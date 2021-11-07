@@ -1,6 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
-from msdss_base_database import Database
-from msdss_users_api import UsersAPI
 from typing import List, Optional
 
 from .tools import create_data_db_func
