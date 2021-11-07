@@ -62,7 +62,6 @@ def get_data_router(
         # Host app at https://localhost:8000
         # Try it at https://localhost:8000/docs
         # app.start()
-        
     """
 
     # (get_data_router_create) Create api router for data routes
