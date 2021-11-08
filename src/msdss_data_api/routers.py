@@ -73,18 +73,16 @@ def get_data_router(
     if use_query_route:
         @out.get(query_route_path, **query_route_kwargs)
         async def query_data(
-            table: str,
-            select: Optional[List[str]] = Query(None),
-            where_left: Optional[List[str]] = Query(None, alias='where-left'),
-            where_op: Optional[List[str]] = Query(None, alias='where-op'),
-            where_right: Optional[List[str]] = Query(None, alias='where-right'),
-            group_by: Optional[List[str]] = Query(None, alias='group-by'),
-            aggregate: Optional[List[str]] = Query(None),
-            aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func'),
-            order_by: Optional[List[str]] = Query(None, alias='order-by'),
-            order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort'),
-            limit: Optional[int] = None,
-            where_boolean: Optional[str] = Query('AND', alias='where-boolean'),
+            table: str = Query(..., description='Name of the dataset or table to query'),
+            select: Optional[List[str]] = Query(None, description='Columns to include'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "col < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
+            group_by: Optional[List[str]] = Query(None, alias='group-by', description='Column names to group by - should be used with aggregate and aggregate_func parameters'),
+            aggregate: Optional[List[str]] = Query(None, description='Column names to aggregate with the same order as the aggregate_func parameter'),
+            aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func', description='Aggregate functions in the same order as the aggregate parameter'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Column names to order by in the same order as parameter order_by_sort'),
+            order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
+            limit: Optional[int] = Query(None, description='Number of rows to return'),
+            where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             db = Depends(get_data_db)):
 
             # (get_data_router_query_table) Check if database has table or if table is restricted
@@ -94,21 +92,11 @@ def get_data_router(
                 raise HTTPException(status_code=401)
 
             # (get_data_router_query_where) Format where statements for query
-            where_lists = [where_left, where_op, where_right]
-            where_not_exists = all([w is None for w in where_lists])
-            if where_not_exists:
-                where = None
-            elif where_left is None:
-                raise HTTPException(status_code=400, detail='Missing parameter where-left')
-            elif where_op is None:
-                raise HTTPException(status_code=400, detail='Missing parameter where-op')
-            elif where_right is None:
-                raise HTTPException(status_code=400, detail='Missing parameter where-right')
-            else:
-                where_lens_not_equal = any([len(w) != len(where_left) for w in where_lists])
-                if where_lens_not_equal:
-                    raise HTTPException(status_code=400, detail='Parameters where-left, where-op, and where-right are not of equal length')
-                where = [statement for statement in zip(where_left, where_op, where_right)]
+            if where:
+                where = [w.split() for w in where]
+                where_has_wrong_len = any([len(w) != 3 for w in where])
+                if where_has_wrong_len:
+                    raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "column operator value" e.g. "col < 3"')
 
             # (get_data_router_query_return) Return the response data
             response = db.select(
