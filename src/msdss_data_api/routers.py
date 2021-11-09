@@ -1,16 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, Query
 from typing import List, Optional
 
-from .tools import create_data_db_func
+from . import data
+from .tools import *
 
 def get_data_router(
     get_data_db = create_data_db_func(),
     prefix='/data',
     tags=['data'],
-    use_query_route=True,
-    query_route_kwargs={},
+    restricted_tables=DEFAULT_RESTRICTED_TABLES,
+    enable_create_route=True,
+    enable_query_route=True,
+    create_route_path='/create/{table}',
+    create_route_kwargs={},
+    create_route_restricted_tables=None,
     query_route_path='/query/{table}',
-    query_route_restricted_tables=['user'],
+    query_route_kwargs={},
+    query_route_restricted_tables=None,
     *args, **kwargs):
     """
     Get a data router.
@@ -23,14 +29,24 @@ def get_data_router(
         Prefix path to all routes belonging to this router.
     tags : list(str)
         Tags for all routes in this router.
+    restricted_tables : list(str)
+        List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown.
     enable_query_route : bool
         Whether to enable the query path for this router or not.
-    query_route_kwargs : str
-        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the query route.
+    enable_create_route : bool
+        Whether to enable the create path for this router or not.
+    create_route_path : str
+        Path for the create route in this router. The full path will include the param ``prefix``. For example if ``query_route_path`` is ``/create/{table}`` and ``prefix`` is ``/data``, then the full path is ``/data/create/{table}``.
+    create_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the create route.
+    create_route_restricted_tables : list(str) or None
+        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
     query_route_path : str
         Path for the query route in this router. The full path will include the param ``prefix``. For example if ``query_route_path`` is ``/query/{table}`` and ``prefix`` is ``/data``, then the full path is ``/data/query/{table}``.
+    query_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the query route.
     query_route_restricted_tables : list(str)
-        List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown.
+        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
     *args, **kwargs
         Additional arguments to accept any extra parameters passed to :class:`fastapi:fastapi.routing.APIRouter`.
     
@@ -62,6 +78,10 @@ def get_data_router(
         # app.start()
     """
 
+    # (get_data_router_vars) Format vars
+    create_route_restricted_tables = create_route_restricted_tables if create_route_restricted_tables else restricted_tables
+    query_route_restricted_tables = query_route_restricted_tables if query_route_restricted_tables else restricted_tables
+
     # (get_data_router_create) Create api router for data routes
     out = APIRouter(
         prefix=prefix,
@@ -70,7 +90,7 @@ def get_data_router(
     )
 
     # (get_data_router_query) Add query route to data router
-    if use_query_route:
+    if enable_query_route:
         @out.get(query_route_path, **query_route_kwargs)
         async def query_data(
             table: str = Query(..., description='Name of the dataset or table to query'),
@@ -85,21 +105,8 @@ def get_data_router(
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             db = Depends(get_data_db)):
 
-            # (get_data_router_query_table) Check if database has table or if table is restricted
-            if not db.has_table(table):
-                raise HTTPException(status_code=404, detail='Table not found')
-            if table in query_route_restricted_tables:
-                raise HTTPException(status_code=401)
-
-            # (get_data_router_query_where) Format where statements for query
-            if where:
-                where = [w.split() for w in where]
-                where_has_wrong_len = any([len(w) != 3 for w in where])
-                if where_has_wrong_len:
-                    raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "column operator value" e.g. "col < 3"')
-
-            # (get_data_router_query_return) Return the response data
-            response = db.select(
+            data._handle_table_name(table, restricted_tables=query_route_restricted_tables, db=db)
+            response = data.query_data(
                 table=table,
                 select=select,
                 where=where,
@@ -109,7 +116,19 @@ def get_data_router(
                 order_by=order_by,
                 order_by_sort=order_by_sort,
                 limit=limit,
-                where_boolean=where_boolean
-            ).to_dict(orient='records')
+                where_boolean=where_boolean,
+                db=db
+            )
             return response
+    
+    # (get_data_router_create) Add create route to data router
+    if enable_create_route:
+        @out.get(create_route_path, **create_route_kwargs)
+        async def create_data(
+            table: str = Query(..., description='Name of the dataset or table to query'),
+            data : dict = Query(..., description='Data'),
+            db = Depends(get_data_db)):
+
+            data._handle_table_name(table, restricted_tables=create_route_restricted_tables, db=db)
+            data.create_data(table=table, data=data, db=db)
     return out
