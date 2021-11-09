@@ -3,6 +3,44 @@ from msdss_base_database import Database
 
 DEFAULT_RESTRICTED_TABLES = ['user']
 
+def _format_where_statements(where):
+    """
+    Format where statements and throw an exception if it does not match the expected format.
+    
+    Parameters
+    ----------
+    where : list(str)
+        list of where statements the form of ``column operator value`` to further filter individual values or rows.
+        
+        * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+        * Example: ``'column_two < 3'``
+
+    Returns
+    -------
+    list(list(str))
+        List of where statements divided into column, operator, value format for each list of lists.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_data_api.data import _format_where_statements
+
+        where = ['col < 3', 'col = a']
+        where_formatted = _format_where_statements(where)
+
+        print(where_formatted)
+    """
+    out = [w.split() for w in where]
+    where_has_wrong_len = any([len(w) != 3 for w in out])
+    if where_has_wrong_len:
+        raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
+    return out
+
 def handle_table_read(table, db=Database()):
     """
     Handle a table read, checking for existence and restrictions.
@@ -38,7 +76,7 @@ def handle_table_read(table, db=Database()):
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_table('test_table', data)
+        create_table('test_table', data, db=db)
 
         # Check table name
         # Should throw no errors
@@ -84,7 +122,7 @@ def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_table('test_table', data)
+        create_table('test_table', data, db=db)
 
         # Check table name
         # Should throw no errors
@@ -132,6 +170,8 @@ def handle_table_write(table, db=Database()):
 def create_table(table, data, db=Database()):
     """
     Create a dataset.
+
+    See :meth:`msdss_base_database:msdss_base_database.core.Database.insert`.
     
     Parameters
     ----------
@@ -168,7 +208,7 @@ def create_table(table, data, db=Database()):
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_table('test_table', data)
+        create_table('test_table', data, db=db)
     """
     db.insert(table, data)
 
@@ -249,7 +289,7 @@ def query_table(
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_table('test_table', data)
+        create_table('test_table', data, db=db)
 
         # Query the data from the database
         df = query_table('test_table', db=db)
@@ -258,10 +298,7 @@ def query_table(
 
     # (query_table_where) Format where statements for query
     if where:
-        where = [w.split() for w in where]
-        where_has_wrong_len = any([len(w) != 3 for w in where])
-        if where_has_wrong_len:
-            raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
+        where = _format_where_statements(where)
 
     # (query_table_return) Return the response data
     out = db.select(
@@ -277,3 +314,61 @@ def query_table(
         where_boolean=where_boolean
     ).to_dict(orient='list')
     return out
+
+def update_table(table, data, where, db=Database()):
+    """
+    Update data from the database.
+
+    See :meth:`msdss_base_database:msdss_base_database.core.Database.update`.
+    
+    Parameters
+    ----------
+    table : str
+            Name of the table to update.
+    data : dict
+        Dictionary representing values to update if they match the ``where`` parameter requirements. Each key is a column and the value is the updated new value.
+    where : list(str)
+        list of where statements the form of ``column operator value`` to further filter individual values or rows.
+        
+        * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+        * Example: ``'column_two < 3'``
+    db : :class:`msdss_base_database:msdss_base_database.core.Database`
+        Database object to use for querying data.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the table exists and drop if it does
+        if db.has_table("test_table"):
+            db.drop_table("test_table")
+
+        # Create sample data
+        data = {
+            'id': [1, 2, 3],
+            'column_one': ['a', 'b', 'c'],
+            'column_two': [2, 4, 6]
+        }
+        create_table('test_table', data, db=db)
+
+        # Query the data from the database
+        new_data = {'column_one': 'UPDATED'}
+        update_table('test_table', new_data, where=['id > 1'], db=db)
+
+        # See updated data
+        df = query_table('test_table', db=db)
+        print(df)
+    """
+    if where:
+        where = _format_where_statements(where)
+    db.update(table=table, where=where, values=data)

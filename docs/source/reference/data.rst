@@ -3,17 +3,37 @@ data
 
 .. automodule:: msdss_data_api.data
 
-_handle_table_name
+_format_where_statements
+------------------------
+
+.. autofunction:: msdss_data_api.data._format_where_statements
+
+handle_table_read
 ------------------
 
-.. autofunction:: msdss_data_api.data._handle_table_name
+.. autofunction:: msdss_data_api.data.handle_table_read
 
-create_data
+handle_table_restrictions
+-------------------------
+
+.. autofunction:: msdss_data_api.data.handle_table_restrictions
+
+handle_table_write
+------------------
+
+.. autofunction:: msdss_data_api.data.handle_table_write
+
+create_table
+------------
+
+.. autofunction:: msdss_data_api.data.create_table
+
+query_table
 -----------
 
-.. autofunction:: msdss_data_api.data.create_data
+.. autofunction:: msdss_data_api.data.query_table
 
-query_data
-----------
+update_table
+------------
 
-.. autofunction:: msdss_data_api.data.query_data
+.. autofunction:: msdss_data_api.data.update_table

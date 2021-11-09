@@ -101,6 +101,18 @@ def get_data_router(
         *args, **kwargs
     )
 
+    # (get_data_router_create) Add create route to data router
+    if enable_create_route:
+        @out.post(create_route_path, **create_route_kwargs)
+        async def create_data(
+            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'),
+            data : Dict[str, List] = Body(...),
+            db = Depends(get_data_db)
+        ):
+            handle_table_restrictions(dataset, restricted_tables=update_route_restricted_tables, db=db)
+            handle_table_write(dataset, db=db)
+            create_table(table=dataset, data=data, db=db)
+
     # (get_data_router_query) Add query route to data router
     if enable_query_route:
         @out.get(query_route_path, **query_route_kwargs)
@@ -134,26 +146,16 @@ def get_data_router(
             )
             return response
     
-    # (get_data_router_create) Add create route to data router
-    if enable_create_route:
-        @out.post(create_route_path, **create_route_kwargs)
-        async def create_data(
-            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'),
-            data : Dict[str, List] = Body(...),
-            db = Depends(get_data_db)
-        ):
-            handle_table_restrictions(dataset, restricted_tables=update_route_restricted_tables, db=db)
-            handle_table_write(dataset, db=db)
-            create_table(table=dataset, data=data, db=db)
-    
-    # (get_data_router_)
+    # (get_data_router_update)  Add update route to data router
     if enable_update_route:
         @out.put(update_route_path, **update_route_kwargs)
         async def update_data(
             dataset: str = Query(..., description='Name of the dataset to update'),
+            data: Dict[str, str] = Body(...),
+            where: Optional[List[str]] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
             db = Depends(get_data_db)
         ):
             handle_table_restrictions(dataset, restricted_tables=update_route_restricted_tables, db=db)
-            handle_table_read(dataset, db=db)
-            pass
+            handle_table_read(dataset, where=where, db=db)
+            update_table(table=dataset, data=data, where=where)
     return out
