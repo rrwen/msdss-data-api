@@ -68,7 +68,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=indigo data-md-color-accent=light-blue>
+        data-md-color-primary=blue data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -275,10 +275,65 @@
         <div class="md-content">
           <article class="md-content__inner md-typeset" role="main">
             
-  <section id="routers">
-<h1 id="reference-routers--page-root">routers<a class="headerlink" href="#reference-routers--page-root" title="Permalink to this headline">¶</a></h1>
+  <section id="module-msdss_data_api.routers">
+<span id="routers"></span><h1 id="reference-routers--page-root">routers<a class="headerlink" href="#reference-routers--page-root" title="Permalink to this headline">¶</a></h1>
 <section id="get-data-router">
 <h2 id="get-data-router">get_data_router<a class="headerlink" href="#get-data-router" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="msdss_data_api.routers.get_data_router">
+<span class="sig-prename descclassname"><span class="pre">msdss_data_api.routers.</span></span><span class="sig-name descname"><span class="pre">get_data_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">get_data_db=&lt;function</span> <span class="pre">create_data_db_func.&lt;locals&gt;.out&gt;,</span> <span class="pre">prefix='/data',</span> <span class="pre">tags=['data'],</span> <span class="pre">restricted_tables=['user'],</span> <span class="pre">enable_create_route=True,</span> <span class="pre">enable_query_route=True,</span> <span class="pre">create_route_path='/create/{table}',</span> <span class="pre">create_route_kwargs={},</span> <span class="pre">create_route_restricted_tables=None,</span> <span class="pre">query_route_path='/query/{table}',</span> <span class="pre">query_route_kwargs={},</span> <span class="pre">query_route_restricted_tables=None,</span> <span class="pre">*args,</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/routers.html#get_data_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.routers.get_data_router" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a data router.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>get_data_db</strong> (<em>func</em>) – Function yielding a <code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code> object. See <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_data_api.tools.create_data_db_func()</span></code>.</p></li>
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Prefix path to all routes belonging to this router.</p></li>
+<li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Tags for all routes in this router.</p></li>
+<li><p><strong>restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown.</p></li>
+<li><p><strong>enable_query_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the query path for this router or not.</p></li>
+<li><p><strong>enable_create_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the create path for this router or not.</p></li>
+<li><p><strong>create_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the create route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>. For example if <code class="docutils literal notranslate"><span class="pre">query_route_path</span></code> is <code class="docutils literal notranslate"><span class="pre">/create/{table}</span></code> and <code class="docutils literal notranslate"><span class="pre">prefix</span></code> is <code class="docutils literal notranslate"><span class="pre">/data</span></code>, then the full path is <code class="docutils literal notranslate"><span class="pre">/data/create/{table}</span></code>.</p></li>
+<li><p><strong>create_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the create route.</p></li>
+<li><p><strong>create_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
+<li><p><strong>query_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the query route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>. For example if <code class="docutils literal notranslate"><span class="pre">query_route_path</span></code> is <code class="docutils literal notranslate"><span class="pre">/query/{table}</span></code> and <code class="docutils literal notranslate"><span class="pre">prefix</span></code> is <code class="docutils literal notranslate"><span class="pre">/data</span></code>, then the full path is <code class="docutils literal notranslate"><span class="pre">/data/query/{table}</span></code>.</p></li>
+<li><p><strong>query_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the query route.</p></li>
+<li><p><strong>query_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
+<li><p><strong>*args</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A router object used for organizing larger applications and for modularity. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/bigger-applications/">FastAPI bigger apps</a></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">msdss_data_api.routers</span> <span class="kn">import</span> <span class="n">get_data_router</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># Create an app</span>
+<span class="linenos"> 5</span><span class="n">app</span> <span class="o">=</span> <span class="n">API</span><span class="p">()</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># Add the data router</span>
+<span class="linenos"> 8</span><span class="n">router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">()</span>
+<span class="linenos"> 9</span><span class="n">app</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">router</span><span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="c1"># Host app at https://localhost:8000</span>
+<span class="linenos">12</span><span class="c1"># Try it at https://localhost:8000/docs</span>
+<span class="linenos">13</span><span class="c1"># app.start()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
 </section>
 </section>
 

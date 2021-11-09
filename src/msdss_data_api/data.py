@@ -3,20 +3,16 @@ from msdss_base_database import Database
 
 DEFAULT_RESTRICTED_TABLES = ['user']
 
-def _handle_table_name(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Database()):
+def handle_table_read(table, db=Database()):
     """
-    Handle a table name, checking for existence and restrictions.
+    Handle a table read, checking for existence and restrictions.
     
     Parameters
     ----------
     table : str
         Name of the table to check.
-    restricted_tables : list(str)
-        List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.
     db : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for creating data.
-    *args, **kwargs
-        Additional arguments passed to :meth:`msdss_base_database.core.Database._write`. Except that ``if_exists`` is always set to ``append``.
+        Database object to use for checking table.
     
     Author
     ------
@@ -27,7 +23,7 @@ def _handle_table_name(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Da
     .. jupyter-execute::
 
         from msdss_base_database import Database
-        from msdss_data_api.data import create_data, _handle_table_name
+        from msdss_data_api.data import *
         
         # Setup database
         db = Database()
@@ -42,23 +38,98 @@ def _handle_table_name(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Da
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_data('test_table', data)
+        create_table('test_table', data)
 
         # Check table name
         # Should throw no errors
-        _handle_table_name('test_table', db=db)
+        handle_table_read('test_table', db=db)
     """
-
-    # (_handle_table_name_exists) Check if table exists
     if not db.has_table(table):
-        raise HTTPException(status_code=404, detail='Table not found')
+        raise HTTPException(status_code=404, detail='Data not found')
 
-    # (_handle_table_name_restrict) Restrict table names
+def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Database()):
+    """
+    Handle a table read, checking for existence and restrictions.
+    
+    Parameters
+    ----------
+    table : str
+        Name of the table to check.
+    restricted_tables : list(str)
+        List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.
+    db : :class:`msdss_base_database:msdss_base_database.core.Database`
+        Database object to use for checking table.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the table exists and drop if it does
+        if db.has_table("test_table"):
+            db.drop_table("test_table")
+
+        # Create sample data
+        data = {
+            'id': [1, 2, 3],
+            'column_one': ['a', 'b', 'c'],
+            'column_two': [2, 4, 6]
+        }
+        create_table('test_table', data)
+
+        # Check table name
+        # Should throw no errors
+        handle_table_restrictions('test_table', db=db)
+    """
     if table in restricted_tables:
         raise HTTPException(status_code=401)
-    
 
-def create_data(table, data, db=Database()):
+def handle_table_write(table, db=Database()):
+    """
+    Handle a table write, checking for existence and restrictions.
+    
+    Parameters
+    ----------
+    table : str
+        Name of the table to check.
+    db : :class:`msdss_base_database:msdss_base_database.core.Database`
+        Database object to use for checking table.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the table exists and drop if it does
+        if db.has_table("test_table"):
+            db.drop_table("test_table")
+
+        # Check table name
+        # Should throw no errors
+        handle_table_write('test_table', db=db)
+    """
+    if db.has_table(table):
+        raise HTTPException(status_code=400, detail='Name already exists')
+
+def create_table(table, data, db=Database()):
     """
     Create a dataset.
     
@@ -97,11 +168,11 @@ def create_data(table, data, db=Database()):
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_data('test_table', data)
+        create_table('test_table', data)
     """
     db.insert(table, data)
 
-def query_data(
+def query_table(
     table,
     select=None,
     where=None,
@@ -178,21 +249,21 @@ def query_data(
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        create_data('test_table', data)
+        create_table('test_table', data)
 
         # Query the data from the database
-        df = query_data('test_table', db=db)
+        df = query_table('test_table', db=db)
         print(df)
     """
 
-    # (_query_data_where) Format where statements for query
+    # (query_table_where) Format where statements for query
     if where:
         where = [w.split() for w in where]
         where_has_wrong_len = any([len(w) != 3 for w in where])
         if where_has_wrong_len:
-            raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "column operator value" e.g. "col < 3"')
+            raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
 
-    # (_query_data_return) Return the response data
+    # (query_table_return) Return the response data
     out = db.select(
         table=table,
         select=select,
