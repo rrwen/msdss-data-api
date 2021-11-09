@@ -3,44 +3,6 @@ from msdss_base_database import Database
 
 DEFAULT_RESTRICTED_TABLES = ['user']
 
-def _format_where_statements(where):
-    """
-    Format where statements and throw an exception if it does not match the expected format.
-    
-    Parameters
-    ----------
-    where : list(str)
-        list of where statements the form of ``column operator value`` to further filter individual values or rows.
-        
-        * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
-        * Example: ``'column_two < 3'``
-
-    Returns
-    -------
-    list(list(str))
-        List of where statements divided into column, operator, value format for each list of lists.
-    
-    Author
-    ------
-    Richard Wen <rrwen.dev@gmail.com>
-    
-    Example
-    -------
-    .. jupyter-execute::
-
-        from msdss_data_api.data import _format_where_statements
-
-        where = ['col < 3', 'col = a']
-        where_formatted = _format_where_statements(where)
-
-        print(where_formatted)
-    """
-    out = [w.split() for w in where]
-    where_has_wrong_len = any([len(w) != 3 for w in out])
-    if where_has_wrong_len:
-        raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
-    return out
-
 def handle_table_read(table, db=Database()):
     """
     Handle a table read, checking for existence and restrictions.
@@ -85,7 +47,7 @@ def handle_table_read(table, db=Database()):
     if not db.has_table(table):
         raise HTTPException(status_code=404, detail='Data not found')
 
-def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Database()):
+def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES):
     """
     Handle a table read, checking for existence and restrictions.
     
@@ -95,8 +57,6 @@ def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES
         Name of the table to check.
     restricted_tables : list(str)
         List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.
-    db : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for checking table.
     
     Author
     ------
@@ -167,6 +127,47 @@ def handle_table_write(table, db=Database()):
     if db.has_table(table):
         raise HTTPException(status_code=400, detail='Name already exists')
 
+def handle_where_statements(where):
+    """
+    Format where statements and throw an exception if it does not match the expected format.
+    
+    Parameters
+    ----------
+    where : list(str)
+        list of where statements the form of ``column operator value`` to further filter individual values or rows.
+        
+        * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+        * Example: ``'column_two < 3'``
+
+    Returns
+    -------
+    list(list(str))
+        List of where statements divided into column, operator, value format for each list of lists.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_data_api.data import handle_where_statements
+
+        where = ['col < 3', 'col = a']
+        where_formatted = handle_where_statements(where)
+
+        print(where_formatted)
+    """
+    if where:
+        out = [w.split() for w in where]
+        where_has_wrong_len = any([len(w) != 3 for w in out])
+        if where_has_wrong_len:
+            raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
+    else:
+        out = where
+    return out
+
 def create_table(table, data, db=Database()):
     """
     Create a dataset.
@@ -181,8 +182,6 @@ def create_table(table, data, db=Database()):
         Data to insert into the table. Should be a dictionary of lists, where each key is a column name and each list represents values in the order of rows of the table.
     db : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for creating data.
-    *args, **kwargs
-        Additional arguments passed to :meth:`msdss_base_database.core.Database._write`. Except that ``if_exists`` is always set to ``append``.
     
     Author
     ------
@@ -211,6 +210,71 @@ def create_table(table, data, db=Database()):
         create_table('test_table', data, db=db)
     """
     db.insert(table, data)
+
+def delete_table(table, where=None, where_boolean='AND', delete_all=False, db=Database()):
+    """
+    Delete a dataset.
+
+    See :meth:`msdss_base_database:msdss_base_database.core.Database.delete`.
+    
+    Parameters
+    ----------
+    table : str
+        Name of the table to hold the data.
+    where : list(str)
+        list of where statements the form of ``column operator value`` to further filter individual values or rows for deleting.
+        
+        * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+        * Example: ``'column_two < 3'``
+
+    where_boolean : str
+        One of AND or OR to combine where statements with. Defaults to AND if not one of AND or OR.
+    delete_all : bool
+        Whether to remove the entire dataset or not.
+    db : :class:`msdss_base_database:msdss_base_database.core.Database`
+        Database object to use for creating data.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the table exists and drop if it does
+        if db.has_table("test_table"):
+            db.drop_table("test_table")
+
+        # Create sample data
+        data = {
+            'id': [1, 2, 3],
+            'column_one': ['a', 'b', 'c'],
+            'column_two': [2, 4, 6]
+        }
+        create_table('test_table', data, db=db)
+
+        # Delete sample data
+        delete_table('test_table', where='id = 1', db=db)
+        res = query_data('test_table', db=db)
+        print(res)
+
+        # Delete the entire dataset
+        delete_table('test_table', delete_all=True)
+    """
+    if delete_all:
+        db.drop_table(table)
+    elif not delete_all and where is None:
+        raise HTTPException(status_code=400, detail='Parameter where is required')
+    else:
+        where = handle_where_statements(where)
+        db.delete(table, where=where, where_boolean=where_boolean)
 
 def query_table(
     table,
@@ -295,10 +359,7 @@ def query_table(
         df = query_table('test_table', db=db)
         print(df)
     """
-
-    # (query_table_where) Format where statements for query
-    if where:
-        where = _format_where_statements(where)
+    where = handle_where_statements(where)
 
     # (query_table_return) Return the response data
     out = db.select(
@@ -369,6 +430,5 @@ def update_table(table, data, where, db=Database()):
         df = query_table('test_table', db=db)
         print(df)
     """
-    if where:
-        where = _format_where_statements(where)
+    where = handle_where_statements(where)
     db.update(table=table, where=where, values=data)
