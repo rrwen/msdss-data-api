@@ -26,7 +26,8 @@ def _handle_table_name(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Da
     -------
     .. jupyter-execute::
 
-        from msdss_data_api.data import _handle_table_name
+        from msdss_base_database import Database
+        from msdss_data_api.data import create_data, _handle_table_name
         
         # Setup database
         db = Database()
@@ -41,7 +42,7 @@ def _handle_table_name(table, restricted_tables=DEFAULT_RESTRICTED_TABLES, db=Da
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        db.create_table('test_table', columns)
+        create_data('test_table', data)
 
         # Check table name
         # Should throw no errors
@@ -80,7 +81,8 @@ def create_data(table, data, db=Database()):
     -------
     .. jupyter-execute::
 
-        from msdss_data_api.data import create_data
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
         
         # Setup database
         db = Database()
@@ -95,7 +97,7 @@ def create_data(table, data, db=Database()):
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        db.create_table('test_table', columns)
+        create_data('test_table', data)
     """
     db.insert(table, data)
 
@@ -160,8 +162,8 @@ def query_data(
     -------
     .. jupyter-execute::
 
-        from msdss_data_api.data import query_data
-        from msdss_base_database.core import Database
+        from msdss_base_database import Database
+        from msdss_data_api.data import *
         
         # Setup database
         db = Database()
@@ -169,25 +171,17 @@ def query_data(
         # Check if the table exists and drop if it does
         if db.has_table("test_table"):
             db.drop_table("test_table")
-        
-        # Create sample table
-        columns = [
-            dict(name='id', type_='Integer', primary_key=True),
-            ('column_one', 'String'),
-            ('column_two', 'Integer')
-        ]
-        db.create_table('test_table', columns)
 
-        # Write sample data
+        # Create sample data
         data = {
             'id': [1, 2, 3],
             'column_one': ['a', 'b', 'c'],
             'column_two': [2, 4, 6]
         }
-        db.insert('test_table', data)
+        create_data('test_table', data)
 
         # Query the data from the database
-        df = _query_data('test_table', db=db)
+        df = query_data('test_table', db=db)
         print(df)
     """
 
