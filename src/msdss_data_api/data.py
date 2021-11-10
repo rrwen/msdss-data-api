@@ -86,7 +86,7 @@ def handle_table_restrictions(table, restricted_tables=DEFAULT_RESTRICTED_TABLES
 
         # Check table name
         # Should throw no errors
-        handle_table_restrictions('test_table', db=db)
+        handle_table_restrictions('test_table')
     """
     if table in restricted_tables:
         raise HTTPException(status_code=401)

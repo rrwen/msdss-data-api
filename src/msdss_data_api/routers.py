@@ -11,6 +11,7 @@ def get_data_router(
     restricted_tables=DEFAULT_RESTRICTED_TABLES,
     enable_create_route=True,
     enable_delete_route=True,
+    enable_id_route=True,
     enable_query_route=True,
     enable_update_route=True,
     create_route_path='/',
@@ -19,6 +20,9 @@ def get_data_router(
     delete_route_path='/',
     delete_route_kwargs={},
     delete_route_restricted_tables=None,
+    id_route_path='/{dataset}/{id}',
+    id_route_kwargs={},
+    id_route_restricted_tables=None,
     query_route_path='/{dataset}',
     query_route_kwargs={},
     query_route_restricted_tables=None,
@@ -43,6 +47,8 @@ def get_data_router(
         Whether to enable the create path for this router or not.
     enable_delete_route : bool
         Whether to enable the delete path for this router or not.
+    enable_id_route : bool
+        Whether to enable the id path for this router or not.
     enable_query_route : bool
         Whether to enable the query path for this router or not.
     enable_update_route : bool
@@ -58,6 +64,12 @@ def get_data_router(
     delete_route_kwargs : dict
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the delete route.
     delete_route_restricted_tables : list(str) or None
+        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    id_route_path : str
+        Path for the id route in this router. The full path will include the param ``prefix``.
+    id_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the id route.
+    id_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
     query_route_path : str
         Path for the query route in this router. The full path will include the param ``prefix``.
@@ -105,6 +117,7 @@ def get_data_router(
     # (get_data_router_vars) Format vars
     create_route_restricted_tables = create_route_restricted_tables if create_route_restricted_tables else restricted_tables
     delete_route_restricted_tables = delete_route_restricted_tables if delete_route_restricted_tables else restricted_tables
+    id_route_restricted_tables = id_route_restricted_tables if id_route_restricted_tables else restricted_tables
     query_route_restricted_tables = query_route_restricted_tables if query_route_restricted_tables else restricted_tables
     update_route_restricted_tables = update_route_restricted_tables if update_route_restricted_tables else restricted_tables
 
@@ -140,6 +153,21 @@ def get_data_router(
             handle_table_restrictions(dataset, restricted_tables=delete_route_restricted_tables)
             handle_table_read(dataset, db=db)
             delete_table(table=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
+
+    # (get_data_router_id) Add id route to data router
+    if enable_id_route:
+        @out.get(id_route_path, **id_route_kwargs)
+        async def get_data_by_id(
+            dataset: str = Query(..., description='Name of the dataset'),
+            id: str = Query(..., description='Identifier value to retrieve a specific document in the dataset'),
+            id_variable: Optional[str] =  Query('id', description='Identifier variable name for the dataset'),
+            db = Depends(get_data_db)
+        ):
+            handle_table_restrictions(dataset, restricted_tables=id_route_restricted_tables)
+            handle_table_read(dataset, db=db)
+            where = [f'{id_variable} = {id}']
+            response = query_table(table=dataset, where=where, db=db)
+            return response
 
     # (get_data_router_query) Add query route to data router
     if enable_query_route:

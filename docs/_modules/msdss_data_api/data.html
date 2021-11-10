@@ -52,11 +52,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -271,44 +274,6 @@
 
 <span class="n">DEFAULT_RESTRICTED_TABLES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'user'</span><span class="p">]</span>
 
-<div class="viewcode-block" id="_format_where_statements"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data._format_where_statements">[docs]</a><span class="k">def</span> <span class="nf">_format_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">):</span>
-    <span class="sd">"""</span>
-<span class="sd">    Format where statements and throw an exception if it does not match the expected format.</span>
-<span class="sd">    </span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    where : list(str)</span>
-<span class="sd">        list of where statements the form of ``column operator value`` to further filter individual values or rows.</span>
-<span class="sd">        </span>
-<span class="sd">        * Operators are one of: ``=``, ``&gt;``, ``&gt;=``, ``&gt;``, ``&lt;``, ``&lt;=``, ``!='', ``LIKE``</span>
-<span class="sd">        * Example: ``'column_two &lt; 3'``</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    list(list(str))</span>
-<span class="sd">        List of where statements divided into column, operator, value format for each list of lists.</span>
-<span class="sd">    </span>
-<span class="sd">    Author</span>
-<span class="sd">    ------</span>
-<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
-<span class="sd">    </span>
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-<span class="sd">    .. jupyter-execute::</span>
-
-<span class="sd">        from msdss_data_api.data import _format_where_statements</span>
-
-<span class="sd">        where = ['col &lt; 3', 'col = a']</span>
-<span class="sd">        where_formatted = _format_where_statements(where)</span>
-
-<span class="sd">        print(where_formatted)</span>
-<span class="sd">    """</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span>
-    <span class="n">where_has_wrong_len</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">out</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">where_has_wrong_len</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col &lt; 3"'</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">out</span></div>
-
 <div class="viewcode-block" id="handle_table_read"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.handle_table_read">[docs]</a><span class="k">def</span> <span class="nf">handle_table_read</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
     <span class="sd">"""</span>
 <span class="sd">    Handle a table read, checking for existence and restrictions.</span>
@@ -353,7 +318,7 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Data not found'</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="handle_table_restrictions"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.handle_table_restrictions">[docs]</a><span class="k">def</span> <span class="nf">handle_table_restrictions</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
+<div class="viewcode-block" id="handle_table_restrictions"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.handle_table_restrictions">[docs]</a><span class="k">def</span> <span class="nf">handle_table_restrictions</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Handle a table read, checking for existence and restrictions.</span>
 <span class="sd">    </span>
@@ -363,8 +328,6 @@
 <span class="sd">        Name of the table to check.</span>
 <span class="sd">    restricted_tables : list(str)</span>
 <span class="sd">        List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.</span>
-<span class="sd">    db : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
-<span class="sd">        Database object to use for checking table.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -394,7 +357,7 @@
 
 <span class="sd">        # Check table name</span>
 <span class="sd">        # Should throw no errors</span>
-<span class="sd">        handle_table_restrictions('test_table', db=db)</span>
+<span class="sd">        handle_table_restrictions('test_table')</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">restricted_tables</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">)</span></div>
@@ -435,6 +398,47 @@
     <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Name already exists'</span><span class="p">)</span></div>
 
+<span class="k">def</span> <span class="nf">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Format where statements and throw an exception if it does not match the expected format.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    where : list(str)</span>
+<span class="sd">        list of where statements the form of ``column operator value`` to further filter individual values or rows.</span>
+<span class="sd">        </span>
+<span class="sd">        * Operators are one of: ``=``, ``&gt;``, ``&gt;=``, ``&gt;``, ``&lt;``, ``&lt;=``, ``!='', ``LIKE``</span>
+<span class="sd">        * Example: ``'column_two &lt; 3'``</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list(list(str))</span>
+<span class="sd">        List of where statements divided into column, operator, value format for each list of lists.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_data_api.data import handle_where_statements</span>
+
+<span class="sd">        where = ['col &lt; 3', 'col = a']</span>
+<span class="sd">        where_formatted = handle_where_statements(where)</span>
+
+<span class="sd">        print(where_formatted)</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">where</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[</span><span class="n">w</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span>
+        <span class="n">where_has_wrong_len</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">out</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">where_has_wrong_len</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col &lt; 3"'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">where</span>
+    <span class="k">return</span> <span class="n">out</span>
+
 <div class="viewcode-block" id="create_table"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.create_table">[docs]</a><span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
     <span class="sd">"""</span>
 <span class="sd">    Create a dataset.</span>
@@ -449,8 +453,6 @@
 <span class="sd">        Data to insert into the table. Should be a dictionary of lists, where each key is a column name and each list represents values in the order of rows of the table.</span>
 <span class="sd">    db : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object to use for creating data.</span>
-<span class="sd">    *args, **kwargs</span>
-<span class="sd">        Additional arguments passed to :meth:`msdss_base_database.core.Database._write`. Except that ``if_exists`` is always set to ``append``.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -479,6 +481,71 @@
 <span class="sd">        create_table('test_table', data, db=db)</span>
 <span class="sd">    """</span>
     <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">delete_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Delete a dataset.</span>
+
+<span class="sd">    See :meth:`msdss_base_database:msdss_base_database.core.Database.delete`.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    table : str</span>
+<span class="sd">        Name of the table to hold the data.</span>
+<span class="sd">    where : list(str)</span>
+<span class="sd">        list of where statements the form of ``column operator value`` to further filter individual values or rows for deleting.</span>
+<span class="sd">        </span>
+<span class="sd">        * Operators are one of: ``=``, ``&gt;``, ``&gt;=``, ``&gt;``, ``&lt;``, ``&lt;=``, ``!='', ``LIKE``</span>
+<span class="sd">        * Example: ``'column_two &lt; 3'``</span>
+
+<span class="sd">    where_boolean : str</span>
+<span class="sd">        One of AND or OR to combine where statements with. Defaults to AND if not one of AND or OR.</span>
+<span class="sd">    delete_all : bool</span>
+<span class="sd">        Whether to remove the entire dataset or not.</span>
+<span class="sd">    db : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">        Database object to use for creating data.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_data_api.data import *</span>
+<span class="sd">        </span>
+<span class="sd">        # Setup database</span>
+<span class="sd">        db = Database()</span>
+
+<span class="sd">        # Check if the table exists and drop if it does</span>
+<span class="sd">        if db.has_table("test_table"):</span>
+<span class="sd">            db.drop_table("test_table")</span>
+
+<span class="sd">        # Create sample data</span>
+<span class="sd">        data = {</span>
+<span class="sd">            'id': [1, 2, 3],</span>
+<span class="sd">            'column_one': ['a', 'b', 'c'],</span>
+<span class="sd">            'column_two': [2, 4, 6]</span>
+<span class="sd">        }</span>
+<span class="sd">        create_table('test_table', data, db=db)</span>
+
+<span class="sd">        # Delete sample data</span>
+<span class="sd">        delete_table('test_table', where='id = 1', db=db)</span>
+<span class="sd">        res = query_data('test_table', db=db)</span>
+<span class="sd">        print(res)</span>
+
+<span class="sd">        # Delete the entire dataset</span>
+<span class="sd">        delete_table('test_table', delete_all=True)</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">delete_all</span><span class="p">:</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">table</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">delete_all</span> <span class="ow">and</span> <span class="n">where</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is required'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="n">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">)</span>
 
 <div class="viewcode-block" id="query_table"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.query_table">[docs]</a><span class="k">def</span> <span class="nf">query_table</span><span class="p">(</span>
     <span class="n">table</span><span class="p">,</span>
@@ -563,10 +630,7 @@
 <span class="sd">        df = query_table('test_table', db=db)</span>
 <span class="sd">        print(df)</span>
 <span class="sd">    """</span>
-
-    <span class="c1"># (query_table_where) Format where statements for query</span>
-    <span class="k">if</span> <span class="n">where</span><span class="p">:</span>
-        <span class="n">where</span> <span class="o">=</span> <span class="n">_format_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+    <span class="n">where</span> <span class="o">=</span> <span class="n">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
 
     <span class="c1"># (query_table_return) Return the response data</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
@@ -637,8 +701,7 @@
 <span class="sd">        df = query_table('test_table', db=db)</span>
 <span class="sd">        print(df)</span>
 <span class="sd">    """</span>
-    <span class="k">if</span> <span class="n">where</span><span class="p">:</span>
-        <span class="n">where</span> <span class="o">=</span> <span class="n">_format_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+    <span class="n">where</span> <span class="o">=</span> <span class="n">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
     <span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div>
 </pre></div>
 

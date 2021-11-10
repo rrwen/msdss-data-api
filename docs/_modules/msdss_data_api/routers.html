@@ -52,11 +52,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -267,7 +270,7 @@
             
   <h1 id="modules-msdss-data-api-routers--page-root">Source code for msdss_data_api.routers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Query</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="kn">import</span> <span class="o">*</span>
@@ -278,11 +281,19 @@
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">'data'</span><span class="p">],</span>
     <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">,</span>
     <span class="n">enable_create_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enable_delete_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enable_id_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_query_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_update_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">create_route_path</span><span class="o">=</span><span class="s1">'/'</span><span class="p">,</span>
     <span class="n">create_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">create_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">delete_route_path</span><span class="o">=</span><span class="s1">'/'</span><span class="p">,</span>
+    <span class="n">delete_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">delete_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">id_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">/</span><span class="si">{id}</span><span class="s1">'</span><span class="p">,</span>
+    <span class="n">id_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">id_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">query_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">'</span><span class="p">,</span>
     <span class="n">query_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">query_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -305,6 +316,10 @@
 <span class="sd">        List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown. See :func:`msdss_data_api.data.handle_table_restrictions`.</span>
 <span class="sd">    enable_create_route : bool</span>
 <span class="sd">        Whether to enable the create path for this router or not.</span>
+<span class="sd">    enable_delete_route : bool</span>
+<span class="sd">        Whether to enable the delete path for this router or not.</span>
+<span class="sd">    enable_id_route : bool</span>
+<span class="sd">        Whether to enable the id path for this router or not.</span>
 <span class="sd">    enable_query_route : bool</span>
 <span class="sd">        Whether to enable the query path for this router or not.</span>
 <span class="sd">    enable_update_route : bool</span>
@@ -314,6 +329,18 @@
 <span class="sd">    create_route_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the create route.</span>
 <span class="sd">    create_route_restricted_tables : list(str) or None</span>
+<span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    delete_route_path : str</span>
+<span class="sd">        Path for the delete route in this router. The full path will include the param ``prefix``.</span>
+<span class="sd">    delete_route_kwargs : dict</span>
+<span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the delete route.</span>
+<span class="sd">    delete_route_restricted_tables : list(str) or None</span>
+<span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    id_route_path : str</span>
+<span class="sd">        Path for the id route in this router. The full path will include the param ``prefix``.</span>
+<span class="sd">    id_route_kwargs : dict</span>
+<span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the id route.</span>
+<span class="sd">    id_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
 <span class="sd">    query_route_path : str</span>
 <span class="sd">        Path for the query route in this router. The full path will include the param ``prefix``.</span>
@@ -360,7 +387,10 @@
 
     <span class="c1"># (get_data_router_vars) Format vars</span>
     <span class="n">create_route_restricted_tables</span> <span class="o">=</span> <span class="n">create_route_restricted_tables</span> <span class="k">if</span> <span class="n">create_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
+    <span class="n">delete_route_restricted_tables</span> <span class="o">=</span> <span class="n">delete_route_restricted_tables</span> <span class="k">if</span> <span class="n">delete_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
+    <span class="n">id_route_restricted_tables</span> <span class="o">=</span> <span class="n">id_route_restricted_tables</span> <span class="k">if</span> <span class="n">id_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">query_route_restricted_tables</span> <span class="o">=</span> <span class="n">query_route_restricted_tables</span> <span class="k">if</span> <span class="n">query_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
+    <span class="n">update_route_restricted_tables</span> <span class="o">=</span> <span class="n">update_route_restricted_tables</span> <span class="k">if</span> <span class="n">update_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
 
     <span class="c1"># (get_data_router_create) Create api router for data routes</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
@@ -374,12 +404,41 @@
         <span class="nd">@out</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">create_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">create_route_kwargs</span><span class="p">)</span>
         <span class="k">async</span> <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'</span><span class="p">),</span>
-            <span class="n">data</span> <span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
         <span class="p">):</span>
-            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">create_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_write</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
             <span class="n">create_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+    <span class="c1"># (get_data_router_delete) Add delete route to data router</span>
+    <span class="k">if</span> <span class="n">enable_delete_route</span><span class="p">:</span>
+        <span class="nd">@out</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">delete_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">delete_route_kwargs</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_data</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to delete data from'</span><span class="p">),</span>
+            <span class="n">where</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to remove in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
+            <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
+            <span class="n">delete_all</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Whether to remove the entire dataset or not'</span><span class="p">),</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">delete_route_restricted_tables</span><span class="p">)</span>
+            <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">delete_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="n">delete_all</span><span class="p">)</span>
+
+    <span class="c1"># (get_data_router_id) Add id route to data router</span>
+    <span class="k">if</span> <span class="n">enable_id_route</span><span class="p">:</span>
+        <span class="nd">@out</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">id_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">id_route_kwargs</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">get_data_by_id</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset'</span><span class="p">),</span>
+            <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier value to retrieve a specific document in the dataset'</span><span class="p">),</span>
+            <span class="n">id_variable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Query</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier variable name for the dataset'</span><span class="p">),</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">id_route_restricted_tables</span><span class="p">)</span>
+            <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">id_variable</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">query_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">response</span>
 
     <span class="c1"># (get_data_router_query) Add query route to data router</span>
     <span class="k">if</span> <span class="n">enable_query_route</span><span class="p">:</span>
@@ -397,7 +456,7 @@
             <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
         <span class="p">):</span>
-            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">query_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">query_table</span><span class="p">(</span>
                 <span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
@@ -418,14 +477,14 @@
     <span class="k">if</span> <span class="n">enable_update_route</span><span class="p">:</span>
         <span class="nd">@out</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">update_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">update_route_kwargs</span><span class="p">)</span>
         <span class="k">async</span> <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span>
-            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to update'</span><span class="p">),</span>
-            <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-            <span class="n">where</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to update in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
+            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'</span><span class="p">),</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+            <span class="n">where</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to update in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
             <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
         <span class="p">):</span>
-            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-            <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-            <span class="n">update_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
+            <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">)</span>
+            <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+            <span class="n">update_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 
