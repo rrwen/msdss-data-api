@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from msdss_base_database import Database
 
-DEFAULT_RESTRICTED_TABLES = ['user']
+DEFAULT_RESTRICTED_TABLES = ['data', 'user']
 
 def handle_table_read(table, db=Database()):
     """

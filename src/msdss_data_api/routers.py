@@ -3,11 +3,16 @@ from typing import Any, Dict, List, Optional
 
 from .data import *
 from .tools import *
+from .users import *
+
+async def _no_current_user():
+    return None
 
 def get_data_router(
-    get_data_db = create_data_db_func(),
     prefix='/data',
     tags=['data'],
+    get_data_db=create_data_db_func(),
+    get_current_user=_no_current_user,
     restricted_tables=DEFAULT_RESTRICTED_TABLES,
     enable_create_route=True,
     enable_delete_route=True,
@@ -17,30 +22,37 @@ def get_data_router(
     create_route_path='/',
     create_route_kwargs={},
     create_route_restricted_tables=None,
+    create_get_current_user=None,
     delete_route_path='/',
     delete_route_kwargs={},
     delete_route_restricted_tables=None,
+    delete_get_current_user=None,
     id_route_path='/{dataset}/{id}',
     id_route_kwargs={},
     id_route_restricted_tables=None,
+    id_get_current_user=None,
     query_route_path='/{dataset}',
     query_route_kwargs={},
     query_route_restricted_tables=None,
+    query_get_current_user=None,
     update_route_path='/{dataset}',
     update_route_kwargs={},
     update_route_restricted_tables=None,
+    update_get_current_user=None,
     *args, **kwargs):
     """
     Get a data router.
     
     Parameters
     ----------
-    get_data_db : func
-        Function yielding a :class:`msdss_base_database:msdss_base_database.core.Database` object. See :func:`msdss_data_api.tools.create_data_db_func`.
     prefix : str
         Prefix path to all routes belonging to this router.
     tags : list(str)
         Tags for all routes in this router.
+    get_data_db : func
+        Function yielding a :class:`msdss_base_database:msdss_base_database.core.Database` object. See :func:`msdss_data_api.tools.create_data_db_func`.
+    get_current_user : func
+        A function to get the current user. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
     restricted_tables : list(str)
         List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown. See :func:`msdss_data_api.data.handle_table_restrictions`.
     enable_create_route : bool
@@ -59,30 +71,45 @@ def get_data_router(
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the create route.
     create_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    create_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     delete_route_path : str
         Path for the delete route in this router. The full path will include the param ``prefix``.
     delete_route_kwargs : dict
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the delete route.
     delete_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    delete_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     id_route_path : str
         Path for the id route in this router. The full path will include the param ``prefix``.
     id_route_kwargs : dict
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the id route.
     id_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    id_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     query_route_path : str
         Path for the query route in this router. The full path will include the param ``prefix``.
     query_route_kwargs : dict
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the query route.
     query_route_restricted_tables : list(str)
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    query_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     update_route_path : str
         Path for the update route in this router.
     update_route_kwargs : dict
         Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the update route.
     update_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    update_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     *args, **kwargs
         Additional arguments to accept any extra parameters passed to :class:`fastapi:fastapi.routing.APIRouter`.
     
@@ -114,12 +141,19 @@ def get_data_router(
         # app.start()
     """
 
-    # (get_data_router_vars) Format vars
+    # (get_data_router_restricted) Set defaults for restricted tables
     create_route_restricted_tables = create_route_restricted_tables if create_route_restricted_tables else restricted_tables
     delete_route_restricted_tables = delete_route_restricted_tables if delete_route_restricted_tables else restricted_tables
     id_route_restricted_tables = id_route_restricted_tables if id_route_restricted_tables else restricted_tables
     query_route_restricted_tables = query_route_restricted_tables if query_route_restricted_tables else restricted_tables
     update_route_restricted_tables = update_route_restricted_tables if update_route_restricted_tables else restricted_tables
+
+    # (get_data_router_user) Set defaults for current user func
+    create_get_current_user = create_get_current_user if create_get_current_user else get_current_user
+    delete_get_current_user = delete_get_current_user if delete_get_current_user else get_current_user
+    id_get_current_user = id_get_current_user if id_get_current_user else get_current_user
+    query_get_current_user = query_get_current_user if query_get_current_user else get_current_user
+    update_get_current_user = update_get_current_user if update_get_current_user else get_current_user
 
     # (get_data_router_create) Create api router for data routes
     out = APIRouter(
@@ -134,7 +168,8 @@ def get_data_router(
         async def create_data(
             dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'),
             data: Dict[str, List] = Body(...),
-            db = Depends(get_data_db)
+            db = Depends(get_data_db),
+            user = Depends(create_get_current_user)
         ):
             handle_table_restrictions(dataset, restricted_tables=create_route_restricted_tables)
             handle_table_write(dataset, db=db)
@@ -148,7 +183,8 @@ def get_data_router(
             where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             delete_all: Optional[bool] = Query(False, description='Whether to remove the entire dataset or not'),
-            db = Depends(get_data_db)
+            db = Depends(get_data_db),
+            user = Depends(delete_get_current_user)
         ):
             handle_table_restrictions(dataset, restricted_tables=delete_route_restricted_tables)
             handle_table_read(dataset, db=db)
@@ -161,7 +197,8 @@ def get_data_router(
             dataset: str = Query(..., description='Name of the dataset'),
             id: str = Query(..., description='Identifier value to retrieve a specific document in the dataset'),
             id_variable: Optional[str] =  Query('id', description='Identifier variable name for the dataset'),
-            db = Depends(get_data_db)
+            db = Depends(get_data_db),
+            user = Depends(id_get_current_user)
         ):
             handle_table_restrictions(dataset, restricted_tables=id_route_restricted_tables)
             handle_table_read(dataset, db=db)
@@ -183,7 +220,8 @@ def get_data_router(
             order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
-            db = Depends(get_data_db)
+            db = Depends(get_data_db),
+            user = Depends(query_get_current_user)
         ):
             handle_table_restrictions(dataset, restricted_tables=query_route_restricted_tables)
             handle_table_read(dataset, db=db)
@@ -209,8 +247,15 @@ def get_data_router(
             dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'),
             data: Dict[str, Any] = Body(...),
             where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
-            db = Depends(get_data_db)
+            db = Depends(get_data_db),
+            user = Depends(update_get_current_user)
         ):
+
+            # (get_data_router_create_users) Handle user permissions
+            if user:
+                handle_user_permissions(user.id, dataset)
+
+            # (get_data_router_update_run) Execute update
             handle_table_restrictions(dataset, restricted_tables=update_route_restricted_tables)
             handle_table_read(dataset, db=db)
             update_table(table=dataset, data=data, where=where, db=db)
