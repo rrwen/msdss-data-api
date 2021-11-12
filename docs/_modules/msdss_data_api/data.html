@@ -272,7 +272,7 @@
 <span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">HTTPException</span>
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 
-<span class="n">DEFAULT_RESTRICTED_TABLES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'user'</span><span class="p">]</span>
+<span class="n">DEFAULT_RESTRICTED_TABLES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'user'</span><span class="p">]</span>
 
 <div class="viewcode-block" id="handle_table_read"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.handle_table_read">[docs]</a><span class="k">def</span> <span class="nf">handle_table_read</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
     <span class="sd">"""</span>
@@ -398,7 +398,7 @@
     <span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Name already exists'</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">):</span>
+<div class="viewcode-block" id="handle_where_statements"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.handle_where_statements">[docs]</a><span class="k">def</span> <span class="nf">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Format where statements and throw an exception if it does not match the expected format.</span>
 <span class="sd">    </span>
@@ -437,7 +437,7 @@
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col &lt; 3"'</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">out</span> <span class="o">=</span> <span class="n">where</span>
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="create_table"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.create_table">[docs]</a><span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
     <span class="sd">"""</span>
@@ -482,7 +482,7 @@
 <span class="sd">    """</span>
     <span class="n">db</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">delete_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
+<div class="viewcode-block" id="delete_table"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.delete_table">[docs]</a><span class="k">def</span> <span class="nf">delete_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">Database</span><span class="p">()):</span>
     <span class="sd">"""</span>
 <span class="sd">    Delete a dataset.</span>
 
@@ -532,8 +532,8 @@
 <span class="sd">        create_table('test_table', data, db=db)</span>
 
 <span class="sd">        # Delete sample data</span>
-<span class="sd">        delete_table('test_table', where='id = 1', db=db)</span>
-<span class="sd">        res = query_data('test_table', db=db)</span>
+<span class="sd">        delete_table('test_table', where=['id = 1'], db=db)</span>
+<span class="sd">        res = query_table('test_table', db=db)</span>
 <span class="sd">        print(res)</span>
 
 <span class="sd">        # Delete the entire dataset</span>
@@ -545,7 +545,7 @@
         <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is required'</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">where</span> <span class="o">=</span> <span class="n">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
-        <span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="query_table"><a class="viewcode-back" href="../../reference/data.html#msdss_data_api.data.query_table">[docs]</a><span class="k">def</span> <span class="nf">query_table</span><span class="p">(</span>
     <span class="n">table</span><span class="p">,</span>

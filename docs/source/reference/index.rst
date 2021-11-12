@@ -6,4 +6,6 @@ API Reference
     core
     data
     routers
+    tools
+    users
     

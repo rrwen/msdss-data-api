@@ -69,7 +69,7 @@
 
   </head>
   <body dir=ltr
-        data-md-color-primary=blue data-md-color-accent=light-blue>
+        data-md-color-primary=blue-grey data-md-color-accent=light-blue>
   
   <svg class="md-svg">
     <defs data-children-count="0">
@@ -274,11 +274,16 @@
 
 <span class="kn">from</span> <span class="nn">.data</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.users</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_no_current_user</span><span class="p">():</span>
+    <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="get_data_router"><a class="viewcode-back" href="../../reference/routers.html#msdss_data_api.routers.get_data_router">[docs]</a><span class="k">def</span> <span class="nf">get_data_router</span><span class="p">(</span>
-    <span class="n">get_data_db</span> <span class="o">=</span> <span class="n">create_data_db_func</span><span class="p">(),</span>
     <span class="n">prefix</span><span class="o">=</span><span class="s1">'/data'</span><span class="p">,</span>
     <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">'data'</span><span class="p">],</span>
+    <span class="n">get_data_db</span><span class="o">=</span><span class="n">create_data_db_func</span><span class="p">(),</span>
+    <span class="n">get_current_user</span><span class="o">=</span><span class="n">_no_current_user</span><span class="p">,</span>
     <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">,</span>
     <span class="n">enable_create_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_delete_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -288,30 +293,37 @@
     <span class="n">create_route_path</span><span class="o">=</span><span class="s1">'/'</span><span class="p">,</span>
     <span class="n">create_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">create_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">create_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">delete_route_path</span><span class="o">=</span><span class="s1">'/'</span><span class="p">,</span>
     <span class="n">delete_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">delete_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">delete_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">id_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">/</span><span class="si">{id}</span><span class="s1">'</span><span class="p">,</span>
     <span class="n">id_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">id_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">id_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">query_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">'</span><span class="p">,</span>
     <span class="n">query_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">query_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">query_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">update_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">'</span><span class="p">,</span>
     <span class="n">update_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">update_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">update_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">"""</span>
 <span class="sd">    Get a data router.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    get_data_db : func</span>
-<span class="sd">        Function yielding a :class:`msdss_base_database:msdss_base_database.core.Database` object. See :func:`msdss_data_api.tools.create_data_db_func`.</span>
 <span class="sd">    prefix : str</span>
 <span class="sd">        Prefix path to all routes belonging to this router.</span>
 <span class="sd">    tags : list(str)</span>
 <span class="sd">        Tags for all routes in this router.</span>
+<span class="sd">    get_data_db : func</span>
+<span class="sd">        Function yielding a :class:`msdss_base_database:msdss_base_database.core.Database` object. See :func:`msdss_data_api.tools.create_data_db_func`.</span>
+<span class="sd">    get_current_user : func</span>
+<span class="sd">        A function to get the current user. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
 <span class="sd">    restricted_tables : list(str)</span>
 <span class="sd">        List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown. See :func:`msdss_data_api.data.handle_table_restrictions`.</span>
 <span class="sd">    enable_create_route : bool</span>
@@ -330,30 +342,45 @@
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the create route.</span>
 <span class="sd">    create_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    create_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    delete_route_path : str</span>
 <span class="sd">        Path for the delete route in this router. The full path will include the param ``prefix``.</span>
 <span class="sd">    delete_route_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the delete route.</span>
 <span class="sd">    delete_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    delete_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    id_route_path : str</span>
 <span class="sd">        Path for the id route in this router. The full path will include the param ``prefix``.</span>
 <span class="sd">    id_route_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the id route.</span>
 <span class="sd">    id_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    id_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    query_route_path : str</span>
 <span class="sd">        Path for the query route in this router. The full path will include the param ``prefix``.</span>
 <span class="sd">    query_route_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the query route.</span>
 <span class="sd">    query_route_restricted_tables : list(str)</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    query_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    update_route_path : str</span>
 <span class="sd">        Path for the update route in this router.</span>
 <span class="sd">    update_route_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the update route.</span>
 <span class="sd">    update_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    update_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    *args, **kwargs</span>
 <span class="sd">        Additional arguments to accept any extra parameters passed to :class:`fastapi:fastapi.routing.APIRouter`.</span>
 <span class="sd">    </span>
@@ -385,12 +412,19 @@
 <span class="sd">        # app.start()</span>
 <span class="sd">    """</span>
 
-    <span class="c1"># (get_data_router_vars) Format vars</span>
+    <span class="c1"># (get_data_router_restricted) Set defaults for restricted tables</span>
     <span class="n">create_route_restricted_tables</span> <span class="o">=</span> <span class="n">create_route_restricted_tables</span> <span class="k">if</span> <span class="n">create_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">delete_route_restricted_tables</span> <span class="o">=</span> <span class="n">delete_route_restricted_tables</span> <span class="k">if</span> <span class="n">delete_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">id_route_restricted_tables</span> <span class="o">=</span> <span class="n">id_route_restricted_tables</span> <span class="k">if</span> <span class="n">id_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">query_route_restricted_tables</span> <span class="o">=</span> <span class="n">query_route_restricted_tables</span> <span class="k">if</span> <span class="n">query_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">update_route_restricted_tables</span> <span class="o">=</span> <span class="n">update_route_restricted_tables</span> <span class="k">if</span> <span class="n">update_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
+
+    <span class="c1"># (get_data_router_user) Set defaults for current user func</span>
+    <span class="n">create_get_current_user</span> <span class="o">=</span> <span class="n">create_get_current_user</span> <span class="k">if</span> <span class="n">create_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
+    <span class="n">delete_get_current_user</span> <span class="o">=</span> <span class="n">delete_get_current_user</span> <span class="k">if</span> <span class="n">delete_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
+    <span class="n">id_get_current_user</span> <span class="o">=</span> <span class="n">id_get_current_user</span> <span class="k">if</span> <span class="n">id_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
+    <span class="n">query_get_current_user</span> <span class="o">=</span> <span class="n">query_get_current_user</span> <span class="k">if</span> <span class="n">query_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
+    <span class="n">update_get_current_user</span> <span class="o">=</span> <span class="n">update_get_current_user</span> <span class="k">if</span> <span class="n">update_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
 
     <span class="c1"># (get_data_router_create) Create api router for data routes</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span>
@@ -405,7 +439,8 @@
         <span class="k">async</span> <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'</span><span class="p">),</span>
             <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">create_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">create_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_write</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
@@ -419,7 +454,8 @@
             <span class="n">where</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to remove in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
             <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
             <span class="n">delete_all</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Whether to remove the entire dataset or not'</span><span class="p">),</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">delete_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">delete_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
@@ -432,7 +468,8 @@
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset'</span><span class="p">),</span>
             <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier value to retrieve a specific document in the dataset'</span><span class="p">),</span>
             <span class="n">id_variable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Query</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier variable name for the dataset'</span><span class="p">),</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">id_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">id_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
@@ -454,7 +491,8 @@
             <span class="n">order_by_sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'order-by-sort'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'</span><span class="p">),</span>
             <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Number of items to return'</span><span class="p">),</span>
             <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">query_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">query_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
@@ -480,8 +518,15 @@
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'</span><span class="p">),</span>
             <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
             <span class="n">where</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to update in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">)</span>
+            <span class="n">db</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_db</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">update_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
+
+            <span class="c1"># (get_data_router_create_users) Handle user permissions</span>
+            <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+                <span class="n">handle_user_permissions</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+
+            <span class="c1"># (get_data_router_update_run) Execute update</span>
             <span class="n">handle_table_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">)</span>
             <span class="n">handle_table_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
             <span class="n">update_table</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>

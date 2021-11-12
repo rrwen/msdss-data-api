@@ -3,11 +3,6 @@ data
 
 .. automodule:: msdss_data_api.data
 
-_format_where_statements
-------------------------
-
-.. autofunction:: msdss_data_api.data._format_where_statements
-
 handle_table_read
 ------------------
 
@@ -23,10 +18,21 @@ handle_table_write
 
 .. autofunction:: msdss_data_api.data.handle_table_write
 
+handle_where_statements
+------------------------
+
+.. autofunction:: msdss_data_api.data.handle_where_statements
+
+
 create_table
 ------------
 
 .. autofunction:: msdss_data_api.data.create_table
+
+delete_table
+------------
+
+.. autofunction:: msdss_data_api.data.delete_table
 
 query_table
 -----------

@@ -3,37 +3,52 @@ data
 
 .. automodule:: msdss_data_api.data
 
-_format_where_statements
-------------------------
+Datasets
+--------
 
-.. autofunction:: msdss_data_api.data._format_where_statements
+.. autoclass:: msdss_data_api.data.Datasets
 
-handle_table_read
-------------------
+create
+^^^^^^
 
-.. autofunction:: msdss_data_api.data.handle_table_read
+.. automethod:: msdss_data_api.data.Datasets.create
 
-handle_table_restrictions
--------------------------
+delete
+^^^^^^
 
-.. autofunction:: msdss_data_api.data.handle_table_restrictions
+.. automethod:: msdss_data_api.data.Datasets.delete
 
-handle_table_write
-------------------
+get
+^^^
 
-.. autofunction:: msdss_data_api.data.handle_table_write
+.. automethod:: msdss_data_api.data.Datasets.get
 
-create_table
-------------
+update
+^^^^^^
 
-.. autofunction:: msdss_data_api.data.create_table
+.. automethod:: msdss_data_api.data.Datasets.update
 
-query_table
------------
+DatasetsHandler
+---------------
 
-.. autofunction:: msdss_data_api.data.query_table
+.. autoclass:: msdss_data_api.data.DatasetsHandler
 
-update_table
-------------
+handle_read
+^^^^^^^^^^^
 
-.. autofunction:: msdss_data_api.data.update_table
+.. automethod:: msdss_data_api.data.handle_read
+
+handle_restrictions
+^^^^^^^^^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.data.handle_restrictions
+
+handle_where
+^^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.data.handle_where
+
+handle_write
+^^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.data.handle_write

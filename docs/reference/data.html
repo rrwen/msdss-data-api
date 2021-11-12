@@ -261,15 +261,17 @@
   <ul class="md-nav__list" data-md-scrollfix="">
         <li class="md-nav__item"><a href="#reference-data--page-root" class="md-nav__link">data</a><nav class="md-nav">
               <ul class="md-nav__list">
-        <li class="md-nav__item"><a href="#format-where-statements" class="md-nav__link">_format_where_statements</a>
-        </li>
         <li class="md-nav__item"><a href="#handle-table-read" class="md-nav__link">handle_table_read</a>
         </li>
         <li class="md-nav__item"><a href="#handle-table-restrictions" class="md-nav__link">handle_table_restrictions</a>
         </li>
         <li class="md-nav__item"><a href="#handle-table-write" class="md-nav__link">handle_table_write</a>
         </li>
+        <li class="md-nav__item"><a href="#handle-where-statements" class="md-nav__link">handle_where_statements</a>
+        </li>
         <li class="md-nav__item"><a href="#create-table" class="md-nav__link">create_table</a>
+        </li>
+        <li class="md-nav__item"><a href="#delete-table" class="md-nav__link">delete_table</a>
         </li>
         <li class="md-nav__item"><a href="#query-table" class="md-nav__link">query_table</a>
         </li>
@@ -293,9 +295,6 @@
             
   <section id="module-msdss_data_api.data">
 <span id="data"></span><h1 id="reference-data--page-root">data<a class="headerlink" href="#reference-data--page-root" title="Permalink to this headline">¶</a></h1>
-<section id="format-where-statements">
-<h2 id="format-where-statements">_format_where_statements<a class="headerlink" href="#format-where-statements" title="Permalink to this headline">¶</a></h2>
-</section>
 <section id="handle-table-read">
 <h2 id="handle-table-read">handle_table_read<a class="headerlink" href="#handle-table-read" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
@@ -348,7 +347,7 @@
 <h2 id="handle-table-restrictions">handle_table_restrictions<a class="headerlink" href="#handle-table-restrictions" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="msdss_data_api.data.handle_table_restrictions">
-<span class="sig-prename descclassname"><span class="pre">msdss_data_api.data.</span></span><span class="sig-name descname"><span class="pre">handle_table_restrictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restricted_tables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['user']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/data.html#handle_table_restrictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.data.handle_table_restrictions" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">msdss_data_api.data.</span></span><span class="sig-name descname"><span class="pre">handle_table_restrictions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restricted_tables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['data',</span> <span class="pre">'user']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/data.html#handle_table_restrictions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.data.handle_table_restrictions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle a table read, checking for existence and restrictions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -432,6 +431,50 @@
 </div>
 </dd></dl>
 </section>
+<section id="handle-where-statements">
+<h2 id="handle-where-statements">handle_where_statements<a class="headerlink" href="#handle-where-statements" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="msdss_data_api.data.handle_where_statements">
+<span class="sig-prename descclassname"><span class="pre">msdss_data_api.data.</span></span><span class="sig-name descname"><span class="pre">handle_where_statements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/data.html#handle_where_statements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.data.handle_where_statements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format where statements and throw an exception if it does not match the expected format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows.</p>
+<ul class="simple">
+<li><p>Operators are one of: <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!='',</span> <span class="pre">``LIKE</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">'column_two</span> <span class="pre">&lt;</span> <span class="pre">3'</span></code></p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of where statements divided into column, operator, value format for each list of lists.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a>))</p>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_data_api.data</span> <span class="kn">import</span> <span class="n">handle_where_statements</span>
+
+<span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'col &lt; 3'</span><span class="p">,</span> <span class="s1">'col = a'</span><span class="p">]</span>
+<span class="n">where_formatted</span> <span class="o">=</span> <span class="n">handle_where_statements</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">where_formatted</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[['col', '&lt;', '3'], ['col', '=', 'a']]
+</pre></div>
+</div>
+</div>
+</div>
+</dd></dl>
+</section>
 <section id="create-table">
 <h2 id="create-table">create_table<a class="headerlink" href="#create-table" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
@@ -474,6 +517,70 @@
 </div>
 </div>
 <div class="cell_output docutils container">
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="delete-table">
+<h2 id="delete-table">delete_table<a class="headerlink" href="#delete-table" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="msdss_data_api.data.delete_table">
+<span class="sig-prename descclassname"><span class="pre">msdss_data_api.data.</span></span><span class="sig-name descname"><span class="pre">delete_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">table</span></em>, <em class="sig-param"><span class="pre">where=None</span></em>, <em class="sig-param"><span class="pre">where_boolean='AND'</span></em>, <em class="sig-param"><span class="pre">delete_all=False</span></em>, <em class="sig-param"><span class="pre">db=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/data.html#delete_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.data.delete_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a dataset.</p>
+<p>See <code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database.delete()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table to hold the data.</p></li>
+<li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows for deleting.</p>
+<ul>
+<li><p>Operators are one of: <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!='',</span> <span class="pre">``LIKE</span></code></p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">'column_two</span> <span class="pre">&lt;</span> <span class="pre">3'</span></code></p></li>
+</ul>
+</p></li>
+<li><p><strong>where_boolean</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – One of AND or OR to combine where statements with. Defaults to AND if not one of AND or OR.</p></li>
+<li><p><strong>delete_all</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to remove the entire dataset or not.</p></li>
+<li><p><strong>db</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code>) – Database object to use for creating data.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.data</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">)</span>
+
+<span class="c1"># Create sample data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">'id'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="s1">'column_one'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span>
+    <span class="s1">'column_two'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">create_table</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Delete sample data</span>
+<span class="n">delete_table</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'id = 1'</span><span class="p">],</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">query_table</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="c1"># Delete the entire dataset</span>
+<span class="n">delete_table</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'id': [2, 3], 'column_one': ['b', 'c'], 'column_two': [4, 6]}
+</pre></div>
+</div>
 </div>
 </div>
 </dd></dl>
