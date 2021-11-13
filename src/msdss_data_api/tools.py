@@ -1,5 +1,8 @@
 from msdss_base_database import Database
 
+from .handlers import *
+from .managers import *
+
 def create_data_db_func(db = Database()):
     """
     Create a function to use as an API dependency.
@@ -23,7 +26,7 @@ def create_data_db_func(db = Database()):
     .. jupyter-execute::
 
         from msdss_base_database import Database
-        from msdss_data_api.data import *
+        from msdss_data_api.tools import *
         
         # Setup database
         db = Database()
@@ -33,4 +36,11 @@ def create_data_db_func(db = Database()):
     """
     async def out():
         yield db
+    return out
+
+def create_data_manager_func(database=Database(), restricted_tables=DEFAULT_RESTRICTED_TABLES):
+    data_handler = DataHandler(database=database, restricted_tables=restricted_tables)
+    data_manager = DataManager(database=database, handler=data_handler)
+    async def out():
+        yield data_manager
     return out

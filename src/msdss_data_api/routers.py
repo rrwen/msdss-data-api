@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Body, Depends, HTTPException, Query
 from typing import Any, Dict, List, Optional
 
-from .data import *
+from .managers import *
 from .tools import *
-from .users import *
 
 async def _no_current_user():
     return None
@@ -11,7 +10,7 @@ async def _no_current_user():
 def get_data_router(
     prefix='/data',
     tags=['data'],
-    get_data_db=create_data_db_func(),
+    database=Database(),
     get_current_user=_no_current_user,
     restricted_tables=DEFAULT_RESTRICTED_TABLES,
     enable_create_route=True,
@@ -49,8 +48,8 @@ def get_data_router(
         Prefix path to all routes belonging to this router.
     tags : list(str)
         Tags for all routes in this router.
-    get_data_db : func
-        Function yielding a :class:`msdss_base_database:msdss_base_database.core.Database` object. See :func:`msdss_data_api.tools.create_data_db_func`.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
+        A :class:`msdss_base_database:msdss_base_database.core.Database` object.
     get_current_user : func
         A function to get the current user. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
     restricted_tables : list(str)
@@ -156,11 +155,10 @@ def get_data_router(
     update_get_current_user = update_get_current_user if update_get_current_user else get_current_user
 
     # (get_data_router_create) Create api router for data routes
-    out = APIRouter(
-        prefix=prefix,
-        tags=tags,
-        *args, **kwargs
-    )
+    out = APIRouter(prefix=prefix, tags=tags, *args, **kwargs)
+
+    # (get_data_router_manager) Create data manager func
+    get_data_manager = create_data_manager_func(database=database, restricted_tables=restricted_tables)
 
     # (get_data_router_create) Add create route to data router
     if enable_create_route:
@@ -168,12 +166,10 @@ def get_data_router(
         async def create_data(
             dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'),
             data: Dict[str, List] = Body(...),
-            db = Depends(get_data_db),
+            data_manager = Depends(get_data_manager),
             user = Depends(create_get_current_user)
         ):
-            handle_table_restrictions(dataset, restricted_tables=create_route_restricted_tables)
-            handle_table_write(dataset, db=db)
-            create_table(table=dataset, data=data, db=db)
+            data_manager.create(dataset=dataset, data=data)
 
     # (get_data_router_delete) Add delete route to data router
     if enable_delete_route:
@@ -183,12 +179,10 @@ def get_data_router(
             where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             delete_all: Optional[bool] = Query(False, description='Whether to remove the entire dataset or not'),
-            db = Depends(get_data_db),
+            data_manager = Depends(get_data_manager),
             user = Depends(delete_get_current_user)
         ):
-            handle_table_restrictions(dataset, restricted_tables=delete_route_restricted_tables)
-            handle_table_read(dataset, db=db)
-            delete_table(table=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
+            data_manager.delete(dataset=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
 
     # (get_data_router_id) Add id route to data router
     if enable_id_route:
@@ -197,13 +191,11 @@ def get_data_router(
             dataset: str = Query(..., description='Name of the dataset'),
             id: str = Query(..., description='Identifier value to retrieve a specific document in the dataset'),
             id_variable: Optional[str] =  Query('id', description='Identifier variable name for the dataset'),
-            db = Depends(get_data_db),
+            data_manager = Depends(get_data_manager),
             user = Depends(id_get_current_user)
         ):
-            handle_table_restrictions(dataset, restricted_tables=id_route_restricted_tables)
-            handle_table_read(dataset, db=db)
             where = [f'{id_variable} = {id}']
-            response = query_table(table=dataset, where=where, db=db)
+            response = data_manager.get(dataset=dataset, where=where)
             return response
 
     # (get_data_router_query) Add query route to data router
@@ -220,13 +212,11 @@ def get_data_router(
             order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
-            db = Depends(get_data_db),
+            data_manager = Depends(get_data_manager),
             user = Depends(query_get_current_user)
         ):
-            handle_table_restrictions(dataset, restricted_tables=query_route_restricted_tables)
-            handle_table_read(dataset, db=db)
-            response = query_table(
-                table=dataset,
+            response = data_manager.get(
+                dataset=dataset,
                 select=select,
                 where=where,
                 group_by=group_by,
@@ -235,28 +225,19 @@ def get_data_router(
                 order_by=order_by,
                 order_by_sort=order_by_sort,
                 limit=limit,
-                where_boolean=where_boolean,
-                db=db
+                where_boolean=where_boolean
             )
             return response
     
-    # (get_data_router_update)  Add update route to data router
+    # (get_data_router_update) Add update route to data router
     if enable_update_route:
         @out.put(update_route_path, **update_route_kwargs)
         async def update_data(
             dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'),
             data: Dict[str, Any] = Body(...),
             where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
-            db = Depends(get_data_db),
+            data_manager = Depends(get_data_manager),
             user = Depends(update_get_current_user)
         ):
-
-            # (get_data_router_create_users) Handle user permissions
-            if user:
-                handle_user_permissions(user.id, dataset)
-
-            # (get_data_router_update_run) Execute update
-            handle_table_restrictions(dataset, restricted_tables=update_route_restricted_tables)
-            handle_table_read(dataset, db=db)
-            update_table(table=dataset, data=data, where=where, db=db)
+            data_manager.update(dataset=dataset, data=data, where=where)
     return out

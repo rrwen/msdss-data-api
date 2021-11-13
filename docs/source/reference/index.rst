@@ -4,8 +4,8 @@ API Reference
 .. toctree::
 
     core
-    data
+    handlers
+    managers
     routers
     tools
-    users
     
