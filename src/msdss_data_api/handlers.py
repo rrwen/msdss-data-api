@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from msdss_base_database import Database
 
-DEFAULT_RESTRICTED_TABLES = ['metadata', 'user']
+from .defaults import *
 
 class DataHandler:
     """
