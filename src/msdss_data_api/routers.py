@@ -1,3 +1,4 @@
+from re import L
 from fastapi import APIRouter, Body, Depends, HTTPException, Query
 from typing import Any, Dict, List, Optional
 
@@ -26,7 +27,7 @@ def get_data_router(
     delete_route_kwargs={},
     delete_route_restricted_tables=None,
     delete_get_current_user=None,
-    id_route_path='/{dataset}/{id}',
+    id_route_path='/{dataset}/id/{id}',
     id_route_kwargs={},
     id_route_restricted_tables=None,
     id_get_current_user=None,
@@ -241,3 +242,17 @@ def get_data_router(
         ):
             data_manager.update(dataset=dataset, data=data, where=where)
     return out
+
+def get_metadata_router(
+    prefix='/metadata',
+    tags=['metadata'],
+    database=Database(),
+    get_current_user=_no_current_user,
+    restricted_tables=DEFAULT_RESTRICTED_TABLES,
+    enable_create_route=True,
+    create_route_path='/',
+    create_route_kwargs={},
+    create_route_restricted_tables=None,
+    create_get_current_user=None,
+    *args, **kwargs):
+    pass

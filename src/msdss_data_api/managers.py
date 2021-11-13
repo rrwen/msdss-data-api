@@ -69,7 +69,7 @@ class DataManager:
         dataset : str
             Name of the dataset or table to hold the data.
         data : list(dict)
-            Data to insert into the table. Should be a list of dictionaries, where each key in each dict is a column name.
+            Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.
         
         Author
         ------
