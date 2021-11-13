@@ -68,8 +68,8 @@ class DataManager:
         ----------
         dataset : str
             Name of the dataset or table to hold the data.
-        data : dict(list)
-            Data to insert into the table. Should be a dictionary of lists, where each key is a column name and each list represents values in the order of rows of the table.
+        data : list(dict)
+            Data to insert into the table. Should be a list of dictionaries, where each key in each dict is a column name.
         
         Author
         ------
@@ -91,11 +91,11 @@ class DataManager:
                 db.drop_table("test_table")
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
         """
         self.handler.handle_restrictions(dataset)
@@ -143,11 +143,11 @@ class DataManager:
                 db.drop_table("test_table")
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Delete sample data
@@ -239,11 +239,11 @@ class DataManager:
                 db.drop_table("test_table")
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Query the data from the database
@@ -264,7 +264,7 @@ class DataManager:
             order_by_sort=order_by_sort,
             limit=limit,
             where_boolean=where_boolean
-        ).to_dict(orient='list')
+        ).to_dict(orient='records')
         return out
 
     def update(self, dataset, data, where):
@@ -305,11 +305,11 @@ class DataManager:
                 db.drop_table("test_table")
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Update the data from the database

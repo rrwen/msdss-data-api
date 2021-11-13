@@ -164,8 +164,8 @@ def get_data_router(
     if enable_create_route:
         @out.post(create_route_path, **create_route_kwargs)
         async def create_data(
-            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "{key: [value, ...], key2: [value2, ...]}", where each key represents a variable and values inside each list are of equal length in order.'),
-            data: Dict[str, List] = Body(...),
+            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'),
+            data: List[Dict[str, Any]] = Body(...),
             data_manager = Depends(get_data_manager),
             user = Depends(create_get_current_user)
         ):

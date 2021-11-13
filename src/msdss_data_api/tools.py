@@ -34,7 +34,7 @@ def create_data_manager_func(database=Database(), restricted_tables=DEFAULT_REST
         db = Database()
 
         # Create a function yielding the data manager to use as a dependency
-        get_data_manager = create_data_db_func(database=db)
+        get_data_manager = create_data_manager_func(database=db)
     """
     data_handler = DataHandler(database=database, restricted_tables=restricted_tables)
     data_manager = DataManager(database=database, handler=data_handler)

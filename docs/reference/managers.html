@@ -359,7 +359,7 @@
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table to hold the data.</p></li>
-<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>)</em>) – Data to insert into the table. Should be a dictionary of lists, where each key is a column name and each list represents values in the order of rows of the table.</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>)</em>) – Data to insert into the table. Should be a list of dictionaries, where each key in each dict is a column name.</p></li>
 </ul>
 </dd>
 </dl>
@@ -380,11 +380,11 @@
     <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">)</span>
 
 <span class="c1"># Create sample data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'id'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="s1">'column_one'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span>
-    <span class="s1">'column_two'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+<span class="p">]</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -433,11 +433,11 @@
     <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">)</span>
 
 <span class="c1"># Create sample data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'id'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="s1">'column_one'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span>
-    <span class="s1">'column_two'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+<span class="p">]</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Delete sample data</span>
@@ -451,7 +451,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'id': [2, 3], 'column_one': ['b', 'c'], 'column_two': [4, 6]}
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 2, 'column_one': 'b', 'column_two': 4}, {'id': 3, 'column_one': 'c', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -511,11 +511,11 @@ If a list of str, then it must have the same number of elements as <code class="
     <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">)</span>
 
 <span class="c1"># Create sample data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'id'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="s1">'column_one'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span>
-    <span class="s1">'column_two'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+<span class="p">]</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Query the data from the database</span>
@@ -525,7 +525,7 @@ If a list of str, then it must have the same number of elements as <code class="
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'id': [1, 2, 3], 'column_one': ['a', 'b', 'c'], 'column_two': [2, 4, 6]}
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'b', 'column_two': 4}, {'id': 3, 'column_one': 'c', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -570,11 +570,11 @@ If a list of str, then it must have the same number of elements as <code class="
     <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="s2">"test_table"</span><span class="p">)</span>
 
 <span class="c1"># Create sample data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">'id'</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="s1">'column_one'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'a'</span><span class="p">,</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'c'</span><span class="p">],</span>
-    <span class="s1">'column_two'</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
-<span class="p">}</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">4</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">,</span> <span class="s1">'column_two'</span><span class="p">:</span> <span class="mi">6</span><span class="p">},</span>
+<span class="p">]</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Update the data from the database</span>
@@ -588,7 +588,7 @@ If a list of str, then it must have the same number of elements as <code class="
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'id': [1, 2, 3], 'column_one': ['a', 'UPDATED', 'UPDATED'], 'column_two': [2, 4, 6]}
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'UPDATED', 'column_two': 4}, {'id': 3, 'column_one': 'UPDATED', 'column_two': 6}]
 </pre></div>
 </div>
 </div>

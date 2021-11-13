@@ -274,19 +274,21 @@
 <span class="kn">from</span> <span class="nn">.handlers</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="o">*</span>
 
-<div class="viewcode-block" id="create_data_db_func"><a class="viewcode-back" href="../../reference/tools.html#msdss_data_api.tools.create_data_db_func">[docs]</a><span class="k">def</span> <span class="nf">create_data_db_func</span><span class="p">(</span><span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()):</span>
+<div class="viewcode-block" id="create_data_manager_func"><a class="viewcode-back" href="../../reference/tools.html#msdss_data_api.tools.create_data_manager_func">[docs]</a><span class="k">def</span> <span class="nf">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">):</span>
     <span class="sd">"""</span>
-<span class="sd">    Create a function to use as an API dependency.</span>
+<span class="sd">    Create a function yielding a :class:`msdss_data_api.managers.DataManager`.</span>
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    db : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object to use for APIs.</span>
+<span class="sd">    restricted_tables : list(str)</span>
+<span class="sd">        List of restricted tables in the database to prevent access to.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    func</span>
-<span class="sd">        A function yielding the ``db``.</span>
+<span class="sd">        A function yielding a preconfigured :class:`msdss_data_api.managers.DataManager`.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -302,19 +304,14 @@
 <span class="sd">        # Setup database</span>
 <span class="sd">        db = Database()</span>
 
-<span class="sd">        # Create a function yielding the database to use as a dependency</span>
-<span class="sd">        create_data_db_func(db=db)</span>
+<span class="sd">        # Create a function yielding the data manager to use as a dependency</span>
+<span class="sd">        get_data_manager = create_data_manager_func(database=db)</span>
 <span class="sd">    """</span>
-    <span class="k">async</span> <span class="k">def</span> <span class="nf">out</span><span class="p">():</span>
-        <span class="k">yield</span> <span class="n">db</span>
-    <span class="k">return</span> <span class="n">out</span></div>
-
-<span class="k">def</span> <span class="nf">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">):</span>
     <span class="n">data_handler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">restricted_tables</span><span class="p">)</span>
     <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">data_handler</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">out</span><span class="p">():</span>
         <span class="k">yield</span> <span class="n">data_manager</span>
-    <span class="k">return</span> <span class="n">out</span>
+    <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 
           </article>
