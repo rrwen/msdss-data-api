@@ -3,19 +3,21 @@ from msdss_base_database import Database
 from .handlers import *
 from .managers import *
 
-def create_data_db_func(db = Database()):
+def create_data_manager_func(database=Database(), restricted_tables=DEFAULT_RESTRICTED_TABLES):
     """
-    Create a function to use as an API dependency.
+    Create a function yielding a :class:`msdss_data_api.managers.DataManager`.
     
     Parameters
     ----------
-    db : :class:`msdss_base_database:msdss_base_database.core.Database`
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for APIs.
+    restricted_tables : list(str)
+        List of restricted tables in the database to prevent access to.
 
     Returns
     -------
     func
-        A function yielding the ``db``.
+        A function yielding a preconfigured :class:`msdss_data_api.managers.DataManager`.
     
     Author
     ------
@@ -31,14 +33,9 @@ def create_data_db_func(db = Database()):
         # Setup database
         db = Database()
 
-        # Create a function yielding the database to use as a dependency
-        create_data_db_func(db=db)
+        # Create a function yielding the data manager to use as a dependency
+        get_data_manager = create_data_db_func(database=db)
     """
-    async def out():
-        yield db
-    return out
-
-def create_data_manager_func(database=Database(), restricted_tables=DEFAULT_RESTRICTED_TABLES):
     data_handler = DataHandler(database=database, restricted_tables=restricted_tables)
     data_manager = DataManager(database=database, handler=data_handler)
     async def out():
