@@ -242,17 +242,3 @@ def get_data_router(
         ):
             data_manager.update(dataset=dataset, data=data, where=where)
     return out
-
-def get_metadata_router(
-    prefix='/metadata',
-    tags=['metadata'],
-    database=Database(),
-    get_current_user=_no_current_user,
-    restricted_tables=DEFAULT_RESTRICTED_TABLES,
-    enable_create_route=True,
-    create_route_path='/',
-    create_route_kwargs={},
-    create_route_restricted_tables=None,
-    create_get_current_user=None,
-    *args, **kwargs):
-    pass

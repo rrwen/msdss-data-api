@@ -66,7 +66,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="managers" href="managers.html" />
-    <link rel="prev" title="Class" href="core.html" />
+    <link rel="prev" title="DataAPI" href="core.html" />
   
    
 
@@ -295,12 +295,12 @@
 <h2 id="datahandler">DataHandler<a class="headerlink" href="#datahandler" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_data_api.handlers.DataHandler">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.handlers.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">restricted_tables=['data',</span> <span class="pre">'user']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/handlers.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.handlers.DataHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.handlers.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">restricted_tables=['metadata',</span> <span class="pre">'user']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/handlers.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.handlers.DataHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to handle dataset events.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>database</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_database:msdss_base_database.core.Database</span></code>) – Database object to use for managing datasets.</p></li>
+<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.5)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – Database object to use for managing datasets.</p></li>
 <li><p><strong>restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.</p></li>
 </ul>
 </dd>
@@ -542,7 +542,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
           
-            <a href="core.html" title="Class"
+            <a href="core.html" title="DataAPI"
                class="md-flex md-footer-nav__link md-footer-nav__link--prev"
                rel="prev">
               <div class="md-flex__cell md-flex__cell--shrink">
@@ -551,7 +551,7 @@
               <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
                 <span class="md-flex__ellipsis">
                   <span
-                      class="md-footer-nav__direction"> Previous </span> Class </span>
+                      class="md-footer-nav__direction"> Previous </span> DataAPI </span>
               </div>
             </a>
           

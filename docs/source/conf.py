@@ -52,7 +52,10 @@ extensions = [
     'sphinx.ext.mathjax'
 ]
 intersphinx_mapping = {
-    'python': ('https://docs.python.org/3/', None)
+    'python': ('https://docs.python.org/3/', None),
+    'msdss_base_database': ('https://rrwen.github.io/msdss-base-database/', None),
+    'msdss_base_api': ('https://rrwen.github.io/msdss-base-api/', None),
+    'msdss_users_api': ('https://rrwen.github.io/msdss-users-api/', None)
 }
 napoleon_custom_sections = ['Author', 'Authors']
 napoleon_include_private_with_doc = True

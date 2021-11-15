@@ -1,9 +1,4 @@
-Class
-======
+DataAPI
+=======
 
-.. autoclass:: msdss_data_api
-
-Method
-------
-
-.. automethod:: msdss_data_api
+.. autoclass:: msdss_data_api.core.DataAPI

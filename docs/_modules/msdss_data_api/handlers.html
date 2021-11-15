@@ -272,7 +272,7 @@
 <span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">HTTPException</span>
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 
-<span class="n">DEFAULT_RESTRICTED_TABLES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'data'</span><span class="p">,</span> <span class="s1">'user'</span><span class="p">]</span>
+<span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="DataHandler"><a class="viewcode-back" href="../../reference/handlers.html#msdss_data_api.handlers.DataHandler">[docs]</a><span class="k">class</span> <span class="nc">DataHandler</span><span class="p">:</span>
     <span class="sd">"""</span>

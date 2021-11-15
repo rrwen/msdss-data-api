@@ -285,13 +285,37 @@
             
   <section id="how-it-works">
 <h1 id="howitworks--page-root">How it Works<a class="headerlink" href="#howitworks--page-root" title="Permalink to this headline">¶</a></h1>
-<ol class="loweralpha simple" start="24">
-<li></li>
-</ol>
-<div class="graphviz"><img alt="digraph methods {
-a -&gt; b;
-}" class="graphviz" src="_images/graphviz-1b03c12ace2546edeee1795fa59d2f463d2c3f69.png"/></div>
-</section>
+<p>This package uses <a class="reference external" href="https://fastapi-users.github.io/fastapi-users/">FastAPI Users</a> to create an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.0.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application.</p>
+<p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.5)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> through the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.DataManager" title="msdss_data_api.managers.DataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> class, while data operation checks are handled by <a class="reference internal" href="reference/handlers.html#msdss_data_api.handlers.DataHandler" title="msdss_data_api.handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.handlers.DataHandler</span></code></a>.</p>
+<p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/usersapi.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.0.9)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies.</p>
+<div class="graphviz"><img alt='digraph methods {
+rankdir=TB;
+
+baseapi[label="msdss-base-api" URL="https://rrwen.github.io/msdss-base-api/" style=filled];
+basedb[label="msdss-base-database" URL="https://rrwen.github.io/msdss-base-database/" style=filled];
+usersapi[label="msdss-users-api" URL="https://rrwen.github.io/msdss-users-api/" style=filled];
+
+datamanager[label="DataManager" shape=rect];
+datahandler[label="DataHandler" shape=rect];
+
+datamanagerfunc[label="create_data_manager_func" shape=rect style=rounded URL=""];
+getdatarouter[label="get_data_router" shape=rect style=rounded URL=""];
+
+subgraph cluster0 {
+   label=&lt; &lt;B&gt;msdss_data_api.core.DataAPI&lt;/B&gt; &gt;;
+   style=rounded;
+
+   basedb -&gt; {datahandler;datamanager};
+   datahandler -&gt; datamanager -&gt; getdatarouter;
+   datamanagerfunc -&gt; getdatarouter;
+   {usersapi;getdatarouter} -&gt; baseapi;
+}
+}' class="graphviz" src="_images/graphviz-282c37fc29760987b1c4bcdc2cf6aaa01243071a.png" usemap="#methods"/></div>
+<map id="methods" name="methods">
+<area alt="" coords="299,465,295,458,282,451,262,446,237,443,209,441,181,443,156,446,136,451,124,458,119,465,124,473,136,479,156,485,181,488,209,489,237,488,262,485,282,479,295,473" href="https://rrwen.github.io/msdss-base-api/" id="node1" shape="poly" title="msdss-base-api"/>
+<area alt="" coords="383,81,377,74,361,67,335,62,302,59,265,57,229,59,196,62,170,67,153,74,147,81,153,89,170,95,196,101,229,104,265,105,302,104,335,101,361,95,377,89" href="https://rrwen.github.io/msdss-base-database/" id="node2" shape="poly" title="msdss-base-database"/>
+<area alt="" coords="394,369,390,362,376,355,356,350,330,347,301,345,273,347,247,350,226,355,213,362,209,369,213,377,226,383,247,389,273,392,301,393,330,392,356,389,376,383,390,377" href="https://rrwen.github.io/msdss-users-api/" id="node3" shape="poly" title="msdss-users-api"/>
+</map></section>
 
 
           </article>

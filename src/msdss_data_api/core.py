@@ -14,7 +14,104 @@ except ImportError:
     pass
 
 class DataAPI(API):
+    """
+    Class for creating Data APIs.
+    
+    Parameters
+    ----------
+    driver : str
+        The driver name of the database connection, which are commonly ``postgresql``, ``sqlite``, ``mysql``, ``oracle`` or ``mssql``.  (see `SQLAlchemy supported databases <https://docs.sqlalchemy.org/en/14/core/engines.html#supported-databases>`_).
+    user : str
+        User name for the connection.
+    password : str
+        Password for the user.
+    host : str
+        Host address of the connection.
+    port : str
+        Port number of the connection.
+    database : str
+        Database name of the connection.
+    enable_data_router : bool
+        Whether to include the data api router.
+    enable_users : bool
+        Whether to include the users router, which enables route protection for data routes. See :class:`msdss_users_api:msdss_users_api.core.UsersAPI`.
+    data_router_kwargs : dict
+        Additional arguments passed to :func:`msdss_data_api.routers.get_data_router`.
+    users_kwargs : dict
+        Additional arguments passed to :class:`msdss_users_api:msdss_users_api.core.UsersAPI` if ``enable_users`` is ``True``. 
 
+        * Note that any arguments with the same names as :class:`msdss_users_api:msdss_users_api.core.UsersAPI` will also be passed to it - however anything defined in this parameter will take priority
+
+    get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for all data routes if ``enable_users`` is ``True``.
+    create_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data create route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
+    delete_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data delete route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
+    id_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the id create route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    query_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data query route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    update_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data update route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    load_env : bool
+        Whether to load variables from a file with environmental variables at ``env_file`` or not.
+    env_file : str
+        The path of the file with environmental variables.
+    key_path : str
+        The path of the key file for the ``env_file``.
+    driver_key : str
+        The environmental variable name for ``driver``.
+    user_key : str
+        The environmental variable name for ``user``.
+    password_key : str
+        The environmental variable name for ``password``.
+    host_key : str
+        The environmental variable name for ``key``.
+    port_key : str
+        The environmental variable name for ``port``.
+    database_key : str
+        The environmental variable name for ``database``.
+
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from msdss_data_api import DataAPI
+
+        # Create a data api without users
+        app = DataAPI(
+            driver='postgresql',
+            user='msdss',
+            password='msdss123',
+            host='localhost',
+            port='5432',
+            database='msdss'
+        )
+
+        # Create a data api with users
+        # NOTE: Change parameter secret to a more secure value
+        app = DataAPI(
+            driver='postgresql',
+            user='msdss',
+            password='msdss123',
+            host='localhost',
+            port='5432',
+            database='msdss',
+            enable_users=True,
+            users_kwargs={
+                'secret': 'CHANGE-THIS'
+            }
+        )
+
+        # Run the app with app.start()
+        # Try API at http://localhost:8000/docs
+        # app.start()
+    """
     def __init__(
         self,
         driver='postgresql',

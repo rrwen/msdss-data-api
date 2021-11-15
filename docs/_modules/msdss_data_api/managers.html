@@ -272,6 +272,7 @@
 <span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">HTTPException</span>
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 
+<span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.handlers</span> <span class="kn">import</span> <span class="o">*</span>
 
 <div class="viewcode-block" id="DataManager"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager">[docs]</a><span class="k">class</span> <span class="nc">DataManager</span><span class="p">:</span>
@@ -340,7 +341,7 @@
 <span class="sd">        dataset : str</span>
 <span class="sd">            Name of the dataset or table to hold the data.</span>
 <span class="sd">        data : list(dict)</span>
-<span class="sd">            Data to insert into the table. Should be a list of dictionaries, where each key in each dict is a column name.</span>
+<span class="sd">            Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</span>
 <span class="sd">        </span>
 <span class="sd">        Author</span>
 <span class="sd">        ------</span>
