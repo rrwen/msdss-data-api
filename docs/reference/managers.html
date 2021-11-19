@@ -728,35 +728,47 @@ This defines the table to store the metadata, where the default is:</p>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
-<p>from datetime import datetime
-from pprint import pprint
-from msdss_base_database import Database
-from msdss_data_api.managers import *
-from msdss_data_api.defaults import *</p>
-<p># Setup database
-db = Database()</p>
-<p># Check if the metadata table exists and drop if it does
-if db.has_table(DEFAULT_METADATA_TABLE):</p>
-<blockquote>
-<div><p>db.drop_table(DEFAULT_METADATA_TABLE)</p>
-</div></blockquote>
-<p># Setup metadata manager
-mdm = MetadataManager(database=db)</p>
-<p># Add metadata
-metadata = [{</p>
-<blockquote>
-<div><p>‘title’: ‘Testing Data’,
-‘description’: ‘Data used for testing’,
-‘source’: ‘Automatically generated from Python’,
-‘uploaded_by’: ‘msdss’,
-‘uploaded’: datetime.now(),
-‘updated’: datetime.now()</p>
-</div></blockquote>
-<p>}]
-mdm.create(‘test_data’, metadata)</p>
-<p># Print results
-tb = mdm.search()
-pprint(tb)</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+
+<span class="c1"># Print results</span>
+<span class="n">tb</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
 </dd></dl>
 </section>
 <section id="id2">
@@ -774,42 +786,61 @@ pprint(tb)</p>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
-<p>from datetime import datetime
-from pprint import pprint
-from msdss_base_database import Database
-from msdss_data_api.managers import *
-from msdss_data_api.defaults import *</p>
-<p># Setup database
-db = Database()</p>
-<p># Check if the metadata table exists and drop if it does
-if db.has_table(DEFAULT_METADATA_TABLE):</p>
-<blockquote>
-<div><p>db.drop_table(DEFAULT_METADATA_TABLE)</p>
-</div></blockquote>
-<p># Setup metadata manager
-mdm = MetadataManager(database=db)</p>
-<p># Add metadata
-metadata = [{</p>
-<blockquote>
-<div><p>‘dataset’: ‘test_data’,
-‘title’: ‘Testing Data’,
-‘description’: ‘Data used for testing’,
-‘source’: ‘Automatically generated from Python’,
-‘uploaded_by’: ‘msdss’,
-‘uploaded’: datetime.now(),
-‘updated’: datetime.now()</p>
-</div></blockquote>
-<p>}]
-mdm.create(‘test_data’, metadata)
-before_delete = mdm.search()</p>
-<p># Delete metadata
-mdm.delete(‘test_data’)
-after_delete = mdm.search()</p>
-<p># Print results
-print(‘before_delete:n’)
-pprint(before_delete)
-print(’nafter_delete:n’
-pprint(after_delete)</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'dataset'</span><span class="p">:</span> <span class="s1">'test_data'</span><span class="p">,</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+<span class="n">before_delete</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+
+<span class="c1"># Delete metadata</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+<span class="n">after_delete</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+
+<span class="c1"># Print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'before_delete:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">before_delete</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">after_delete:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">after_delete</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_delete:
+
+None
+
+after_delete:
+
+None
+</pre></div>
+</div>
+</div>
+</div>
 </dd></dl>
 </section>
 <section id="id3">
@@ -833,35 +864,47 @@ pprint(after_delete)</p>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
-<p>from datetime import datetime
-from pprint import pprint
-from msdss_base_database import Database
-from msdss_data_api.managers import *
-from msdss_data_api.defaults import *</p>
-<p># Setup database
-db = Database()</p>
-<p># Check if the metadata table exists and drop if it does
-if db.has_table(DEFAULT_METADATA_TABLE):</p>
-<blockquote>
-<div><p>db.drop_table(DEFAULT_METADATA_TABLE)</p>
-</div></blockquote>
-<p># Setup metadata manager
-mdm = MetadataManager(database=db)</p>
-<p># Add metadata
-metadata = [{</p>
-<blockquote>
-<div><p>‘title’: ‘Testing Data’,
-‘description’: ‘Data used for testing’,
-‘source’: ‘Automatically generated from Python’,
-‘uploaded_by’: ‘msdss’,
-‘uploaded’: datetime.now(),
-‘updated’: datetime.now()</p>
-</div></blockquote>
-<p>}]
-mdm.create(‘test_data’, metadata)</p>
-<p># Get metadata
-metadata_get = mdm.get(‘test_data’)
-pprint(metadata_get)</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+
+<span class="c1"># Get metadata</span>
+<span class="n">metadata_get</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">metadata_get</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
 </dd></dl>
 </section>
 <section id="search">
@@ -888,35 +931,47 @@ pprint(metadata_get)</p>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
-<p>from datetime import datetime
-from pprint import pprint
-from msdss_base_database import Database
-from msdss_data_api.managers import *
-from msdss_data_api.defaults import *</p>
-<p># Setup database
-db = Database()</p>
-<p># Check if the metadata table exists and drop if it does
-if db.has_table(DEFAULT_METADATA_TABLE):</p>
-<blockquote>
-<div><p>db.drop_table(DEFAULT_METADATA_TABLE)</p>
-</div></blockquote>
-<p># Setup metadata manager
-mdm = MetadataManager(database=db)</p>
-<p># Add metadata
-metadata = [{</p>
-<blockquote>
-<div><p>‘title’: ‘Testing Data’,
-‘description’: ‘Data used for testing’,
-‘source’: ‘Automatically generated from Python’,
-‘uploaded_by’: ‘msdss’,
-‘uploaded’: datetime.now(),
-‘updated’: datetime.now()</p>
-</div></blockquote>
-<p>}]
-mdm.create(‘test_data’, metadata)</p>
-<p># Search metadata
-results = mdm.search(‘test_data’, where=[‘title = “Testing Data”’])
-pprint(results)</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+
+<span class="c1"># Search metadata</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'title = "Testing Data"'</span><span class="p">])</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>None
+</pre></div>
+</div>
+</div>
+</div>
 </dd></dl>
 </section>
 <section id="id4">
@@ -937,41 +992,60 @@ pprint(results)</p>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
-<p>from datetime import datetime
-from pprint import pprint
-from msdss_base_database import Database
-from msdss_data_api.managers import *
-from msdss_data_api.defaults import *</p>
-<p># Setup database
-db = Database()</p>
-<p># Check if the metadata table exists and drop if it does
-if db.has_table(DEFAULT_METADATA_TABLE):</p>
-<blockquote>
-<div><p>db.drop_table(DEFAULT_METADATA_TABLE)</p>
-</div></blockquote>
-<p># Setup metadata manager
-mdm = MetadataManager(database=db)</p>
-<p># Add metadata
-metadata = [{</p>
-<blockquote>
-<div><p>‘title’: ‘Testing Data’,
-‘description’: ‘Data used for testing’,
-‘source’: ‘Automatically generated from Python’,
-‘uploaded_by’: ‘msdss’,
-‘uploaded’: datetime.now(),
-‘updated’: datetime.now()</p>
-</div></blockquote>
-<p>}]
-mdm.create(‘test_data’, metadata)
-before_update = mdm.get(‘test_data’)</p>
-<p># Update metadata
-mdm.update(‘test_data’, {‘description’: ‘NEW DESCRIPTION’})
-after_update = mdm.get(‘test_data’)</p>
-<p># Print results
-print(‘before_update:n’)
-pprint(before_update)
-print(’nafter_update:n’)
-pprint(after_update)</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+<span class="n">before_update</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+
+<span class="c1"># Update metadata</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="p">{</span><span class="s1">'description'</span><span class="p">:</span> <span class="s1">'NEW DESCRIPTION'</span><span class="p">})</span>
+<span class="n">after_update</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+
+<span class="c1"># Print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'before_update:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">before_update</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">after_update:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">after_update</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
+
+None
+
+after_update:
+
+None
+</pre></div>
+</div>
+</div>
+</div>
 </dd></dl>
 </section>
 </section>

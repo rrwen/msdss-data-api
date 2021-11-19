@@ -501,36 +501,36 @@ class MetadataManager:
         -------
         .. jupyter-execute::
 
-        from datetime import datetime
-        from pprint import pprint
-        from msdss_base_database import Database
-        from msdss_data_api.managers import *
-        from msdss_data_api.defaults import *
-        
-        # Setup database
-        db = Database()
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Setup metadata manager
-        mdm = MetadataManager(database=db)
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
 
-        # Add metadata
-        metadata = [{
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
-        }]
-        mdm.create('test_data', metadata)
+            # Add metadata
+            metadata = [{
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded': datetime.now(),
+                'updated': datetime.now()
+            }]
+            mdm.create('test_data', metadata)
 
-        # Print results
-        tb = mdm.search()
-        pprint(tb)
+            # Print results
+            tb = mdm.search()
+            pprint(tb)
         """
         data = [data] if isinstance(data, dict) else data
         data[0][self.dataset_column] = dataset
@@ -555,44 +555,44 @@ class MetadataManager:
         -------
         .. jupyter-execute::
 
-        from datetime import datetime
-        from pprint import pprint
-        from msdss_base_database import Database
-        from msdss_data_api.managers import *
-        from msdss_data_api.defaults import *
-        
-        # Setup database
-        db = Database()
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Setup metadata manager
-        mdm = MetadataManager(database=db)
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
 
-        # Add metadata
-        metadata = [{
-            'dataset': 'test_data',
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
-        }]
-        mdm.create('test_data', metadata)
-        before_delete = mdm.search()
+            # Add metadata
+            metadata = [{
+                'dataset': 'test_data',
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded': datetime.now(),
+                'updated': datetime.now()
+            }]
+            mdm.create('test_data', metadata)
+            before_delete = mdm.search()
 
-        # Delete metadata
-        mdm.delete('test_data')
-        after_delete = mdm.search()
+            # Delete metadata
+            mdm.delete('test_data')
+            after_delete = mdm.search()
 
-        # Print results
-        print('before_delete:\\n')
-        pprint(before_delete)
-        print('\\nafter_delete:\\n'
-        pprint(after_delete)
+            # Print results
+            print('before_delete:\\n')
+            pprint(before_delete)
+            print('\\nafter_delete:\\n')
+            pprint(after_delete)
         """
         where = [f'{self.dataset_column} = {dataset}']
         self.data_manager.delete(self.table, where=where)
@@ -621,36 +621,36 @@ class MetadataManager:
         -------
         .. jupyter-execute::
 
-        from datetime import datetime
-        from pprint import pprint
-        from msdss_base_database import Database
-        from msdss_data_api.managers import *
-        from msdss_data_api.defaults import *
-        
-        # Setup database
-        db = Database()
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Setup metadata manager
-        mdm = MetadataManager(database=db)
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
 
-        # Add metadata
-        metadata = [{
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
-        }]
-        mdm.create('test_data', metadata)
+            # Add metadata
+            metadata = [{
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded': datetime.now(),
+                'updated': datetime.now()
+            }]
+            mdm.create('test_data', metadata)
 
-        # Get metadata
-        metadata_get = mdm.get('test_data')
-        pprint(metadata_get)
+            # Get metadata
+            metadata_get = mdm.get('test_data')
+            pprint(metadata_get)
         """
         where = [f'{self.dataset_column} = {dataset}']
         self.data_manager.get(self.table, where=where)
@@ -679,36 +679,36 @@ class MetadataManager:
         -------
         .. jupyter-execute::
 
-        from datetime import datetime
-        from pprint import pprint
-        from msdss_base_database import Database
-        from msdss_data_api.managers import *
-        from msdss_data_api.defaults import *
-        
-        # Setup database
-        db = Database()
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Setup metadata manager
-        mdm = MetadataManager(database=db)
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
 
-        # Add metadata
-        metadata = [{
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
-        }]
-        mdm.create('test_data', metadata)
+            # Add metadata
+            metadata = [{
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded': datetime.now(),
+                'updated': datetime.now()
+            }]
+            mdm.create('test_data', metadata)
 
-        # Search metadata
-        results = mdm.search('test_data', where=['title = "Testing Data"'])
-        pprint(results)
+            # Search metadata
+            results = mdm.search(where=['title = "Testing Data"'])
+            pprint(results)
         """
         self.data_manager.get(self.table, *args, **kwargs)
 
@@ -733,43 +733,43 @@ class MetadataManager:
         -------
         .. jupyter-execute::
 
-        from datetime import datetime
-        from pprint import pprint
-        from msdss_base_database import Database
-        from msdss_data_api.managers import *
-        from msdss_data_api.defaults import *
-        
-        # Setup database
-        db = Database()
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
 
-        # Check if the metadata table exists and drop if it does
-        if db.has_table(DEFAULT_METADATA_TABLE):
-            db.drop_table(DEFAULT_METADATA_TABLE)
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
 
-        # Setup metadata manager
-        mdm = MetadataManager(database=db)
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
 
-        # Add metadata
-        metadata = [{
-            'title': 'Testing Data',
-            'description': 'Data used for testing',
-            'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
-        }]
-        mdm.create('test_data', metadata)
-        before_update = mdm.get('test_data')
+            # Add metadata
+            metadata = [{
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded': datetime.now(),
+                'updated': datetime.now()
+            }]
+            mdm.create('test_data', metadata)
+            before_update = mdm.get('test_data')
 
-        # Update metadata
-        mdm.update('test_data', {'description': 'NEW DESCRIPTION'})
-        after_update = mdm.get('test_data')
+            # Update metadata
+            mdm.update('test_data', {'description': 'NEW DESCRIPTION'})
+            after_update = mdm.get('test_data')
 
-        # Print results
-        print('before_update:\\n')
-        pprint(before_update)
-        print('\\nafter_update:\\n')
-        pprint(after_update)
+            # Print results
+            print('before_update:\\n')
+            pprint(before_update)
+            print('\\nafter_update:\\n')
+            pprint(after_update)
         """
         where = [f'{self.dataset_column} = {dataset}']
         self.data_manager.update(self.table, data, where=where)

@@ -772,36 +772,36 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. jupyter-execute::</span>
 
-<span class="sd">        from datetime import datetime</span>
-<span class="sd">        from pprint import pprint</span>
-<span class="sd">        from msdss_base_database import Database</span>
-<span class="sd">        from msdss_data_api.managers import *</span>
-<span class="sd">        from msdss_data_api.defaults import *</span>
-<span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from pprint import pprint</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            from msdss_data_api.defaults import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            mdm = MetadataManager(database=db)</span>
 
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'uploaded_by': 'msdss',</span>
-<span class="sd">            'uploaded': datetime.now(),</span>
-<span class="sd">            'updated': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_data', metadata)</span>
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'title': 'Testing Data',</span>
+<span class="sd">                'description': 'Data used for testing',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'uploaded_by': 'msdss',</span>
+<span class="sd">                'uploaded': datetime.now(),</span>
+<span class="sd">                'updated': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_data', metadata)</span>
 
-<span class="sd">        # Print results</span>
-<span class="sd">        tb = mdm.search()</span>
-<span class="sd">        pprint(tb)</span>
+<span class="sd">            # Print results</span>
+<span class="sd">            tb = mdm.search()</span>
+<span class="sd">            pprint(tb)</span>
 <span class="sd">        """</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
         <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_column</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span>
@@ -826,44 +826,44 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. jupyter-execute::</span>
 
-<span class="sd">        from datetime import datetime</span>
-<span class="sd">        from pprint import pprint</span>
-<span class="sd">        from msdss_base_database import Database</span>
-<span class="sd">        from msdss_data_api.managers import *</span>
-<span class="sd">        from msdss_data_api.defaults import *</span>
-<span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from pprint import pprint</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            from msdss_data_api.defaults import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            mdm = MetadataManager(database=db)</span>
 
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'dataset': 'test_data',</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'uploaded_by': 'msdss',</span>
-<span class="sd">            'uploaded': datetime.now(),</span>
-<span class="sd">            'updated': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_data', metadata)</span>
-<span class="sd">        before_delete = mdm.search()</span>
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'dataset': 'test_data',</span>
+<span class="sd">                'title': 'Testing Data',</span>
+<span class="sd">                'description': 'Data used for testing',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'uploaded_by': 'msdss',</span>
+<span class="sd">                'uploaded': datetime.now(),</span>
+<span class="sd">                'updated': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_data', metadata)</span>
+<span class="sd">            before_delete = mdm.search()</span>
 
-<span class="sd">        # Delete metadata</span>
-<span class="sd">        mdm.delete('test_data')</span>
-<span class="sd">        after_delete = mdm.search()</span>
+<span class="sd">            # Delete metadata</span>
+<span class="sd">            mdm.delete('test_data')</span>
+<span class="sd">            after_delete = mdm.search()</span>
 
-<span class="sd">        # Print results</span>
-<span class="sd">        print('before_delete:\\n')</span>
-<span class="sd">        pprint(before_delete)</span>
-<span class="sd">        print('\\nafter_delete:\\n'</span>
-<span class="sd">        pprint(after_delete)</span>
+<span class="sd">            # Print results</span>
+<span class="sd">            print('before_delete:\\n')</span>
+<span class="sd">            pprint(before_delete)</span>
+<span class="sd">            print('\\nafter_delete:\\n')</span>
+<span class="sd">            pprint(after_delete)</span>
 <span class="sd">        """</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_column</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span></div>
@@ -892,36 +892,36 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. jupyter-execute::</span>
 
-<span class="sd">        from datetime import datetime</span>
-<span class="sd">        from pprint import pprint</span>
-<span class="sd">        from msdss_base_database import Database</span>
-<span class="sd">        from msdss_data_api.managers import *</span>
-<span class="sd">        from msdss_data_api.defaults import *</span>
-<span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from pprint import pprint</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            from msdss_data_api.defaults import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            mdm = MetadataManager(database=db)</span>
 
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'uploaded_by': 'msdss',</span>
-<span class="sd">            'uploaded': datetime.now(),</span>
-<span class="sd">            'updated': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_data', metadata)</span>
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'title': 'Testing Data',</span>
+<span class="sd">                'description': 'Data used for testing',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'uploaded_by': 'msdss',</span>
+<span class="sd">                'uploaded': datetime.now(),</span>
+<span class="sd">                'updated': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_data', metadata)</span>
 
-<span class="sd">        # Get metadata</span>
-<span class="sd">        metadata_get = mdm.get('test_data')</span>
-<span class="sd">        pprint(metadata_get)</span>
+<span class="sd">            # Get metadata</span>
+<span class="sd">            metadata_get = mdm.get('test_data')</span>
+<span class="sd">            pprint(metadata_get)</span>
 <span class="sd">        """</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_column</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span></div>
@@ -950,36 +950,36 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. jupyter-execute::</span>
 
-<span class="sd">        from datetime import datetime</span>
-<span class="sd">        from pprint import pprint</span>
-<span class="sd">        from msdss_base_database import Database</span>
-<span class="sd">        from msdss_data_api.managers import *</span>
-<span class="sd">        from msdss_data_api.defaults import *</span>
-<span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from pprint import pprint</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            from msdss_data_api.defaults import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            mdm = MetadataManager(database=db)</span>
 
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'uploaded_by': 'msdss',</span>
-<span class="sd">            'uploaded': datetime.now(),</span>
-<span class="sd">            'updated': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_data', metadata)</span>
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'title': 'Testing Data',</span>
+<span class="sd">                'description': 'Data used for testing',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'uploaded_by': 'msdss',</span>
+<span class="sd">                'uploaded': datetime.now(),</span>
+<span class="sd">                'updated': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_data', metadata)</span>
 
-<span class="sd">        # Search metadata</span>
-<span class="sd">        results = mdm.search('test_data', where=['title = "Testing Data"'])</span>
-<span class="sd">        pprint(results)</span>
+<span class="sd">            # Search metadata</span>
+<span class="sd">            results = mdm.search(where=['title = "Testing Data"'])</span>
+<span class="sd">            pprint(results)</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
@@ -1004,43 +1004,43 @@
 <span class="sd">        -------</span>
 <span class="sd">        .. jupyter-execute::</span>
 
-<span class="sd">        from datetime import datetime</span>
-<span class="sd">        from pprint import pprint</span>
-<span class="sd">        from msdss_base_database import Database</span>
-<span class="sd">        from msdss_data_api.managers import *</span>
-<span class="sd">        from msdss_data_api.defaults import *</span>
-<span class="sd">        </span>
-<span class="sd">        # Setup database</span>
-<span class="sd">        db = Database()</span>
+<span class="sd">            from datetime import datetime</span>
+<span class="sd">            from pprint import pprint</span>
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            from msdss_data_api.defaults import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
 
-<span class="sd">        # Check if the metadata table exists and drop if it does</span>
-<span class="sd">        if db.has_table(DEFAULT_METADATA_TABLE):</span>
-<span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
+<span class="sd">            # Check if the metadata table exists and drop if it does</span>
+<span class="sd">            if db.has_table(DEFAULT_METADATA_TABLE):</span>
+<span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
-<span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">            # Setup metadata manager</span>
+<span class="sd">            mdm = MetadataManager(database=db)</span>
 
-<span class="sd">        # Add metadata</span>
-<span class="sd">        metadata = [{</span>
-<span class="sd">            'title': 'Testing Data',</span>
-<span class="sd">            'description': 'Data used for testing',</span>
-<span class="sd">            'source': 'Automatically generated from Python',</span>
-<span class="sd">            'uploaded_by': 'msdss',</span>
-<span class="sd">            'uploaded': datetime.now(),</span>
-<span class="sd">            'updated': datetime.now()</span>
-<span class="sd">        }]</span>
-<span class="sd">        mdm.create('test_data', metadata)</span>
-<span class="sd">        before_update = mdm.get('test_data')</span>
+<span class="sd">            # Add metadata</span>
+<span class="sd">            metadata = [{</span>
+<span class="sd">                'title': 'Testing Data',</span>
+<span class="sd">                'description': 'Data used for testing',</span>
+<span class="sd">                'source': 'Automatically generated from Python',</span>
+<span class="sd">                'uploaded_by': 'msdss',</span>
+<span class="sd">                'uploaded': datetime.now(),</span>
+<span class="sd">                'updated': datetime.now()</span>
+<span class="sd">            }]</span>
+<span class="sd">            mdm.create('test_data', metadata)</span>
+<span class="sd">            before_update = mdm.get('test_data')</span>
 
-<span class="sd">        # Update metadata</span>
-<span class="sd">        mdm.update('test_data', {'description': 'NEW DESCRIPTION'})</span>
-<span class="sd">        after_update = mdm.get('test_data')</span>
+<span class="sd">            # Update metadata</span>
+<span class="sd">            mdm.update('test_data', {'description': 'NEW DESCRIPTION'})</span>
+<span class="sd">            after_update = mdm.get('test_data')</span>
 
-<span class="sd">        # Print results</span>
-<span class="sd">        print('before_update:\\n')</span>
-<span class="sd">        pprint(before_update)</span>
-<span class="sd">        print('\\nafter_update:\\n')</span>
-<span class="sd">        pprint(after_update)</span>
+<span class="sd">            # Print results</span>
+<span class="sd">            print('before_update:\\n')</span>
+<span class="sd">            pprint(before_update)</span>
+<span class="sd">            print('\\nafter_update:\\n')</span>
+<span class="sd">            pprint(after_update)</span>
 <span class="sd">        """</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_column</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span></div></div>
