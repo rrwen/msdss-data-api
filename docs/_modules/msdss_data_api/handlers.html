@@ -282,6 +282,8 @@
 <span class="sd">    ----------</span>
 <span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object to use for managing datasets.</span>
+<span class="sd">    permitted_tables : list(str)</span>
+<span class="sd">        List of permitted table names that are only accessible. If any tables not in this list are accessed, a 401 unauthorized http exception will be thrown.</span>
 <span class="sd">    restricted_tables : list(str)</span>
 <span class="sd">        List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.</span>
 <span class="sd">    </span>
@@ -326,9 +328,56 @@
 <span class="sd">        # Should not raise exceptions</span>
 <span class="sd">        handler.handle_restrictions('test_table')</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">permitted_tables</span><span class="o">=</span><span class="p">[],</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">DEFAULT_RESTRICTED_TABLES</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">permitted_tables</span> <span class="o">=</span> <span class="n">permitted_tables</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">restricted_tables</span> <span class="o">=</span> <span class="n">restricted_tables</span>
+
+    <span class="k">def</span> <span class="nf">handle_permissions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Handle a permitted table access.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset : str</span>
+<span class="sd">            Name of the table to check.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.handlers import *</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup objects</span>
+<span class="sd">            db = Database()</span>
+<span class="sd">            dm = DataManager(database=db)</span>
+<span class="sd">            handler = DataHandler(database=db)</span>
+
+<span class="sd">            # Check if the table exists and drop if it does</span>
+<span class="sd">            if db.has_table('test_table'):</span>
+<span class="sd">                db.drop_table('test_table')</span>
+
+<span class="sd">            # Create sample data</span>
+<span class="sd">            data = {</span>
+<span class="sd">                'id': [1, 2, 3],</span>
+<span class="sd">                'column_one': ['a', 'b', 'c'],</span>
+<span class="sd">                'column_two': [2, 4, 6]</span>
+<span class="sd">            }</span>
+<span class="sd">            dm.create('test_table', data)</span>
+
+<span class="sd">            # Check table name</span>
+<span class="sd">            # Should not raise exceptions</span>
+<span class="sd">            handler.handle_permissions('test_table')</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">permitted_tables</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dataset</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">permitted_tables</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">401</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DataHandler.handle_read"><a class="viewcode-back" href="../../reference/handlers.html#msdss_data_api.handlers.DataHandler.handle_read">[docs]</a>    <span class="k">def</span> <span class="nf">handle_read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -373,12 +422,13 @@
 <span class="sd">            handler.handle_read('test_table')</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_permissions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">404</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Dataset not found'</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataHandler.handle_restrictions"><a class="viewcode-back" href="../../reference/handlers.html#msdss_data_api.handlers.DataHandler.handle_restrictions">[docs]</a>    <span class="k">def</span> <span class="nf">handle_restrictions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">"""</span>
-<span class="sd">        Handle a table read, checking for existence and restrictions.</span>
+<span class="sd">        Handle restricted table access.</span>
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -498,6 +548,7 @@
 <span class="sd">            dm.create('test_table', data)</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_permissions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Dataset already exists'</span><span class="p">)</span></div></div>
 </pre></div>

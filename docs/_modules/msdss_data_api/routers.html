@@ -269,11 +269,12 @@
           <article class="md-content__inner md-typeset" role="main">
             
   <h1 id="modules-msdss-data-api-routers--page-root">Source code for msdss_data_api.routers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">re</span> <span class="kn">import</span> <span class="n">L</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">HTTPException</span><span class="p">,</span> <span class="n">Query</span>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">APIRouter</span><span class="p">,</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">Query</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">.tools</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">_no_current_user</span><span class="p">():</span>
@@ -288,6 +289,7 @@
     <span class="n">enable_create_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_delete_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_id_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">enable_insert_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_query_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">enable_update_route</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">create_route_path</span><span class="o">=</span><span class="s1">'/'</span><span class="p">,</span>
@@ -302,6 +304,10 @@
     <span class="n">id_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">id_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">id_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">insert_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">/insert'</span><span class="p">,</span>
+    <span class="n">insert_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
+    <span class="n">insert_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">insert_get_current_user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">query_route_path</span><span class="o">=</span><span class="s1">'/</span><span class="si">{dataset}</span><span class="s1">'</span><span class="p">,</span>
     <span class="n">query_route_kwargs</span><span class="o">=</span><span class="p">{},</span>
     <span class="n">query_route_restricted_tables</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -332,6 +338,8 @@
 <span class="sd">        Whether to enable the delete path for this router or not.</span>
 <span class="sd">    enable_id_route : bool</span>
 <span class="sd">        Whether to enable the id path for this router or not.</span>
+<span class="sd">    enable_id_route : bool</span>
+<span class="sd">        Whether to enable the insert path for this router or not.</span>
 <span class="sd">    enable_query_route : bool</span>
 <span class="sd">        Whether to enable the query path for this router or not.</span>
 <span class="sd">    enable_update_route : bool</span>
@@ -361,6 +369,15 @@
 <span class="sd">    id_route_restricted_tables : list(str) or None</span>
 <span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
 <span class="sd">    id_get_current_user : func</span>
+<span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
+<span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
+<span class="sd">    insert_route_path : str</span>
+<span class="sd">        Path for the insert route in this router. The full path will include the param ``prefix``.</span>
+<span class="sd">    insert_route_kwargs : dict</span>
+<span class="sd">        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the insert route.</span>
+<span class="sd">    insert_route_restricted_tables : list(str) or None</span>
+<span class="sd">        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.</span>
+<span class="sd">    insert_get_current_user : func</span>
 <span class="sd">        A function to get the current user, but route specific. See `FastAPI get_current_user &lt;https://fastapi.tiangolo.com/tutorial/security/get-current-user/&gt;`_.</span>
 <span class="sd">        If ``None``, it will default to parameter ``get_current_user``.</span>
 <span class="sd">    query_route_path : str</span>
@@ -416,6 +433,7 @@
     <span class="n">create_route_restricted_tables</span> <span class="o">=</span> <span class="n">create_route_restricted_tables</span> <span class="k">if</span> <span class="n">create_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">delete_route_restricted_tables</span> <span class="o">=</span> <span class="n">delete_route_restricted_tables</span> <span class="k">if</span> <span class="n">delete_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">id_route_restricted_tables</span> <span class="o">=</span> <span class="n">id_route_restricted_tables</span> <span class="k">if</span> <span class="n">id_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
+    <span class="n">insert_route_restricted_tables</span> <span class="o">=</span> <span class="n">insert_route_restricted_tables</span> <span class="k">if</span> <span class="n">insert_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">query_route_restricted_tables</span> <span class="o">=</span> <span class="n">query_route_restricted_tables</span> <span class="k">if</span> <span class="n">query_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
     <span class="n">update_route_restricted_tables</span> <span class="o">=</span> <span class="n">update_route_restricted_tables</span> <span class="k">if</span> <span class="n">update_route_restricted_tables</span> <span class="k">else</span> <span class="n">restricted_tables</span>
 
@@ -423,25 +441,62 @@
     <span class="n">create_get_current_user</span> <span class="o">=</span> <span class="n">create_get_current_user</span> <span class="k">if</span> <span class="n">create_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
     <span class="n">delete_get_current_user</span> <span class="o">=</span> <span class="n">delete_get_current_user</span> <span class="k">if</span> <span class="n">delete_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
     <span class="n">id_get_current_user</span> <span class="o">=</span> <span class="n">id_get_current_user</span> <span class="k">if</span> <span class="n">id_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
+    <span class="n">insert_get_current_user</span> <span class="o">=</span> <span class="n">insert_get_current_user</span> <span class="k">if</span> <span class="n">insert_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
     <span class="n">query_get_current_user</span> <span class="o">=</span> <span class="n">query_get_current_user</span> <span class="k">if</span> <span class="n">query_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
     <span class="n">update_get_current_user</span> <span class="o">=</span> <span class="n">update_get_current_user</span> <span class="k">if</span> <span class="n">update_get_current_user</span> <span class="k">else</span> <span class="n">get_current_user</span>
 
     <span class="c1"># (get_data_router_create) Create api router for data routes</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">APIRouter</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="n">tags</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="c1"># (get_data_router_manager) Create data manager func</span>
-    <span class="n">get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">restricted_tables</span><span class="p">)</span>
+    <span class="c1"># (get_data_router_manager_data) Create data manager func    </span>
+    <span class="n">create_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">create_route_restricted_tables</span><span class="p">)</span>
+    <span class="n">delete_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">delete_route_restricted_tables</span><span class="p">)</span>
+    <span class="n">id_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">id_route_restricted_tables</span><span class="p">)</span>
+    <span class="n">insert_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">insert_route_restricted_tables</span><span class="p">)</span>
+    <span class="n">query_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">query_route_restricted_tables</span><span class="p">)</span>
+    <span class="n">update_get_data_manager</span> <span class="o">=</span> <span class="n">create_data_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="n">update_route_restricted_tables</span><span class="p">)</span>
+    
+    <span class="c1"># (get_data_router_manager_metadata) Create metadata manager func</span>
+    <span class="n">get_metadata_manager</span> <span class="o">=</span> <span class="n">create_metadata_manager_func</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
 
     <span class="c1"># (get_data_router_create) Add create route to data router</span>
     <span class="k">if</span> <span class="n">enable_create_route</span><span class="p">:</span>
         <span class="nd">@out</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">create_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">create_route_kwargs</span><span class="p">)</span>
         <span class="k">async</span> <span class="k">def</span> <span class="nf">create_data</span><span class="p">(</span>
-            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to create - the request body is used to upload JSON data in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'</span><span class="p">),</span>
-            <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
-            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_manager</span><span class="p">),</span>
+            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to create - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'</span><span class="p">),</span>
+            <span class="n">body</span><span class="p">:</span> <span class="n">DataCreate</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span>
+                <span class="o">...</span><span class="p">,</span>
+                <span class="n">example</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Title for Dataset'</span><span class="p">,</span>
+                    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Description for dataset...'</span><span class="p">,</span>
+                    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Data source for dataset'</span><span class="p">,</span>
+                    <span class="s1">'data'</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s1">'col_one'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">'col_two'</span><span class="p">:</span> <span class="s1">'a'</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s1">'col_one'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">'col_two'</span><span class="p">:</span> <span class="s1">'b'</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s1">'col_one'</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">'col_two'</span><span class="p">:</span> <span class="s1">'c'</span><span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">create_get_data_manager</span><span class="p">),</span>
+            <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_metadata_manager</span><span class="p">),</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">create_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
+            <span class="c1"># (get_data_router_create_data) Get data</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">dict</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">body</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">'data'</span><span class="p">)</span>
+
+            <span class="c1"># (get_data_router_create_metadata) Format metadata</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">body</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_DATASET_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPLOADED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+            <span class="c1"># (get_data_router_create_users) Add user operations if available</span>
+            <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPLOADED_BY_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span>
+
+            <span class="c1"># (get_data_router_create_run) Create dataset and metadata</span>
             <span class="n">data_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">metadata_manager</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
 
     <span class="c1"># (get_data_router_delete) Add delete route to data router</span>
     <span class="k">if</span> <span class="n">enable_delete_route</span><span class="p">:</span>
@@ -451,10 +506,13 @@
             <span class="n">where</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to remove in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
             <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
             <span class="n">delete_all</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Whether to remove the entire dataset or not'</span><span class="p">),</span>
-            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_manager</span><span class="p">),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">delete_get_data_manager</span><span class="p">),</span>
+            <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_metadata_manager</span><span class="p">),</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">delete_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">data_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="n">delete_all</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">delete_all</span><span class="p">:</span>
+                <span class="n">metadata_manager</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">)</span>
 
     <span class="c1"># (get_data_router_id) Add id route to data router</span>
     <span class="k">if</span> <span class="n">enable_id_route</span><span class="p">:</span>
@@ -463,12 +521,27 @@
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset'</span><span class="p">),</span>
             <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier value to retrieve a specific document in the dataset'</span><span class="p">),</span>
             <span class="n">id_variable</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span>  <span class="n">Query</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Identifier variable name for the dataset'</span><span class="p">),</span>
-            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_manager</span><span class="p">),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">id_get_data_manager</span><span class="p">),</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">id_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">id_variable</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s1">'</span><span class="p">]</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">data_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">response</span>
+
+    <span class="c1"># (get_data_router_insert) Add insert route to data router</span>
+    <span class="k">if</span> <span class="n">enable_insert_route</span><span class="p">:</span>
+        <span class="nd">@out</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">insert_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">insert_route_kwargs</span><span class="p">)</span>
+        <span class="k">async</span> <span class="k">def</span> <span class="nf">insert_data</span><span class="p">(</span>
+            <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to insert - the request body is used to upload JSON data in the form of "[{key: value, key2: value2, ... }, {key: value, key2: value2, ...}]" where each key is a variable name'</span><span class="p">),</span>
+            <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">insert_get_data_manager</span><span class="p">),</span>
+            <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_metadata_manager</span><span class="p">),</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">insert_get_current_user</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">data_manager</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
     <span class="c1"># (get_data_router_query) Add query route to data router</span>
     <span class="k">if</span> <span class="n">enable_query_route</span><span class="p">:</span>
@@ -484,7 +557,7 @@
             <span class="n">order_by_sort</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'order-by-sort'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'</span><span class="p">),</span>
             <span class="n">limit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Number of items to return'</span><span class="p">),</span>
             <span class="n">where_boolean</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s1">'where-boolean'</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Either "AND" or "OR" to combine where statements'</span><span class="p">),</span>
-            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_manager</span><span class="p">),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">query_get_data_manager</span><span class="p">),</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">query_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="n">response</span> <span class="o">=</span> <span class="n">data_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
@@ -506,12 +579,16 @@
         <span class="nd">@out</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">update_route_path</span><span class="p">,</span> <span class="o">**</span><span class="n">update_route_kwargs</span><span class="p">)</span>
         <span class="k">async</span> <span class="k">def</span> <span class="nf">update_data</span><span class="p">(</span>
             <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'</span><span class="p">),</span>
-            <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
+            <span class="n">body</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">),</span>
             <span class="n">where</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Query</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">'Where statements to filter data to update in the form of "variable operator value" (e.g. "var &lt; 3") - valid operators are: =, &gt;, &gt;=, &gt;, &lt;, &lt;=, !=, LIKE'</span><span class="p">),</span>
-            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_data_manager</span><span class="p">),</span>
+            <span class="n">data_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">update_get_data_manager</span><span class="p">),</span>
+            <span class="n">metadata_manager</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">get_metadata_manager</span><span class="p">),</span>
             <span class="n">user</span> <span class="o">=</span> <span class="n">Depends</span><span class="p">(</span><span class="n">update_get_current_user</span><span class="p">)</span>
         <span class="p">):</span>
-            <span class="n">data_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
+            <span class="n">data_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 

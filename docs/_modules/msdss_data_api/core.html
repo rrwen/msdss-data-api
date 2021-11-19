@@ -320,7 +320,9 @@
 <span class="sd">    delete_get_current_user_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data delete route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
 <span class="sd">    id_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the id create route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
+<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data id route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
+<span class="sd">    insert_get_current_user_kwargs : dict</span>
+<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
 <span class="sd">    query_get_current_user_kwargs : dict</span>
 <span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data query route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
 <span class="sd">    update_get_current_user_kwargs : dict</span>
@@ -403,6 +405,9 @@
             <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
         <span class="p">),</span>
         <span class="n">id_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">insert_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">),</span>
         <span class="n">query_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">update_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
             <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>

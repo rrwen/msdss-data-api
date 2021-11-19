@@ -448,7 +448,7 @@ class MetadataManager:
         mdm.update('test_data', {'description': 'NEW DESCRIPTION'})
 
         # Delete metadata
-        dm.delete('test_data')
+        mdm.delete('test_data')
     """
     def __init__(
         self,
