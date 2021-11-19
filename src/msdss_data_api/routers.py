@@ -1,8 +1,9 @@
-from re import L
-from fastapi import APIRouter, Body, Depends, HTTPException, Query
+from datetime import datetime
+from fastapi import APIRouter, Body, Depends, Query
 from typing import Any, Dict, List, Optional
 
 from .managers import *
+from .models import *
 from .tools import *
 
 async def _no_current_user():
@@ -17,6 +18,7 @@ def get_data_router(
     enable_create_route=True,
     enable_delete_route=True,
     enable_id_route=True,
+    enable_insert_route=True,
     enable_query_route=True,
     enable_update_route=True,
     create_route_path='/',
@@ -31,6 +33,10 @@ def get_data_router(
     id_route_kwargs={},
     id_route_restricted_tables=None,
     id_get_current_user=None,
+    insert_route_path='/{dataset}/insert',
+    insert_route_kwargs={},
+    insert_route_restricted_tables=None,
+    insert_get_current_user=None,
     query_route_path='/{dataset}',
     query_route_kwargs={},
     query_route_restricted_tables=None,
@@ -61,6 +67,8 @@ def get_data_router(
         Whether to enable the delete path for this router or not.
     enable_id_route : bool
         Whether to enable the id path for this router or not.
+    enable_id_route : bool
+        Whether to enable the insert path for this router or not.
     enable_query_route : bool
         Whether to enable the query path for this router or not.
     enable_update_route : bool
@@ -90,6 +98,15 @@ def get_data_router(
     id_route_restricted_tables : list(str) or None
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
     id_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
+    insert_route_path : str
+        Path for the insert route in this router. The full path will include the param ``prefix``.
+    insert_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the insert route.
+    insert_route_restricted_tables : list(str) or None
+        Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
+    insert_get_current_user : func
         A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
         If ``None``, it will default to parameter ``get_current_user``.
     query_route_path : str
@@ -145,6 +162,7 @@ def get_data_router(
     create_route_restricted_tables = create_route_restricted_tables if create_route_restricted_tables else restricted_tables
     delete_route_restricted_tables = delete_route_restricted_tables if delete_route_restricted_tables else restricted_tables
     id_route_restricted_tables = id_route_restricted_tables if id_route_restricted_tables else restricted_tables
+    insert_route_restricted_tables = insert_route_restricted_tables if insert_route_restricted_tables else restricted_tables
     query_route_restricted_tables = query_route_restricted_tables if query_route_restricted_tables else restricted_tables
     update_route_restricted_tables = update_route_restricted_tables if update_route_restricted_tables else restricted_tables
 
@@ -152,25 +170,62 @@ def get_data_router(
     create_get_current_user = create_get_current_user if create_get_current_user else get_current_user
     delete_get_current_user = delete_get_current_user if delete_get_current_user else get_current_user
     id_get_current_user = id_get_current_user if id_get_current_user else get_current_user
+    insert_get_current_user = insert_get_current_user if insert_get_current_user else get_current_user
     query_get_current_user = query_get_current_user if query_get_current_user else get_current_user
     update_get_current_user = update_get_current_user if update_get_current_user else get_current_user
 
     # (get_data_router_create) Create api router for data routes
     out = APIRouter(prefix=prefix, tags=tags, *args, **kwargs)
 
-    # (get_data_router_manager) Create data manager func
-    get_data_manager = create_data_manager_func(database=database, restricted_tables=restricted_tables)
+    # (get_data_router_manager_data) Create data manager func    
+    create_get_data_manager = create_data_manager_func(database=database, restricted_tables=create_route_restricted_tables)
+    delete_get_data_manager = create_data_manager_func(database=database, restricted_tables=delete_route_restricted_tables)
+    id_get_data_manager = create_data_manager_func(database=database, restricted_tables=id_route_restricted_tables)
+    insert_get_data_manager = create_data_manager_func(database=database, restricted_tables=insert_route_restricted_tables)
+    query_get_data_manager = create_data_manager_func(database=database, restricted_tables=query_route_restricted_tables)
+    update_get_data_manager = create_data_manager_func(database=database, restricted_tables=update_route_restricted_tables)
+    
+    # (get_data_router_manager_metadata) Create metadata manager func
+    get_metadata_manager = create_metadata_manager_func(database=database)
 
     # (get_data_router_create) Add create route to data router
     if enable_create_route:
         @out.post(create_route_path, **create_route_kwargs)
         async def create_data(
-            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'),
-            data: List[Dict[str, Any]] = Body(...),
-            data_manager = Depends(get_data_manager),
+            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'),
+            body: DataCreate = Body(
+                ...,
+                example={
+                    'title': 'Title for Dataset',
+                    'description': 'Description for dataset...',
+                    'source': 'Data source for dataset',
+                    'data': [
+                        {'col_one': 1, 'col_two': 'a'},
+                        {'col_one': 2, 'col_two': 'b'},
+                        {'col_one': 3, 'col_two': 'c'}
+                    ]
+                }),
+            data_manager = Depends(create_get_data_manager),
+            metadata_manager = Depends(get_metadata_manager),
             user = Depends(create_get_current_user)
         ):
+            # (get_data_router_create_data) Get data
+            body = body.dict()
+            data = body.pop('data')
+
+            # (get_data_router_create_metadata) Format metadata
+            metadata = body
+            metadata[DEFAULT_METADATA_DATASET_COLUMN] = dataset
+            metadata[DEFAULT_METADATA_UPLOADED_COLUMN] = datetime.now()
+            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
+
+            # (get_data_router_create_users) Add user operations if available
+            if user:
+                metadata[DEFAULT_METADATA_UPLOADED_BY_COLUMN] = user.id
+
+            # (get_data_router_create_run) Create dataset and metadata
             data_manager.create(dataset=dataset, data=data)
+            metadata_manager.create(dataset=dataset, data=metadata)
 
     # (get_data_router_delete) Add delete route to data router
     if enable_delete_route:
@@ -180,10 +235,13 @@ def get_data_router(
             where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             delete_all: Optional[bool] = Query(False, description='Whether to remove the entire dataset or not'),
-            data_manager = Depends(get_data_manager),
+            data_manager = Depends(delete_get_data_manager),
+            metadata_manager = Depends(get_metadata_manager),
             user = Depends(delete_get_current_user)
         ):
             data_manager.delete(dataset=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
+            if delete_all:
+                metadata_manager.delete(dataset=dataset)
 
     # (get_data_router_id) Add id route to data router
     if enable_id_route:
@@ -192,12 +250,27 @@ def get_data_router(
             dataset: str = Query(..., description='Name of the dataset'),
             id: str = Query(..., description='Identifier value to retrieve a specific document in the dataset'),
             id_variable: Optional[str] =  Query('id', description='Identifier variable name for the dataset'),
-            data_manager = Depends(get_data_manager),
+            data_manager = Depends(id_get_data_manager),
             user = Depends(id_get_current_user)
         ):
             where = [f'{id_variable} = {id}']
             response = data_manager.get(dataset=dataset, where=where)
             return response
+
+    # (get_data_router_insert) Add insert route to data router
+    if enable_insert_route:
+        @out.put(insert_route_path, **insert_route_kwargs)
+        async def insert_data(
+            dataset: str = Query(..., description='Name of the dataset to insert - the request body is used to upload JSON data in the form of "[{key: value, key2: value2, ... }, {key: value, key2: value2, ...}]" where each key is a variable name'),
+            data: List[Dict[str, Any]] = Body(...),
+            data_manager = Depends(insert_get_data_manager),
+            metadata_manager = Depends(get_metadata_manager),
+            user = Depends(insert_get_current_user)
+        ):
+            data_manager.insert(dataset=dataset, data=data)
+            metadata = {}
+            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
+            metadata_manager.update(dataset, metadata)
 
     # (get_data_router_query) Add query route to data router
     if enable_query_route:
@@ -213,7 +286,7 @@ def get_data_router(
             order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
             where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
-            data_manager = Depends(get_data_manager),
+            data_manager = Depends(query_get_data_manager),
             user = Depends(query_get_current_user)
         ):
             response = data_manager.get(
@@ -235,10 +308,14 @@ def get_data_router(
         @out.put(update_route_path, **update_route_kwargs)
         async def update_data(
             dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'),
-            data: Dict[str, Any] = Body(...),
+            body: Dict[str, Any] = Body(...),
             where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
-            data_manager = Depends(get_data_manager),
+            data_manager = Depends(update_get_data_manager),
+            metadata_manager = Depends(get_metadata_manager),
             user = Depends(update_get_current_user)
         ):
-            data_manager.update(dataset=dataset, data=data, where=where)
+            data_manager.update(dataset=dataset, data=body, where=where)
+            metadata = {}
+            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
+            metadata_manager.update(dataset, metadata)
     return out

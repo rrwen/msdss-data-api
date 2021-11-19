@@ -1,5 +1,6 @@
 from fastapi import HTTPException
 from msdss_base_database import Database
+from shlex import split
 
 from .defaults import *
 from .handlers import *
@@ -165,7 +166,7 @@ class DataManager:
         elif not delete_all and where is None:
             raise HTTPException(status_code=400, detail='Parameter where is required')
         else:
-            where = [w.split() for w in where]
+            where = [split(w) for w in where]
             self.handler.handle_where(where)
             self.database.delete(dataset, where=where, where_boolean=where_boolean)
 
@@ -217,8 +218,8 @@ class DataManager:
         
         Returns
         -------
-        dict(list)
-            A dict of lists where each key is the column name and each list contains the values for column in the order of the rows of the table.
+        list(dict)
+            A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.
 
         Author
         ------
@@ -252,7 +253,7 @@ class DataManager:
             print(result)
         """
         self.handler.handle_read(dataset)
-        where = [w.split() for w in where] if where else where
+        where = [split(w) for w in where] if where else where
         self.handler.handle_where(where)
         out = self.database.select(
             table=dataset,
@@ -267,6 +268,58 @@ class DataManager:
             where_boolean=where_boolean
         ).to_dict(orient='records')
         return out
+
+    def insert(self, dataset, data):
+        """
+        Create a dataset.
+
+        See :meth:`msdss_base_database:msdss_base_database.core.Database.insert`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset or table to hold the data.
+        data : list(dict)
+            Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            
+            # Setup database
+            db = Database()
+            dm = DataManager(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table("test_table"):
+                db.drop_table("test_table")
+
+            # Create sample data
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
+            dm.create('test_table', data)
+
+            # Insert more data
+            more_data = [
+                {'id': 4, 'column_one': 'e', 'column_two': 8},
+                {'id': 5, 'column_one': 'f', 'column_two': 10},
+                {'id': 6, 'column_one': 'g', 'column_two': 12},
+            ]
+            dm.insert('test_table', more_data)
+        """
+        self.handler.handle_restrictions(dataset)
+        self.handler.handle_read(dataset)
+        self.database.insert(dataset, data)
 
     def update(self, dataset, data, where):
         """
@@ -322,6 +375,401 @@ class DataManager:
             print(result)
         """
         self.handler.handle_read(dataset)
-        where = [w.split() for w in where]
+        where = [split(w) for w in where]
         self.handler.handle_where(where)
         self.database.update(table=dataset, where=where, values=data)
+
+class MetadataManager:
+    """
+    Class to manage metadata in a database.
+    
+    Parameters
+    ----------
+    table : str
+        The name of the table to store the metadata.
+    columns : list(dict) or list(list)
+        List of dict (kwargs) or lists (positional args) that are passed to sqlalchemy.schema.Column. See parameter ``columns`` in :meth:`msdss_base_database:msdss_base_database.core.create_table`.
+        This defines the table to store the metadata, where the default is:
+
+        .. jupyter-execute::
+            :hide-code:
+
+            from msdss_data_api.defaults import *
+            from pprint import pprint
+
+            pprint(DEFAULT_METADATA_COLUMNS)
+
+    dataset_column : str
+        The column name holding the dataset name in the metadata table.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database`
+        Database object to use for managing metadata.
+    
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+    
+    Example
+    -------
+    .. jupyter-execute::
+
+        from datetime import datetime
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+
+        # Get metadata
+        metadata_get = mdm.get('test_data')
+        
+        # Search metadata
+        search_results = mdm.search(where=['title = "Testing Data"'])
+
+        # Update metadata
+        mdm.update('test_data', {'description': 'NEW DESCRIPTION'})
+
+        # Delete metadata
+        dm.delete('test_data')
+    """
+    def __init__(
+        self,
+        table=DEFAULT_METADATA_TABLE,
+        columns=DEFAULT_METADATA_COLUMNS,
+        dataset_column=DEFAULT_METADATA_DATASET_COLUMN,
+        database=Database(),
+        data_handler=None,
+        data_manager=None):
+        
+        # (MetadataManager_table) Create table if not exists
+        if not database.has_table(table):
+            database.create_table(table, columns)
+        
+        # (MetadataManager_attr) Set attributes
+        self.table = table
+        self.dataset_column = dataset_column
+        self.database = database
+
+        # (MetadataManager_manager) Create data manager
+        self.data_handler = DataHandler(database=database, permitted_tables=[self.table], restricted_tables=[])
+        self.data_manager = DataManager(database=database, handler=self.data_handler)
+
+    def create(self, dataset, data):
+        """
+        Delete a metadata entry.
+
+        See :meth:`msdss_data_api.managers.DataManager.delete`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset to add metadata for.
+        data : list(dict) or dict
+            Metadata to insert into the table, where each key represents a metadata descriptor. The default key names are:
+
+            .. jupyter-execute::
+                :hide-code:
+
+                from msdss_data_api.defaults import *
+                from pprint import pprint
+
+                pprint(DEFAULT_METADATA_COLUMNS)
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+        from datetime import datetime
+        from pprint import pprint
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+
+        # Print results
+        tb = mdm.search()
+        pprint(tb)
+        """
+        data = [data] if isinstance(data, dict) else data
+        data[0][self.dataset_column] = dataset
+        self.data_manager.insert(self.table, data)
+
+    def delete(self, dataset):
+        """
+        Delete a metadata entry.
+
+        See :meth:`msdss_data_api.managers.DataManager.delete`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset to delete metadata for.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+        from datetime import datetime
+        from pprint import pprint
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'dataset': 'test_data',
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+        before_delete = mdm.search()
+
+        # Delete metadata
+        mdm.delete('test_data')
+        after_delete = mdm.search()
+
+        # Print results
+        print('before_delete:\\n')
+        pprint(before_delete)
+        print('\\nafter_delete:\\n'
+        pprint(after_delete)
+        """
+        where = [f'{self.dataset_column} = {dataset}']
+        self.data_manager.delete(self.table, where=where)
+
+    def get(self, dataset):
+        """
+        Search metadata entries.
+
+        See :meth:`msdss_data_api.managers.DataManager.get`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset to get metadata for.
+
+        Returns
+        -------
+        list(dict)
+            A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+        from datetime import datetime
+        from pprint import pprint
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+
+        # Get metadata
+        metadata_get = mdm.get('test_data')
+        pprint(metadata_get)
+        """
+        where = [f'{self.dataset_column} = {dataset}']
+        self.data_manager.get(self.table, where=where)
+
+    def search(self, *args, **kwargs):
+        """
+        Search metadata entries.
+
+        See :meth:`msdss_data_api.managers.DataManager.get`.
+        
+        Parameters
+        ----------
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_data_api.managers.DataManager.get` except for parameter ``table``.
+
+        Returns
+        -------
+        list(dict)
+            A dict of lists where each key is the column name and each list contains the values for columns in the order of the rows of the table.
+
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+        from datetime import datetime
+        from pprint import pprint
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+
+        # Search metadata
+        results = mdm.search('test_data', where=['title = "Testing Data"'])
+        pprint(results)
+        """
+        self.data_manager.get(self.table, *args, **kwargs)
+
+    def update(self, dataset, data):
+        """
+        Update metadata entry.
+
+        See :meth:`msdss_data_api.managers.DataManager.update`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset to update.
+        data : dict
+            Dictionary representing values to update.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+        from datetime import datetime
+        from pprint import pprint
+        from msdss_base_database import Database
+        from msdss_data_api.managers import *
+        from msdss_data_api.defaults import *
+        
+        # Setup database
+        db = Database()
+
+        # Check if the metadata table exists and drop if it does
+        if db.has_table(DEFAULT_METADATA_TABLE):
+            db.drop_table(DEFAULT_METADATA_TABLE)
+
+        # Setup metadata manager
+        mdm = MetadataManager(database=db)
+
+        # Add metadata
+        metadata = [{
+            'title': 'Testing Data',
+            'description': 'Data used for testing',
+            'source': 'Automatically generated from Python',
+            'uploaded_by': 'msdss',
+            'uploaded': datetime.now(),
+            'updated': datetime.now()
+        }]
+        mdm.create('test_data', metadata)
+        before_update = mdm.get('test_data')
+
+        # Update metadata
+        mdm.update('test_data', {'description': 'NEW DESCRIPTION'})
+        after_update = mdm.get('test_data')
+
+        # Print results
+        print('before_update:\\n')
+        pprint(before_update)
+        print('\\nafter_update:\\n')
+        pprint(after_update)
+        """
+        where = [f'{self.dataset_column} = {dataset}']
+        self.data_manager.update(self.table, data, where=where)

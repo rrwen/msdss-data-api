@@ -11,6 +11,8 @@ class DataHandler:
     ----------
     database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for managing datasets.
+    permitted_tables : list(str)
+        List of permitted table names that are only accessible. If any tables not in this list are accessed, a 401 unauthorized http exception will be thrown.
     restricted_tables : list(str)
         List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.
     
@@ -55,9 +57,56 @@ class DataHandler:
         # Should not raise exceptions
         handler.handle_restrictions('test_table')
     """
-    def __init__(self, database=Database(), restricted_tables=DEFAULT_RESTRICTED_TABLES):
+    def __init__(self, database=Database(), permitted_tables=[], restricted_tables=DEFAULT_RESTRICTED_TABLES):
         self.database = database
+        self.permitted_tables = permitted_tables
         self.restricted_tables = restricted_tables
+
+    def handle_permissions(self, dataset):
+        """
+        Handle a permitted table access.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the table to check.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.handlers import *
+            from msdss_data_api.managers import *
+            
+            # Setup objects
+            db = Database()
+            dm = DataManager(database=db)
+            handler = DataHandler(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table('test_table'):
+                db.drop_table('test_table')
+
+            # Create sample data
+            data = {
+                'id': [1, 2, 3],
+                'column_one': ['a', 'b', 'c'],
+                'column_two': [2, 4, 6]
+            }
+            dm.create('test_table', data)
+
+            # Check table name
+            # Should not raise exceptions
+            handler.handle_permissions('test_table')
+        """
+        if len(self.permitted_tables) > 0:
+            if dataset not in self.permitted_tables:
+                raise HTTPException(status_code=401)
 
     def handle_read(self, dataset):
         """
@@ -102,12 +151,13 @@ class DataHandler:
             handler.handle_read('test_table')
         """
         self.handle_restrictions(dataset)
+        self.handle_permissions(dataset)
         if not self.database.has_table(dataset):
             raise HTTPException(status_code=404, detail='Dataset not found')
 
     def handle_restrictions(self, dataset):
         """
-        Handle a table read, checking for existence and restrictions.
+        Handle restricted table access.
         
         Parameters
         ----------
@@ -227,5 +277,6 @@ class DataHandler:
             dm.create('test_table', data)
         """
         self.handle_restrictions(dataset)
+        self.handle_permissions(dataset)
         if self.database.has_table(dataset):
             raise HTTPException(status_code=400, detail='Dataset already exists')

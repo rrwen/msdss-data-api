@@ -49,7 +49,9 @@ class DataAPI(API):
     delete_get_current_user_kwargs : dict
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data delete route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
     id_get_current_user_kwargs : dict
-        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the id create route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data id route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    insert_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
     query_get_current_user_kwargs : dict
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data query route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
     update_get_current_user_kwargs : dict
@@ -132,6 +134,9 @@ class DataAPI(API):
             superuser=True
         ),
         id_get_current_user_kwargs=None,
+        insert_get_current_user_kwargs=dict(
+            superuser=True
+        ),
         query_get_current_user_kwargs=None,
         update_get_current_user_kwargs=dict(
             superuser=True

@@ -6,6 +6,7 @@ API Reference
     core
     handlers
     managers
+    models
     routers
     tools
     
