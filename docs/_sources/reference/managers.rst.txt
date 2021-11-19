@@ -29,7 +29,7 @@ update
 .. automethod:: msdss_data_api.managers.DataManager.update
 
 MetadataManager
------------
+---------------
 
 .. autoclass:: msdss_data_api.managers.MetadataManager
 

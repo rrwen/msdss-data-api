@@ -710,7 +710,7 @@ class MetadataManager:
             results = mdm.search(where=['title = "Testing Data"'])
             pprint(results)
         """
-        self.data_manager.get(self.table, *args, **kwargs)
+        return self.data_manager.get(self.table, *args, **kwargs)
 
     def update(self, dataset, data):
         """
