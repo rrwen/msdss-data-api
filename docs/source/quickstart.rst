@@ -59,6 +59,12 @@ Then setup the database environment variables:
     msdss-dotenv set MSDSS_DATABASE_PORT 5432
     msdss-dotenv set MSDSS_DATABASE_NAME msdss
 
+Finally, create a ``superuser`` with the ``msdss-users`` command line interface:
+
+.. code::
+
+    msdss-users register --superuser
+
 In Python, use the package via :class:`msdss_data_api.core.DataAPI`:
 
 .. jupyter-execute::
