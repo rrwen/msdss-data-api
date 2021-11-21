@@ -52,8 +52,14 @@ class DataAPI(API):
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data id route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
     insert_get_current_user_kwargs : dict
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
+    metadata_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    metadata_update_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.
     query_get_current_user_kwargs : dict
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data query route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
+    search_get_current_user_kwargs : dict
+        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data search route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
     update_get_current_user_kwargs : dict
         Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data update route if ``enable_users`` is ``True``. The default is to only allow users to access this route.
     load_env : bool
@@ -137,7 +143,12 @@ class DataAPI(API):
         insert_get_current_user_kwargs=dict(
             superuser=True
         ),
+        metadata_get_current_user_kwargs=None,
+        metadata_update_get_current_user_kwargs=dict(
+            superuser=True
+        ),
         query_get_current_user_kwargs=None,
+        search_get_current_user_kwargs=None,
         update_get_current_user_kwargs=dict(
             superuser=True
         ),
@@ -186,7 +197,11 @@ class DataAPI(API):
                 'create_get_current_user': create_get_current_user_kwargs,
                 'delete_get_current_user': delete_get_current_user_kwargs,
                 'id_get_current_user': id_get_current_user_kwargs,
+                'insert_get_current_user': insert_get_current_user_kwargs,
+                'metadata_get_current_user': metadata_get_current_user_kwargs,
+                'metadata_update_get_current_user': metadata_update_get_current_user_kwargs,
                 'query_get_current_user': query_get_current_user_kwargs,
+                'search_get_current_user': search_get_current_user_kwargs,
                 'update_get_current_user': update_get_current_user_kwargs
             }
             for k, v in get_current_user_mappings.items():

@@ -19,7 +19,10 @@ def get_data_router(
     enable_delete_route=True,
     enable_id_route=True,
     enable_insert_route=True,
+    enable_metadata_route=True,
+    enable_metadata_update_route=True,
     enable_query_route=True,
+    enable_search_route=True,
     enable_update_route=True,
     create_route_path='/',
     create_route_kwargs={},
@@ -37,10 +40,19 @@ def get_data_router(
     insert_route_kwargs={},
     insert_route_restricted_tables=None,
     insert_get_current_user=None,
+    metadata_route_path='/{dataset}/metadata',
+    metadata_route_kwargs={},
+    metadata_get_current_user=None,
+    metadata_update_route_path='/{dataset}/metadata',
+    metadata_update_route_kwargs={},
+    metadata_update_get_current_user=None,
     query_route_path='/{dataset}',
     query_route_kwargs={},
     query_route_restricted_tables=None,
     query_get_current_user=None,
+    search_route_path='/',
+    search_route_kwargs={},
+    search_get_current_user=None,
     update_route_path='/{dataset}',
     update_route_kwargs={},
     update_route_restricted_tables=None,
@@ -67,10 +79,16 @@ def get_data_router(
         Whether to enable the delete path for this router or not.
     enable_id_route : bool
         Whether to enable the id path for this router or not.
-    enable_id_route : bool
+    enable_insert_route : bool
         Whether to enable the insert path for this router or not.
+    enable_metadata_route : bool
+        Whether to enable the GET metadata path for this router or not.
+    enable_metadata_update_route : bool
+        Whether to enable the PUT metadata path for this router or not.
     enable_query_route : bool
         Whether to enable the query path for this router or not.
+    enable_search_route : bool
+        Whether to enable the search path for this router or not.
     enable_update_route : bool
         Whether to enable the update path for this router or not.
     create_route_path : str
@@ -109,6 +127,20 @@ def get_data_router(
     insert_get_current_user : func
         A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
         If ``None``, it will default to parameter ``get_current_user``.
+    metadata_route_path : str
+        Path for the metadata route in this router. The full path will include the param ``prefix``.
+    metadata_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the metadata route.
+    metadata_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
+    metadata_update_route_path : str
+        Path for the metadata update route in this router. The full path will include the param ``prefix``.
+    metadata_update_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the metadata update route.
+    metadata_update_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
     query_route_path : str
         Path for the query route in this router. The full path will include the param ``prefix``.
     query_route_kwargs : dict
@@ -116,6 +148,13 @@ def get_data_router(
     query_route_restricted_tables : list(str)
         Same as parameter ``restricted_tables`` except router specific. If ``None``, will default to parameter ``restricted_tables``.
     query_get_current_user : func
+        A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
+        If ``None``, it will default to parameter ``get_current_user``.
+    search_route_path : str
+        Path for the search route in this router. The full path will include the param ``prefix``.
+    search_route_kwargs : dict
+        Additional arguments passed to :meth:`fastapi:fastapi.FastAPI.get` for the search route.
+    search_get_current_user : func
         A function to get the current user, but route specific. See `FastAPI get_current_user <https://fastapi.tiangolo.com/tutorial/security/get-current-user/>`_.
         If ``None``, it will default to parameter ``get_current_user``.
     update_route_path : str
@@ -171,7 +210,10 @@ def get_data_router(
     delete_get_current_user = delete_get_current_user if delete_get_current_user else get_current_user
     id_get_current_user = id_get_current_user if id_get_current_user else get_current_user
     insert_get_current_user = insert_get_current_user if insert_get_current_user else get_current_user
+    metadata_get_current_user = metadata_get_current_user if metadata_get_current_user else get_current_user
+    metadata_update_get_current_user = metadata_update_get_current_user if metadata_update_get_current_user else get_current_user
     query_get_current_user = query_get_current_user if query_get_current_user else get_current_user
+    search_get_current_user = search_get_current_user if search_get_current_user else get_current_user
     update_get_current_user = update_get_current_user if update_get_current_user else get_current_user
 
     # (get_data_router_create) Create api router for data routes
@@ -204,7 +246,8 @@ def get_data_router(
                         {'col_one': 2, 'col_two': 'b'},
                         {'col_one': 3, 'col_two': 'c'}
                     ]
-                }),
+                }
+            ),
             data_manager = Depends(create_get_data_manager),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(create_get_current_user)
@@ -216,8 +259,8 @@ def get_data_router(
             # (get_data_router_create_metadata) Format metadata
             metadata = body
             metadata[DEFAULT_METADATA_DATASET_COLUMN] = dataset
-            metadata[DEFAULT_METADATA_UPLOADED_COLUMN] = datetime.now()
-            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
+            metadata[DEFAULT_METADATA_UPLOADED_AT_COLUMN] = datetime.now()
+            metadata[DEFAULT_METADATA_UPDATED_AT_COLUMN] = datetime.now()
 
             # (get_data_router_create_users) Add user operations if available
             if user:
@@ -240,6 +283,7 @@ def get_data_router(
             user = Depends(delete_get_current_user)
         ):
             data_manager.delete(dataset=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
+            metadata_manager.updated_at(dataset=dataset)
             if delete_all:
                 metadata_manager.delete(dataset=dataset)
 
@@ -268,9 +312,33 @@ def get_data_router(
             user = Depends(insert_get_current_user)
         ):
             data_manager.insert(dataset=dataset, data=data)
-            metadata = {}
-            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
-            metadata_manager.update(dataset, metadata)
+            metadata_manager.updated_at(dataset)
+
+    # (get_data_router_metadata) Add metadata route to data router
+    if enable_metadata_route:
+        @out.get(metadata_route_path, **metadata_route_kwargs)
+        async def get_metadata(
+            dataset: str = Query(..., description='Name of the dataset to get metadata for'),
+            metadata_manager = Depends(get_metadata_manager),
+            user = Depends(metadata_get_current_user)
+        ):
+            response = metadata_manager.get(dataset=dataset)
+            return response
+
+    # (get_data_router_metadata) Add metadata route to data router
+    if enable_metadata_update_route:
+        @out.put(metadata_update_route_path, **metadata_update_route_kwargs)
+        async def update_metadata(
+            dataset: str = Query(..., description='Name of the dataset to update metadata for'),
+            body: Dict[str, Any] = Body(
+                ...,
+                example={'col_one': 1, 'col_two': 'a'}
+            ),
+            metadata_manager = Depends(get_metadata_manager),
+            user = Depends(metadata_update_get_current_user)
+        ):
+            response = metadata_manager.update(dataset=dataset, data=body)
+            return response
 
     # (get_data_router_query) Add query route to data router
     if enable_query_route:
@@ -303,19 +371,43 @@ def get_data_router(
             )
             return response
     
+    # (get_data_router_search) Add search route to data router
+    if enable_search_route:
+        @out.get(search_route_path, **search_route_kwargs)
+        async def search_data(
+            select: Optional[List[str]] = Query(None, description='Variables to include in search'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "dataset = test_data") - valid operators are: =, >, >=, >, <, <=, !=, LIKE, CONTAINS'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
+            order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
+            limit: Optional[int] = Query(None, description='Number of items to return'),
+            where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
+            metadata_manager = Depends(get_metadata_manager),
+            user = Depends(search_get_current_user)
+        ):
+            response = metadata_manager.search(
+                select=select,
+                where=where,
+                order_by=order_by,
+                order_by_sort=order_by_sort,
+                limit=limit,
+                where_boolean=where_boolean
+            )
+            return response
+    
     # (get_data_router_update) Add update route to data router
     if enable_update_route:
         @out.put(update_route_path, **update_route_kwargs)
         async def update_data(
             dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'),
-            body: Dict[str, Any] = Body(...),
+            body: Dict[str, Any] = Body(
+                ...,
+                example={'col_one': 1, 'col_two': 'a'}
+            ),
             where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
             data_manager = Depends(update_get_data_manager),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(update_get_current_user)
         ):
             data_manager.update(dataset=dataset, data=body, where=where)
-            metadata = {}
-            metadata[DEFAULT_METADATA_UPDATED_COLUMN] = datetime.now()
-            metadata_manager.update(dataset, metadata)
+            metadata_manager.updated_at(dataset)
     return out

@@ -487,8 +487,8 @@
             <span class="c1"># (get_data_router_create_metadata) Format metadata</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">body</span>
             <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_DATASET_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataset</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPLOADED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPLOADED_AT_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_AT_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 
             <span class="c1"># (get_data_router_create_users) Add user operations if available</span>
             <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
@@ -540,7 +540,7 @@
         <span class="p">):</span>
             <span class="n">data_manager</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_AT_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
             <span class="n">metadata_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
     <span class="c1"># (get_data_router_query) Add query route to data router</span>
@@ -587,7 +587,7 @@
         <span class="p">):</span>
             <span class="n">data_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">body</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">)</span>
             <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="n">DEFAULT_METADATA_UPDATED_AT_COLUMN</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
             <span class="n">metadata_manager</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>

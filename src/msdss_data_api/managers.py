@@ -1,3 +1,4 @@
+from datetime import datetime
 from fastapi import HTTPException
 from msdss_base_database import Database
 from shlex import split
@@ -47,7 +48,7 @@ class DataManager:
         result = dm.get('test_table')
 
         # Update sample data
-        new_data = {'column_one': 'UPDATED'}
+        new_data = {'column_one': 'updated_at'}
         dm.update('test_table', new_data, where=['id > 1'])
 
         # Delete sample data
@@ -367,7 +368,7 @@ class DataManager:
             dm.create('test_table', data)
 
             # Update the data from the database
-            new_data = {'column_one': 'UPDATED'}
+            new_data = {'column_one': 'updated_at'}
             dm.update('test_table', new_data, where=['id > 1'])
 
             # See updated data
@@ -400,7 +401,9 @@ class MetadataManager:
             pprint(DEFAULT_METADATA_COLUMNS)
 
     dataset_column : str
-        The column name holding the dataset name in the metadata table.
+        The column name holding the dataset name in the metadata table or a unique id for each dataset.
+    uploaded_at_column : str
+        The column name holding the last updated date and time in the metadata table.
     database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for managing metadata.
     
@@ -433,8 +436,8 @@ class MetadataManager:
             'description': 'Data used for testing',
             'source': 'Automatically generated from Python',
             'uploaded_by': 'msdss',
-            'uploaded': datetime.now(),
-            'updated': datetime.now()
+            'uploaded_at': datetime.now(),
+            'updated_at': datetime.now()
         }]
         mdm.create('test_data', metadata)
 
@@ -455,6 +458,7 @@ class MetadataManager:
         table=DEFAULT_METADATA_TABLE,
         columns=DEFAULT_METADATA_COLUMNS,
         dataset_column=DEFAULT_METADATA_DATASET_COLUMN,
+        updated_at_column=DEFAULT_METADATA_UPDATED_AT_COLUMN,
         database=Database(),
         data_handler=None,
         data_manager=None):
@@ -466,6 +470,7 @@ class MetadataManager:
         # (MetadataManager_attr) Set attributes
         self.table = table
         self.dataset_column = dataset_column
+        self.updated_at_column = updated_at_column
         self.database = database
 
         # (MetadataManager_manager) Create data manager
@@ -523,8 +528,8 @@ class MetadataManager:
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
                 'uploaded_by': 'msdss',
-                'uploaded': datetime.now(),
-                'updated': datetime.now()
+                'uploaded_at': datetime.now(),
+                'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
 
@@ -578,8 +583,8 @@ class MetadataManager:
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
                 'uploaded_by': 'msdss',
-                'uploaded': datetime.now(),
-                'updated': datetime.now()
+                'uploaded_at': datetime.now(),
+                'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
             before_delete = mdm.search()
@@ -643,8 +648,8 @@ class MetadataManager:
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
                 'uploaded_by': 'msdss',
-                'uploaded': datetime.now(),
-                'updated': datetime.now()
+                'uploaded_at': datetime.now(),
+                'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
 
@@ -702,8 +707,8 @@ class MetadataManager:
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
                 'uploaded_by': 'msdss',
-                'uploaded': datetime.now(),
-                'updated': datetime.now()
+                'uploaded_at': datetime.now(),
+                'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
 
@@ -757,8 +762,8 @@ class MetadataManager:
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
                 'uploaded_by': 'msdss',
-                'uploaded': datetime.now(),
-                'updated': datetime.now()
+                'uploaded_at': datetime.now(),
+                'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
             before_update = mdm.get('test_data')
@@ -775,3 +780,65 @@ class MetadataManager:
         """
         where = [f'{self.dataset_column} = {dataset}']
         self.data_manager.update(self.table, data, where=where)
+
+    def updated_at(self, dataset, dt=None):
+        """
+        Set last updated entry for a dataset.
+
+        See :meth:`msdss_data_api.managers.MetadataManager.update`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset to update.
+        dt : :class:`datetime.datetime`
+            Datetime object representing the last updated time.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+
+        Example
+        -------
+        .. jupyter-execute::
+
+            from datetime import datetime
+            from pprint import pprint
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            from msdss_data_api.defaults import *
+            
+            # Setup database
+            db = Database()
+
+            # Check if the metadata table exists and drop if it does
+            if db.has_table(DEFAULT_METADATA_TABLE):
+                db.drop_table(DEFAULT_METADATA_TABLE)
+
+            # Setup metadata manager
+            mdm = MetadataManager(database=db)
+
+            # Add metadata
+            metadata = [{
+                'title': 'Testing Data',
+                'description': 'Data used for testing',
+                'source': 'Automatically generated from Python',
+                'uploaded_by': 'msdss',
+                'uploaded_at': datetime.now(),
+            }]
+            mdm.create('test_data', metadata)
+            before_update = mdm.get('test_data')
+
+            # Update metadata
+            mdm.updated_at('test_data', datetime.now())
+            after_update = mdm.get('test_data')
+
+            # Print results
+            print('before_update:\\n')
+            pprint(before_update)
+            print('\\nafter_update:\\n')
+            pprint(after_update)
+        """
+        data = {}
+        data[self.updated_at_column] = dt if dt else datetime.now()
+        self.update(dataset, data)
