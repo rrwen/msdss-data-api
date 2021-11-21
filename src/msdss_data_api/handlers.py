@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from msdss_base_database import Database
+from msdss_base_database import Database, SUPPORTED_OPERATORS
 
 from .defaults import *
 
@@ -42,11 +42,11 @@ class DataHandler:
         handler.handle_write('test_table')
 
         # Create sample data
-        data = {
-            'id': [1, 2, 3],
-            'column_one': ['a', 'b', 'c'],
-            'column_two': [2, 4, 6]
-        }
+        data = [
+            {'id': 1, 'column_one': 'a', 'column_two': 2},
+            {'id': 2, 'column_one': 'b', 'column_two': 4},
+            {'id': 3, 'column_one': 'c', 'column_two': 6},
+        ]
         dm.create('test_table', data)
 
         # Check table name
@@ -93,11 +93,11 @@ class DataHandler:
                 db.drop_table('test_table')
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Check table name
@@ -139,11 +139,11 @@ class DataHandler:
                 db.drop_table('test_table')
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Check table name
@@ -186,11 +186,11 @@ class DataHandler:
                 db.drop_table('test_table')
 
             # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
             dm.create('test_table', data)
 
             # Check table name
@@ -206,10 +206,20 @@ class DataHandler:
         
         Parameters
         ----------
+        table : str
+            Table name to apply where to.
         where_list : list(list(str))
             list of where statements the form of ``['column', 'operator', 'value']`` to further filter individual values or rows.
             
-            * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+            * Operators are one of:
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database import SUPPORTED_OPERATORS
+                    for operator in SUPPORTED_OPERATORS:
+                        print(operator)
+
             * Example: ``['column_two', '<'. '3']'``
         
         Author
@@ -229,10 +239,16 @@ class DataHandler:
             handler.handle_where(where_list)
         """
         if where_list:
+
+            # (DataHandler_handle_where_len) Handle wrong length
             where_has_wrong_len = any([len(w) != 3 for w in where_list])
             if where_has_wrong_len:
                 raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
 
+            # (DataHandler_handle_where_op) Handle unsupported operator
+            for w in where_list:
+                if w[1].upper() not in SUPPORTED_OPERATORS:
+                    raise HTTPException(status_code=400, detail='Operator \'' + w[1] + '\' is not supported - supported operators are: ' + ', '.join(SUPPORTED_OPERATORS))
 
     def handle_write(self, dataset):
         """
@@ -267,16 +283,61 @@ class DataHandler:
             # Check table name
             # Should not raise exceptions
             handler.handle_write('test_table')
-
-            # Create sample data
-            data = {
-                'id': [1, 2, 3],
-                'column_one': ['a', 'b', 'c'],
-                'column_two': [2, 4, 6]
-            }
-            dm.create('test_table', data)
         """
         self.handle_restrictions(dataset)
         self.handle_permissions(dataset)
         if self.database.has_table(dataset):
             raise HTTPException(status_code=400, detail='Dataset already exists')
+
+    def handle_update(self, dataset, data):
+        """
+        Handle a table update, checking for existence and restrictions.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the table to check.
+        data : dict
+            Dictionary of update values to check. Each key should represent a column name in the table.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.handlers import *
+            from msdss_data_api.managers import *
+            
+            # Setup objects
+            db = Database()
+            dm = DataManager(database=db)
+            handler = DataHandler(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table('test_table'):
+                db.drop_table('test_table')
+
+            # Create sample data
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
+            dm.create('test_table', data)
+
+            # Handle update
+            # Should not throw any exceptions
+            newdata = {'id': 2, 'column_one': 'UPDATED'}
+            handler.handle_update('test_table', newdata)
+        """
+        self.handle_restrictions(dataset)
+        self.handle_permissions(dataset)
+        self.handle_read(dataset)
+        columns = self.database._get_table(dataset).c
+        for k in data.keys():
+            if k not in columns:
+                raise HTTPException(status_code=400, detail='Variable \'' + k + '\' not found')

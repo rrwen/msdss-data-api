@@ -57,3 +57,8 @@ update
 ^^^^^^
 
 .. automethod:: msdss_data_api.managers.MetadataManager.update
+
+updated_at
+^^^^^^^^^^
+
+.. automethod:: msdss_data_api.managers.MetadataManager.updated_at

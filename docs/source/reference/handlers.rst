@@ -8,6 +8,12 @@ DataHandler
 
 .. autoclass:: msdss_data_api.handlers.DataHandler
 
+handle_permissions
+^^^^^^^^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.handlers.DataHandler.handle_permissions
+
+
 handle_read
 ^^^^^^^^^^^
 
@@ -27,3 +33,8 @@ handle_write
 ^^^^^^^^^^^^
 
 .. automethod:: msdss_data_api.handlers.DataHandler.handle_write
+
+handle_update
+^^^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.handlers.DataHandler.handle_update

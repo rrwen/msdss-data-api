@@ -284,6 +284,8 @@
         <li class="md-nav__item"><a href="#search" class="md-nav__link">search</a>
         </li>
         <li class="md-nav__item"><a href="#id4" class="md-nav__link">update</a>
+        </li>
+        <li class="md-nav__item"><a href="#updated-at" class="md-nav__link">updated_at</a>
         </li></ul>
             </nav>
         </li></ul>
@@ -347,7 +349,7 @@
 <span class="n">result</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">)</span>
 
 <span class="c1"># Update sample data</span>
-<span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'UPDATED'</span><span class="p">}</span>
+<span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'updated_at'</span><span class="p">}</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'id &gt; 1'</span><span class="p">])</span>
 
 <span class="c1"># Delete sample data</span>
@@ -421,7 +423,30 @@
 <li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database to delete.</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows for deleting.</p>
 <ul>
-<li><p>Operators are one of: <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!='',</span> <span class="pre">``LIKE</span></code></p></li>
+<li><p>Operators are one of</p>
+<blockquote>
+<div><div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=
+!=
+&gt;
+&gt;=
+&gt;
+&lt;
+&lt;=
+LIKE
+NOTLIKE
+ILIKE
+NOTILIKE
+CONTAINS
+STARTSWITH
+ENDSWITH
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</li>
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">'column_two</span> <span class="pre">&lt;</span> <span class="pre">3'</span></code></p></li>
 </ul>
 </p></li>
@@ -486,7 +511,30 @@
 <li><p><strong>select</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – List of column names or a single column name to filter or select from the table. If <code class="docutils literal notranslate"><span class="pre">None</span></code> then all columns will be selected.</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows.</p>
 <ul>
-<li><p>Operators are one of: <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!='',</span> <span class="pre">``LIKE</span></code></p></li>
+<li><p>Operators are one of</p>
+<blockquote>
+<div><div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=
+!=
+&gt;
+&gt;=
+&gt;
+&lt;
+&lt;=
+LIKE
+NOTLIKE
+ILIKE
+NOTILIKE
+CONTAINS
+STARTSWITH
+ENDSWITH
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</li>
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">'column_two</span> <span class="pre">&lt;</span> <span class="pre">3'</span></code></p></li>
 </ul>
 </p></li>
@@ -502,7 +550,7 @@ If a list of str, then it must have the same number of elements as <code class="
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.</p>
+<dd class="field-even"><p>A list of dicts where each key is the column name.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
@@ -560,7 +608,30 @@ If a list of str, then it must have the same number of elements as <code class="
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Dictionary representing values to update if they match the <code class="docutils literal notranslate"><span class="pre">where</span></code> parameter requirements. Each key is a column and the value is the updated new value.</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows.</p>
 <ul>
-<li><p>Operators are one of: <code class="docutils literal notranslate"><span class="pre">=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;=</span></code>, <code class="docutils literal notranslate"><span class="pre">!='',</span> <span class="pre">``LIKE</span></code></p></li>
+<li><p>Operators are one of</p>
+<blockquote>
+<div><div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>=
+!=
+&gt;
+&gt;=
+&gt;
+&lt;
+&lt;=
+LIKE
+NOTLIKE
+ILIKE
+NOTILIKE
+CONTAINS
+STARTSWITH
+ENDSWITH
+</pre></div>
+</div>
+</div>
+</div>
+</div></blockquote>
+</li>
 <li><p>Example: <code class="docutils literal notranslate"><span class="pre">'column_two</span> <span class="pre">&lt;</span> <span class="pre">3'</span></code></p></li>
 </ul>
 </p></li>
@@ -592,7 +663,7 @@ If a list of str, then it must have the same number of elements as <code class="
 <span class="n">dm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <span class="c1"># Update the data from the database</span>
-<span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'UPDATED'</span><span class="p">}</span>
+<span class="n">new_data</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'column_one'</span><span class="p">:</span> <span class="s1">'updated_at'</span><span class="p">}</span>
 <span class="n">dm</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s1">'test_table'</span><span class="p">,</span> <span class="n">new_data</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="p">[</span><span class="s1">'id &gt; 1'</span><span class="p">])</span>
 
 <span class="c1"># See updated data</span>
@@ -602,7 +673,7 @@ If a list of str, then it must have the same number of elements as <code class="
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'UPDATED', 'column_two': 4}, {'id': 3, 'column_one': 'UPDATED', 'column_two': 6}]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'updated_at', 'column_two': 4}, {'id': 3, 'column_one': 'updated_at', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -614,7 +685,7 @@ If a list of str, then it must have the same number of elements as <code class="
 <h2 id="metadatamanager">MetadataManager<a class="headerlink" href="#metadatamanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_data_api.managers.MetadataManager">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.managers.</span></span><span class="sig-name descname"><span class="pre">MetadataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">table='data',</span> <span class="pre">columns=[{'name':</span> <span class="pre">'id',</span> <span class="pre">'type_':</span> <span class="pre">'Integer',</span> <span class="pre">'primary_key':</span> <span class="pre">True},</span> <span class="pre">{'name':</span> <span class="pre">'dataset',</span> <span class="pre">'type_':</span> <span class="pre">'String',</span> <span class="pre">'unique':</span> <span class="pre">True},</span> <span class="pre">('title',</span> <span class="pre">'String'),</span> <span class="pre">('description',</span> <span class="pre">'String'),</span> <span class="pre">('source',</span> <span class="pre">'String'),</span> <span class="pre">('uploaded_by',</span> <span class="pre">'String'),</span> <span class="pre">('uploaded',</span> <span class="pre">'DateTime'),</span> <span class="pre">('updated',</span> <span class="pre">'DateTime')],</span> <span class="pre">dataset_column='dataset',</span> <span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">data_handler=None,</span> <span class="pre">data_manager=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#MetadataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.MetadataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.managers.</span></span><span class="sig-name descname"><span class="pre">MetadataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">table='data',</span> <span class="pre">columns=[{'name':</span> <span class="pre">'id',</span> <span class="pre">'type_':</span> <span class="pre">'Integer',</span> <span class="pre">'primary_key':</span> <span class="pre">True},</span> <span class="pre">{'name':</span> <span class="pre">'dataset',</span> <span class="pre">'type_':</span> <span class="pre">'String',</span> <span class="pre">'unique':</span> <span class="pre">True},</span> <span class="pre">('title',</span> <span class="pre">'String'),</span> <span class="pre">('description',</span> <span class="pre">'String'),</span> <span class="pre">('source',</span> <span class="pre">'String'),</span> <span class="pre">('created_by',</span> <span class="pre">'String'),</span> <span class="pre">('created_at',</span> <span class="pre">'DateTime'),</span> <span class="pre">('updated_at',</span> <span class="pre">'DateTime')],</span> <span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">handler=None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#MetadataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.MetadataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage metadata in a database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -629,15 +700,14 @@ This defines the table to store the metadata, where the default is:</p>
  ('title', 'String'),
  ('description', 'String'),
  ('source', 'String'),
- ('uploaded_by', 'String'),
- ('uploaded', 'DateTime'),
- ('updated', 'DateTime')]
+ ('created_by', 'String'),
+ ('created_at', 'DateTime'),
+ ('updated_at', 'DateTime')]
 </pre></div>
 </div>
 </div>
 </div>
 </p></li>
-<li><p><strong>dataset_column</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The column name holding the dataset name in the metadata table.</p></li>
 <li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.5)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – Database object to use for managing metadata.</p></li>
 </ul>
 </dd>
@@ -667,9 +737,9 @@ This defines the table to store the metadata, where the default is:</p>
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
@@ -714,9 +784,9 @@ This defines the table to store the metadata, where the default is:</p>
  ('title', 'String'),
  ('description', 'String'),
  ('source', 'String'),
- ('uploaded_by', 'String'),
- ('uploaded', 'DateTime'),
- ('updated', 'DateTime')]
+ ('created_by', 'String'),
+ ('created_at', 'DateTime'),
+ ('updated_at', 'DateTime')]
 </pre></div>
 </div>
 </div>
@@ -751,9 +821,9 @@ This defines the table to store the metadata, where the default is:</p>
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
@@ -764,14 +834,14 @@ This defines the table to store the metadata, where the default is:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'dataset': 'test_data',
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-11-21 02:25:04.527953'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'Data used for testing',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.329631'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.329625'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.527960')}]
 </pre></div>
 </div>
 </div>
@@ -817,9 +887,9 @@ This defines the table to store the metadata, where the default is:</p>
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 <span class="n">before_delete</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
@@ -839,14 +909,14 @@ This defines the table to store the metadata, where the default is:</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_delete:
 
-[{'dataset': 'test_data',
+[{'created_at': Timestamp('2021-11-21 02:25:04.588928'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'Data used for testing',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.383095'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.383089'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.588934')}]
 
 after_delete:
 
@@ -869,7 +939,7 @@ after_delete:
 <dd class="field-odd"><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset to get metadata for.</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.</p>
+<dd class="field-even"><p>A list of dicts where each key is the column name.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
@@ -901,9 +971,9 @@ after_delete:
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
@@ -914,14 +984,14 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'dataset': 'test_data',
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-11-21 02:25:04.656965'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'Data used for testing',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.448828'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.448822'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.656971')}]
 </pre></div>
 </div>
 </div>
@@ -975,9 +1045,9 @@ after_delete:
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 
@@ -988,14 +1058,14 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'dataset': 'test_data',
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-11-21 02:25:04.713581'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'Data used for testing',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.552840'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.552834'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.713587')}]
 </pre></div>
 </div>
 </div>
@@ -1043,9 +1113,9 @@ after_delete:
     <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
     <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
     <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
-    <span class="s1">'uploaded_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
-    <span class="s1">'uploaded'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
-    <span class="s1">'updated'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+    <span class="s1">'updated_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
 <span class="p">}]</span>
 <span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
 <span class="n">before_update</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
@@ -1065,25 +1135,112 @@ after_delete:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[{'dataset': 'test_data',
+[{'created_at': Timestamp('2021-11-21 02:25:04.770027'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'Data used for testing',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.611087'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.611081'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.770034')}]
 
 after_update:
 
-[{'dataset': 'test_data',
+[{'created_at': Timestamp('2021-11-21 02:25:04.770027'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
   'description': 'NEW DESCRIPTION',
   'id': 1,
   'source': 'Automatically generated from Python',
   'title': 'Testing Data',
-  'updated': Timestamp('2021-11-19 05:21:15.611087'),
-  'uploaded': Timestamp('2021-11-19 05:21:15.611081'),
-  'uploaded_by': 'msdss'}]
+  'updated_at': Timestamp('2021-11-21 02:25:04.770034')}]
+</pre></div>
+</div>
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="updated-at">
+<h3 id="updated-at">updated_at<a class="headerlink" href="#updated-at" title="Permalink to this headline">¶</a></h3>
+<dl class="py method">
+<dt class="sig sig-object py" id="msdss_data_api.managers.MetadataManager.updated_at">
+<span class="sig-prename descclassname"><span class="pre">MetadataManager.</span></span><span class="sig-name descname"><span class="pre">updated_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#MetadataManager.updated_at"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.MetadataManager.updated_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set last updated entry for a dataset.</p>
+<p>See <a class="reference internal" href="#msdss_data_api.managers.MetadataManager.update" title="msdss_data_api.managers.MetadataManager.update"><code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager.update()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset to update.</p></li>
+<li><p><strong>dt</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>) – Datetime object representing the last updated time.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.managers</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">msdss_data_api.defaults</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># Setup database</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">()</span>
+
+<span class="c1"># Check if the metadata table exists and drop if it does</span>
+<span class="k">if</span> <span class="n">db</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">):</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">)</span>
+
+<span class="c1"># Setup metadata manager</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="c1"># Add metadata</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
+    <span class="s1">'title'</span><span class="p">:</span> <span class="s1">'Testing Data'</span><span class="p">,</span>
+    <span class="s1">'description'</span><span class="p">:</span> <span class="s1">'Data used for testing'</span><span class="p">,</span>
+    <span class="s1">'source'</span><span class="p">:</span> <span class="s1">'Automatically generated from Python'</span><span class="p">,</span>
+    <span class="s1">'created_by'</span><span class="p">:</span> <span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="s1">'created_at'</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+<span class="p">}]</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">metadata</span><span class="p">)</span>
+<span class="n">before_update</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+
+<span class="c1"># Update metadata</span>
+<span class="n">mdm</span><span class="o">.</span><span class="n">updated_at</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span>
+<span class="n">after_update</span> <span class="o">=</span> <span class="n">mdm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'test_data'</span><span class="p">)</span>
+
+<span class="c1"># Print results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'before_update:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">before_update</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">after_update:</span><span class="se">\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">after_update</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
+
+[{'created_at': Timestamp('2021-11-21 02:25:04.836153'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': None}]
+
+after_update:
+
+[{'created_at': Timestamp('2021-11-21 02:25:04.836153'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-11-21 02:25:04.849991')}]
 </pre></div>
 </div>
 </div>

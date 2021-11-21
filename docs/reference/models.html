@@ -262,6 +262,8 @@
         <li class="md-nav__item"><a href="#reference-models--page-root" class="md-nav__link">models</a><nav class="md-nav">
               <ul class="md-nav__list">
         <li class="md-nav__item"><a href="#datacreate" class="md-nav__link">DataCreate</a>
+        </li>
+        <li class="md-nav__item"><a href="#metadataupdate" class="md-nav__link">MetadataUpdate</a>
         </li></ul>
             </nav>
         </li>
@@ -287,16 +289,46 @@
 <dt class="sig sig-object py" id="msdss_data_api.models.DataCreate">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.models.</span></span><span class="sig-name descname"><span class="pre">DataCreate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/models.html#DataCreate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.models.DataCreate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model for creating data.</p>
-<dl class="simple">
-<dt>title<span class="classifier">str</span></dt><dd><p>Title of the dataset stored in metadata.</p>
-</dd>
-<dt>description<span class="classifier">str</span></dt><dd><p>Description of dataset stored in metadata.</p>
-</dd>
-<dt>source<span class="classifier">str</span></dt><dd><p>Data source stored in metadata.</p>
-</dd>
-<dt>data<span class="classifier">list(dict)</span></dt><dd><p>The data itself for the dataset. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.DataCreate.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#msdss_data_api.models.DataCreate.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of the dataset stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
 </dd>
 </dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.DataCreate.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#msdss_data_api.models.DataCreate.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of dataset stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.DataCreate.source">
+<span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#msdss_data_api.models.DataCreate.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data source stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.DataCreate.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#msdss_data_api.models.DataCreate.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>The data itself for the dataset. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)">list</a>(<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a>)</p>
+</dd>
+</dl>
+</dd></dl>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>
@@ -313,6 +345,65 @@
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'data': ModelField(name='data', type=List[Dict[str, Any]], required=True),
  'description': ModelField(name='description', type=Optional[str], required=False, default=None),
+ 'source': ModelField(name='source', type=Optional[str], required=False, default=None),
+ 'title': ModelField(name='title', type=Optional[str], required=False, default=None)}
+</pre></div>
+</div>
+</div>
+</div>
+</dd></dl>
+</section>
+<section id="metadataupdate">
+<h2 id="metadataupdate">MetadataUpdate<a class="headerlink" href="#metadataupdate" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="msdss_data_api.models.MetadataUpdate">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.models.</span></span><span class="sig-name descname"><span class="pre">MetadataUpdate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/models.html#MetadataUpdate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.models.MetadataUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Model for updating metadata.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.MetadataUpdate.title">
+<span class="sig-name descname"><span class="pre">title</span></span><a class="headerlink" href="#msdss_data_api.models.MetadataUpdate.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Title of the dataset stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.MetadataUpdate.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#msdss_data_api.models.MetadataUpdate.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of dataset stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.models.MetadataUpdate.source">
+<span class="sig-name descname"><span class="pre">source</span></span><a class="headerlink" href="#msdss_data_api.models.MetadataUpdate.source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data source stored in metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+<p class="rubric">Author</p>
+<p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
+<p class="rubric">Example</p>
+<div class="jupyter_cell jupyter_container docutils container">
+<div class="cell_input code_cell docutils container">
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_data_api.models</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+
+<span class="n">fields</span> <span class="o">=</span> <span class="n">MetadataUpdate</span><span class="o">.</span><span class="n">__fields__</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'description': ModelField(name='description', type=Optional[str], required=False, default=None),
  'source': ModelField(name='source', type=Optional[str], required=False, default=None),
  'title': ModelField(name='title', type=Optional[str], required=False, default=None)}
 </pre></div>

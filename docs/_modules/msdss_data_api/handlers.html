@@ -270,7 +270,7 @@
             
   <h1 id="modules-msdss-data-api-handlers--page-root">Source code for msdss_data_api.handlers</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">HTTPException</span>
-<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span><span class="p">,</span> <span class="n">SUPPORTED_OPERATORS</span>
 
 <span class="kn">from</span> <span class="nn">.defaults</span> <span class="kn">import</span> <span class="o">*</span>
 
@@ -313,11 +313,11 @@
 <span class="sd">        handler.handle_write('test_table')</span>
 
 <span class="sd">        # Create sample data</span>
-<span class="sd">        data = {</span>
-<span class="sd">            'id': [1, 2, 3],</span>
-<span class="sd">            'column_one': ['a', 'b', 'c'],</span>
-<span class="sd">            'column_two': [2, 4, 6]</span>
-<span class="sd">        }</span>
+<span class="sd">        data = [</span>
+<span class="sd">            {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">            {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">            {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">        ]</span>
 <span class="sd">        dm.create('test_table', data)</span>
 
 <span class="sd">        # Check table name</span>
@@ -364,11 +364,11 @@
 <span class="sd">                db.drop_table('test_table')</span>
 
 <span class="sd">            # Create sample data</span>
-<span class="sd">            data = {</span>
-<span class="sd">                'id': [1, 2, 3],</span>
-<span class="sd">                'column_one': ['a', 'b', 'c'],</span>
-<span class="sd">                'column_two': [2, 4, 6]</span>
-<span class="sd">            }</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
 <span class="sd">            dm.create('test_table', data)</span>
 
 <span class="sd">            # Check table name</span>
@@ -410,11 +410,11 @@
 <span class="sd">                db.drop_table('test_table')</span>
 
 <span class="sd">            # Create sample data</span>
-<span class="sd">            data = {</span>
-<span class="sd">                'id': [1, 2, 3],</span>
-<span class="sd">                'column_one': ['a', 'b', 'c'],</span>
-<span class="sd">                'column_two': [2, 4, 6]</span>
-<span class="sd">            }</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
 <span class="sd">            dm.create('test_table', data)</span>
 
 <span class="sd">            # Check table name</span>
@@ -457,11 +457,11 @@
 <span class="sd">                db.drop_table('test_table')</span>
 
 <span class="sd">            # Create sample data</span>
-<span class="sd">            data = {</span>
-<span class="sd">                'id': [1, 2, 3],</span>
-<span class="sd">                'column_one': ['a', 'b', 'c'],</span>
-<span class="sd">                'column_two': [2, 4, 6]</span>
-<span class="sd">            }</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
 <span class="sd">            dm.create('test_table', data)</span>
 
 <span class="sd">            # Check table name</span>
@@ -477,10 +477,20 @@
 <span class="sd">        </span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
+<span class="sd">        table : str</span>
+<span class="sd">            Table name to apply where to.</span>
 <span class="sd">        where_list : list(list(str))</span>
 <span class="sd">            list of where statements the form of ``['column', 'operator', 'value']`` to further filter individual values or rows.</span>
 <span class="sd">            </span>
-<span class="sd">            * Operators are one of: ``=``, ``&gt;``, ``&gt;=``, ``&gt;``, ``&lt;``, ``&lt;=``, ``!='', ``LIKE``</span>
+<span class="sd">            * Operators are one of:</span>
+
+<span class="sd">                .. jupyter-execute::</span>
+<span class="sd">                    :hide-code:</span>
+
+<span class="sd">                    from msdss_base_database import SUPPORTED_OPERATORS</span>
+<span class="sd">                    for operator in SUPPORTED_OPERATORS:</span>
+<span class="sd">                        print(operator)</span>
+
 <span class="sd">            * Example: ``['column_two', '&lt;'. '3']'``</span>
 <span class="sd">        </span>
 <span class="sd">        Author</span>
@@ -500,10 +510,16 @@
 <span class="sd">            handler.handle_where(where_list)</span>
 <span class="sd">        """</span>
         <span class="k">if</span> <span class="n">where_list</span><span class="p">:</span>
+
+            <span class="c1"># (DataHandler_handle_where_len) Handle wrong length</span>
             <span class="n">where_has_wrong_len</span> <span class="o">=</span> <span class="nb">any</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where_list</span><span class="p">])</span>
             <span class="k">if</span> <span class="n">where_has_wrong_len</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col &lt; 3"'</span><span class="p">)</span></div>
+                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col &lt; 3"'</span><span class="p">)</span>
 
+            <span class="c1"># (DataHandler_handle_where_op) Handle unsupported operator</span>
+            <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where_list</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUPPORTED_OPERATORS</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Operator </span><span class="se">\'</span><span class="s1">'</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\'</span><span class="s1"> is not supported - supported operators are: '</span> <span class="o">+</span> <span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SUPPORTED_OPERATORS</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="DataHandler.handle_write"><a class="viewcode-back" href="../../reference/handlers.html#msdss_data_api.handlers.DataHandler.handle_write">[docs]</a>    <span class="k">def</span> <span class="nf">handle_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -538,19 +554,64 @@
 <span class="sd">            # Check table name</span>
 <span class="sd">            # Should not raise exceptions</span>
 <span class="sd">            handler.handle_write('test_table')</span>
-
-<span class="sd">            # Create sample data</span>
-<span class="sd">            data = {</span>
-<span class="sd">                'id': [1, 2, 3],</span>
-<span class="sd">                'column_one': ['a', 'b', 'c'],</span>
-<span class="sd">                'column_two': [2, 4, 6]</span>
-<span class="sd">            }</span>
-<span class="sd">            dm.create('test_table', data)</span>
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handle_permissions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Dataset already exists'</span><span class="p">)</span></div></div>
+            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Dataset already exists'</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">handle_update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Handle a table update, checking for existence and restrictions.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset : str</span>
+<span class="sd">            Name of the table to check.</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            Dictionary of update values to check. Each key should represent a column name in the table.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.handlers import *</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup objects</span>
+<span class="sd">            db = Database()</span>
+<span class="sd">            dm = DataManager(database=db)</span>
+<span class="sd">            handler = DataHandler(database=db)</span>
+
+<span class="sd">            # Check if the table exists and drop if it does</span>
+<span class="sd">            if db.has_table('test_table'):</span>
+<span class="sd">                db.drop_table('test_table')</span>
+
+<span class="sd">            # Create sample data</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
+<span class="sd">            dm.create('test_table', data)</span>
+
+<span class="sd">            # Handle update</span>
+<span class="sd">            # Should not throw any exceptions</span>
+<span class="sd">            newdata = {'id': 2, 'column_one': 'UPDATED'}</span>
+<span class="sd">            handler.handle_update('test_table', newdata)</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_permissions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">_get_table</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="o">.</span><span class="n">c</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Variable </span><span class="se">\'</span><span class="s1">'</span> <span class="o">+</span> <span class="n">k</span> <span class="o">+</span> <span class="s1">'</span><span class="se">\'</span><span class="s1"> not found'</span><span class="p">)</span></div>
 </pre></div>
 
           </article>

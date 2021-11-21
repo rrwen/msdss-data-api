@@ -7,3 +7,8 @@ DataCreate
 ----------
 
 .. autoclass:: msdss_data_api.models.DataCreate
+
+MetadataUpdate
+--------------
+
+.. autoclass:: msdss_data_api.models.MetadataUpdate

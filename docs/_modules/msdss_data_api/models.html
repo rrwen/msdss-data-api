@@ -276,8 +276,8 @@
     <span class="sd">"""</span>
 <span class="sd">    Model for creating data.</span>
 <span class="sd">    </span>
-<span class="sd">    Fields</span>
-<span class="sd">    ------</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
 <span class="sd">    title : str</span>
 <span class="sd">        Title of the dataset stored in metadata.</span>
 <span class="sd">    description : str</span>
@@ -286,7 +286,6 @@
 <span class="sd">        Data source stored in metadata.</span>
 <span class="sd">    data : list(dict)</span>
 <span class="sd">        The data itself for the dataset. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</span>
-<span class="sd">    </span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -306,6 +305,38 @@
     <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span></div>
+
+<div class="viewcode-block" id="MetadataUpdate"><a class="viewcode-back" href="../../reference/models.html#msdss_data_api.models.MetadataUpdate">[docs]</a><span class="k">class</span> <span class="nc">MetadataUpdate</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">"""</span>
+<span class="sd">    Model for updating metadata.</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    title : str</span>
+<span class="sd">        Title of the dataset stored in metadata.</span>
+<span class="sd">    description : str</span>
+<span class="sd">        Description of dataset stored in metadata.</span>
+<span class="sd">    source : str</span>
+<span class="sd">        Data source stored in metadata.</span>
+<span class="sd">    </span>
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">    </span>
+<span class="sd">    Example</span>
+<span class="sd">    -------</span>
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_data_api.models import *</span>
+<span class="sd">        from pprint import pprint</span>
+
+<span class="sd">        fields = MetadataUpdate.__fields__</span>
+<span class="sd">        pprint(fields)</span>
+<span class="sd">    """</span>
+    <span class="n">title</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">source</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span></div>
+    
 </pre></div>
 
           </article>

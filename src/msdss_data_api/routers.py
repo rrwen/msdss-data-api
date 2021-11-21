@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Body, Depends, Query
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Literal, Optional
 
 from .managers import *
 from .models import *
@@ -41,10 +41,10 @@ def get_data_router(
     insert_route_restricted_tables=None,
     insert_get_current_user=None,
     metadata_route_path='/{dataset}/metadata',
-    metadata_route_kwargs={},
+    metadata_route_kwargs={'tags': ['metadata']},
     metadata_get_current_user=None,
     metadata_update_route_path='/{dataset}/metadata',
-    metadata_update_route_kwargs={},
+    metadata_update_route_kwargs={'tags': ['metadata']},
     metadata_update_get_current_user=None,
     query_route_path='/{dataset}',
     query_route_kwargs={},
@@ -258,13 +258,13 @@ def get_data_router(
 
             # (get_data_router_create_metadata) Format metadata
             metadata = body
-            metadata[DEFAULT_METADATA_DATASET_COLUMN] = dataset
-            metadata[DEFAULT_METADATA_UPLOADED_AT_COLUMN] = datetime.now()
-            metadata[DEFAULT_METADATA_UPDATED_AT_COLUMN] = datetime.now()
+            metadata['dataset'] = dataset
+            metadata['created_at'] = datetime.now()
+            metadata['updated_at'] = datetime.now()
 
             # (get_data_router_create_users) Add user operations if available
             if user:
-                metadata[DEFAULT_METADATA_UPLOADED_BY_COLUMN] = user.id
+                metadata['created_by'] = user.email
 
             # (get_data_router_create_run) Create dataset and metadata
             data_manager.create(dataset=dataset, data=data)
@@ -275,8 +275,8 @@ def get_data_router(
         @out.delete(delete_route_path, **delete_route_kwargs)
         async def delete_data(
             dataset: str = Query(..., description='Name of the dataset to delete data from'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
-            where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             delete_all: Optional[bool] = Query(False, description='Whether to remove the entire dataset or not'),
             data_manager = Depends(delete_get_data_manager),
             metadata_manager = Depends(get_metadata_manager),
@@ -329,15 +329,19 @@ def get_data_router(
     if enable_metadata_update_route:
         @out.put(metadata_update_route_path, **metadata_update_route_kwargs)
         async def update_metadata(
-            dataset: str = Query(..., description='Name of the dataset to update metadata for'),
-            body: Dict[str, Any] = Body(
+            dataset: str = Query(..., description='Name of the dataset to update metadata for. Upload user and creation/update times can not be updated.'),
+            body: MetadataUpdate = Body(
                 ...,
-                example={'col_one': 1, 'col_two': 'a'}
+                example={
+                    'title': 'New Title to Replace Existing',
+                    'description': 'New description to replace existing...',
+                    'source': 'New data source to replace existing'
+                }
             ),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(metadata_update_get_current_user)
         ):
-            response = metadata_manager.update(dataset=dataset, data=body)
+            response = metadata_manager.update(dataset=dataset, data=body.dict())
             return response
 
     # (get_data_router_query) Add query route to data router
@@ -346,14 +350,14 @@ def get_data_router(
         async def query_data(
             dataset: str = Query(..., description='Name of the dataset to query'),
             select: Optional[List[str]] = Query(None, description='Variables to include'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             group_by: Optional[List[str]] = Query(None, alias='group-by', description='Variable names to group by - should be used with aggregate and aggregate_func parameters'),
             aggregate: Optional[List[str]] = Query(None, description='Variable names to aggregate with the same order as the aggregate_func parameter'),
             aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func', description='Aggregate functions in the same order as the aggregate parameter'),
             order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
-            order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
+            order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
-            where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
+            where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             data_manager = Depends(query_get_data_manager),
             user = Depends(query_get_current_user)
         ):
@@ -376,11 +380,11 @@ def get_data_router(
         @out.get(search_route_path, **search_route_kwargs)
         async def search_data(
             select: Optional[List[str]] = Query(None, description='Variables to include in search'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "dataset = test_data") - valid operators are: =, >, >=, >, <, <=, !=, LIKE, CONTAINS'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "dataset = test_data") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
-            order_by_sort: Optional[List[str]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
+            order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
-            where_boolean: Optional[str] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
+            where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(search_get_current_user)
         ):
@@ -403,7 +407,7 @@ def get_data_router(
                 ...,
                 example={'col_one': 1, 'col_two': 'a'}
             ),
-            where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, >, >=, >, <, <=, !=, LIKE'),
+            where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             data_manager = Depends(update_get_data_manager),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(update_get_current_user)

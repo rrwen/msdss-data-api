@@ -118,7 +118,15 @@ class DataManager:
         where : list(str)
             list of where statements the form of ``column operator value`` to further filter individual values or rows for deleting.
             
-            * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+            * Operators are one of
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database import SUPPORTED_OPERATORS
+                    for operator in SUPPORTED_OPERATORS:
+                        print(operator)
+
             * Example: ``'column_two < 3'``
 
         where_boolean : str
@@ -169,7 +177,11 @@ class DataManager:
         else:
             where = [split(w) for w in where]
             self.handler.handle_where(where)
-            self.database.delete(dataset, where=where, where_boolean=where_boolean)
+            try:
+                self.database.delete(dataset, where=where, where_boolean=where_boolean)
+            except KeyError as e:
+                detail = 'Variable ' + str(e) + ' not found'
+                raise HTTPException(status_code=400, detail=detail)
 
     def get(
         self,
@@ -197,7 +209,15 @@ class DataManager:
         where : list(str)
             list of where statements the form of ``column operator value`` to further filter individual values or rows.
             
-            * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+            * Operators are one of
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database import SUPPORTED_OPERATORS
+                    for operator in SUPPORTED_OPERATORS:
+                        print(operator)
+
             * Example: ``'column_two < 3'``
         
         group_by : slist(str) or None
@@ -220,7 +240,7 @@ class DataManager:
         Returns
         -------
         list(dict)
-            A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.
+            A list of dicts where each key is the column name.
 
         Author
         ------
@@ -256,18 +276,22 @@ class DataManager:
         self.handler.handle_read(dataset)
         where = [split(w) for w in where] if where else where
         self.handler.handle_where(where)
-        out = self.database.select(
-            table=dataset,
-            select=select,
-            where=where,
-            group_by=group_by,
-            aggregate=aggregate,
-            aggregate_func=aggregate_func,
-            order_by=order_by,
-            order_by_sort=order_by_sort,
-            limit=limit,
-            where_boolean=where_boolean
-        ).to_dict(orient='records')
+        try:
+            out = self.database.select(
+                table=dataset,
+                select=select,
+                where=where,
+                group_by=group_by,
+                aggregate=aggregate,
+                aggregate_func=aggregate_func,
+                order_by=order_by,
+                order_by_sort=order_by_sort,
+                limit=limit,
+                where_boolean=where_boolean
+            ).to_dict(orient='records')
+        except KeyError as e:
+            detail = 'Variable ' + str(e) + ' not found'
+            raise HTTPException(status_code=400, detail=detail)
         return out
 
     def insert(self, dataset, data):
@@ -337,7 +361,15 @@ class DataManager:
         where : list(str)
             list of where statements the form of ``column operator value`` to further filter individual values or rows.
             
-            * Operators are one of: ``=``, ``>``, ``>=``, ``>``, ``<``, ``<=``, ``!='', ``LIKE``
+            * Operators are one of
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database import SUPPORTED_OPERATORS
+                    for operator in SUPPORTED_OPERATORS:
+                        print(operator)
+                            
             * Example: ``'column_two < 3'``
         
         Author
@@ -375,10 +407,14 @@ class DataManager:
             result = dm.get('test_table')
             print(result)
         """
-        self.handler.handle_read(dataset)
+        self.handler.handle_update(dataset, data)
         where = [split(w) for w in where]
         self.handler.handle_where(where)
-        self.database.update(table=dataset, where=where, values=data)
+        try:
+            self.database.update(table=dataset, where=where, values=data)
+        except KeyError as e:
+            detail = 'Variable ' + str(e) + ' not found'
+            raise HTTPException(status_code=400, detail=detail)
 
 class MetadataManager:
     """
@@ -400,10 +436,6 @@ class MetadataManager:
 
             pprint(DEFAULT_METADATA_COLUMNS)
 
-    dataset_column : str
-        The column name holding the dataset name in the metadata table or a unique id for each dataset.
-    uploaded_at_column : str
-        The column name holding the last updated date and time in the metadata table.
     database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for managing metadata.
     
@@ -435,8 +467,8 @@ class MetadataManager:
             'title': 'Testing Data',
             'description': 'Data used for testing',
             'source': 'Automatically generated from Python',
-            'uploaded_by': 'msdss',
-            'uploaded_at': datetime.now(),
+            'created_by': 'msdss',
+            'created_at': datetime.now(),
             'updated_at': datetime.now()
         }]
         mdm.create('test_data', metadata)
@@ -457,11 +489,8 @@ class MetadataManager:
         self,
         table=DEFAULT_METADATA_TABLE,
         columns=DEFAULT_METADATA_COLUMNS,
-        dataset_column=DEFAULT_METADATA_DATASET_COLUMN,
-        updated_at_column=DEFAULT_METADATA_UPDATED_AT_COLUMN,
         database=Database(),
-        data_handler=None,
-        data_manager=None):
+        handler=None):
         
         # (MetadataManager_table) Create table if not exists
         if not database.has_table(table):
@@ -469,8 +498,6 @@ class MetadataManager:
         
         # (MetadataManager_attr) Set attributes
         self.table = table
-        self.dataset_column = dataset_column
-        self.updated_at_column = updated_at_column
         self.database = database
 
         # (MetadataManager_manager) Create data manager
@@ -527,8 +554,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
                 'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
@@ -538,7 +565,7 @@ class MetadataManager:
             pprint(tb)
         """
         data = [data] if isinstance(data, dict) else data
-        data[0][self.dataset_column] = dataset
+        data[0]['dataset'] = dataset
         self.data_manager.insert(self.table, data)
 
     def delete(self, dataset):
@@ -582,8 +609,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
                 'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
@@ -599,7 +626,7 @@ class MetadataManager:
             print('\\nafter_delete:\\n')
             pprint(after_delete)
         """
-        where = [f'{self.dataset_column} = {dataset}']
+        where = [f'dataset = {dataset}']
         self.data_manager.delete(self.table, where=where)
 
     def get(self, dataset):
@@ -616,7 +643,7 @@ class MetadataManager:
         Returns
         -------
         list(dict)
-            A list of dicts where each key is the column name and each list contains the values for columns in the order of the rows of the table.
+            A list of dicts where each key is the column name.
 
         Author
         ------
@@ -647,8 +674,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
                 'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
@@ -657,7 +684,7 @@ class MetadataManager:
             metadata_get = mdm.get('test_data')
             pprint(metadata_get)
         """
-        where = [f'{self.dataset_column} = {dataset}']
+        where = [f'dataset = {dataset}']
         out = self.data_manager.get(self.table, where=where)
         return out
 
@@ -706,8 +733,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
                 'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
@@ -761,8 +788,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
                 'updated_at': datetime.now()
             }]
             mdm.create('test_data', metadata)
@@ -778,7 +805,7 @@ class MetadataManager:
             print('\\nafter_update:\\n')
             pprint(after_update)
         """
-        where = [f'{self.dataset_column} = {dataset}']
+        where = [f'dataset = {dataset}']
         self.data_manager.update(self.table, data, where=where)
 
     def updated_at(self, dataset, dt=None):
@@ -823,8 +850,8 @@ class MetadataManager:
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
                 'source': 'Automatically generated from Python',
-                'uploaded_by': 'msdss',
-                'uploaded_at': datetime.now(),
+                'created_by': 'msdss',
+                'created_at': datetime.now(),
             }]
             mdm.create('test_data', metadata)
             before_update = mdm.get('test_data')
@@ -839,6 +866,5 @@ class MetadataManager:
             print('\\nafter_update:\\n')
             pprint(after_update)
         """
-        data = {}
-        data[self.updated_at_column] = dt if dt else datetime.now()
+        data = {'updated_at': dt if dt else datetime.now()}
         self.update(dataset, data)
