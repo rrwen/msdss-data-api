@@ -1,6 +1,7 @@
 import inspect
 import os
 
+from fastapi import FastAPI
 from msdss_base_api import API
 from msdss_base_database import Database
 from msdss_base_dotenv import env_exists, load_env_file
@@ -80,6 +81,8 @@ class DataAPI(API):
         The environmental variable name for ``port``.
     database_key : str
         The environmental variable name for ``database``.
+    api : :class:`fastapi:fastapi.FastAPI`
+        API object for creating routes.
 
     Attributes
     ----------
@@ -184,8 +187,12 @@ class DataAPI(API):
         host_key='MSDSS_DATABASE_HOST',
         port_key='MSDSS_DATABASE_PORT',
         database_key='MSDSS_DATABASE_NAME',
+        api=FastAPI(
+            title='MSDSS Data API',
+            version='0.1.1'
+        ),
         *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(api=api, *args, **kwargs)
 
         # (DataAPI_env) Load env vars
         has_env = env_exists(file_path=env_file, key_path=key_path)

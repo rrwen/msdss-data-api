@@ -292,7 +292,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Prefix path to all routes belonging to this router.</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Tags for all routes in this router.</p></li>
-<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.5)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – A <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.5)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> object.</p></li>
+<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.6)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – A <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.6)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> object.</p></li>
 <li><p><strong>get_current_user</strong> (<em>func</em>) – A function to get the current user. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.</p></li>
 <li><p><strong>restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown. See <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_data_api.data.handle_table_restrictions()</span></code>.</p></li>
 <li><p><strong>enable_create_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the create path for this router or not.</p></li>
@@ -441,7 +441,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
