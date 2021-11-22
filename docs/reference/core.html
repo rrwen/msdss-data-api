@@ -47,7 +47,7 @@
   
   
   
-    <title>DataAPI &#8212; 0.1.0</title>
+    <title>DataAPI &#8212; 0.1.1</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.1.0"
+        <a href="../index.html" title="0.1.1"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.1.0 logo">
+                   alt="0.1.1 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.1.0</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.1.1</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.1.0" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.1.1" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.1.0">msdss-data-api</a>
+       title="0.1.1">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -317,6 +317,51 @@
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.core.DataAPI.data_database">
+<span class="sig-name descname"><span class="pre">data_database</span></span><a class="headerlink" href="#msdss_data_api.core.DataAPI.data_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Database object used for the data API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_base_datbase:msdss_base_database.core.Database</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.core.DataAPI.data_routers">
+<span class="sig-name descname"><span class="pre">data_routers</span></span><a class="headerlink" href="#msdss_data_api.core.DataAPI.data_routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Routers from the data API:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> (<code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.APIRouter</span></code>): configured data router from <a class="reference internal" href="routers.html#msdss_data_api.routers.get_data_router" title="msdss_data_api.routers.get_data_router"><code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_data_api.routers.get_data_router()</span></code></a></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="msdss_data_api.core.DataAPI._data_functions">
+<span class="sig-name descname"><span class="pre">_data_functions</span></span><a class="headerlink" href="#msdss_data_api.core.DataAPI._data_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions from creating the data API:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_current_user</span></code> (func): current user dependency function default</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">create_get_current_user</span></code> (func): current user dependency function for the data create route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delete_get_current_user</span></code> (func): current user dependency function for the data delete route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id_get_current_user</span></code> (func): current user dependency function for the data id route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">insert_get_current_user</span></code> (func): current user dependency function for the data insert route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata_get_current_user</span></code> (func): current user dependency function for the data get route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">metadata_update_get_current_user</span></code> (func): current user dependency function for the data metadata update route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">query_get_current_user</span></code> (func): current user dependency function for the data query route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_get_current_user</span></code> (func): current user dependency function for the data search route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update_get_current_user</span></code> (func): current user dependency function for the data update route</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)">dict</a></p>
+</dd>
+</dl>
+</dd></dl>
 <p class="rubric">Author</p>
 <p>Richard Wen &lt;<a class="reference external" href="mailto:rrwen.dev%40gmail.com">rrwen<span>.</span>dev<span>@</span>gmail<span>.</span>com</a>&gt;</p>
 <p class="rubric">Example</p>

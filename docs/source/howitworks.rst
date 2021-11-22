@@ -5,7 +5,7 @@ This package uses `FastAPI Users <https://fastapi-users.github.io/fastapi-users/
 
 Database operations are handled by :class:`msdss_base_database:msdss_base_database.core.Database` through the :class:`msdss_data_api.managers.DataManager` class, while data operation checks are handled by :class:`msdss_data_api.handlers.DataHandler`. Similarly, metadata is handled via the :class:`msdss_data_api.managers.MetadataManager` class, but using a single table.
 
-Request bodies with known parameters are represented with models in the :module:`msdss_data_api.models` module.
+Request bodies with known parameters are represented with models in the :mod:`msdss_data_api.models` module.
 
 For user authentication and management, the :class:`msdss_users_api:msdss_users_api.core.UsersAPI` object is used to create user management routes and dependencies.
 

@@ -81,6 +81,29 @@ class DataAPI(API):
     database_key : str
         The environmental variable name for ``database``.
 
+    Attributes
+    ----------
+    data_database : :class:`msdss_base_datbase:msdss_base_database.core.Database`
+        Database object used for the data API.
+    data_routers : dict
+        Routers from the data API:
+
+        * ``data`` (:class:`fastapi:fastapi.APIRouter`): configured data router from :func:`msdss_data_api.routers.get_data_router`
+
+    _data_functions : dict
+        Functions from creating the data API:
+
+        * ``get_current_user`` (func): current user dependency function default
+        * ``create_get_current_user`` (func): current user dependency function for the data create route
+        * ``delete_get_current_user`` (func): current user dependency function for the data delete route
+        * ``id_get_current_user`` (func): current user dependency function for the data id route
+        * ``insert_get_current_user`` (func): current user dependency function for the data insert route
+        * ``metadata_get_current_user`` (func): current user dependency function for the data get route
+        * ``metadata_update_get_current_user`` (func): current user dependency function for the data metadata update route
+        * ``query_get_current_user`` (func): current user dependency function for the data query route
+        * ``search_get_current_user`` (func): current user dependency function for the data search route
+        * ``update_get_current_user`` (func): current user dependency function for the data update route
+
     Author
     ------
     Richard Wen <rrwen.dev@gmail.com>
@@ -206,11 +229,21 @@ class DataAPI(API):
             }
             for k, v in get_current_user_mappings.items():
                 v = v if v else get_current_user_kwargs
-                data_router_kwargs[k] = data_router_kwargs.get(k, self.users_app.get_current_user(**v))
+                get_current_user_mappings[k] = self.users_app.get_current_user(**v)
+                data_router_kwargs[k] = data_router_kwargs.get(k, get_current_user_mappings[k])
         
         # (DataAPI_router_data) Add data router
         if enable_data_router:
             db = Database(driver=driver, user=user, password=password, host=host, port=port, database=database)
             data_router = get_data_router(database=db, **data_router_kwargs)
             self.add_router(data_router)
+
+        # (DataAPI_attr) Set attributes
+        if enable_data_router:
+            self.data_database = db
+            self.data_routers = dict(
+                data=data_router
+            )
+        if enable_users:
+            self._data_functions = get_current_user_mappings
         
