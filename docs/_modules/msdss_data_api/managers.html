@@ -565,7 +565,7 @@
             <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
-    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="DataManager.insert"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Create a dataset.</span>
 
@@ -615,7 +615,7 @@
 <span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataManager.update"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="p">):</span>
         <span class="sd">"""</span>
