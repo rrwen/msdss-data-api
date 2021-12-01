@@ -123,8 +123,8 @@ class DataManager:
                 .. jupyter-execute::
                     :hide-code:
 
-                    from msdss_base_database import SUPPORTED_OPERATORS
-                    for operator in SUPPORTED_OPERATORS:
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
                         print(operator)
 
             * Example: ``'column_two < 3'``
@@ -214,15 +214,15 @@ class DataManager:
                 .. jupyter-execute::
                     :hide-code:
 
-                    from msdss_base_database import SUPPORTED_OPERATORS
-                    for operator in SUPPORTED_OPERATORS:
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
                         print(operator)
 
             * Example: ``'column_two < 3'``
         
-        group_by : slist(str) or None
+        group_by : list(str) or None
             Single or list of column names to group by. This should be used with ``aggregate`` and ``aggregate_func``.
-        aggregate : slist(str) or None
+        aggregate : list(str) or None
             Single or list of column names to aggregate using the ``aggregate_func``. This should be used with ``group_by`` and ``aggregate_func``.
         aggregate_func : list(str)
             Function name (such as 'count' or 'sum') from :class:`sqlalchemy:sqlalchemy.sql.functions.Function` for aggregating records from each ``aggregate`` column.
@@ -366,8 +366,8 @@ class DataManager:
                 .. jupyter-execute::
                     :hide-code:
 
-                    from msdss_base_database import SUPPORTED_OPERATORS
-                    for operator in SUPPORTED_OPERATORS:
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
                         print(operator)
                             
             * Example: ``'column_two < 3'``
@@ -506,7 +506,7 @@ class MetadataManager:
 
     def create(self, dataset, data):
         """
-        Delete a metadata entry.
+        Create a metadata entry.
 
         See :meth:`msdss_data_api.managers.DataManager.delete`.
         
@@ -818,8 +818,8 @@ class MetadataManager:
         ----------
         dataset : str
             Name of the dataset to update.
-        dt : :class:`datetime.datetime`
-            Datetime object representing the last updated time.
+        dt : :class:`datetime.datetime` or None
+            Datetime object representing the last updated time. If ``None``, will be set to now.
         
         Author
         ------

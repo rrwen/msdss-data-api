@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_data_api.managers &#8212; 0.1.1</title>
+    <title>msdss_data_api.managers &#8212; 0.2.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.1.1"
+        <a href="../../index.html" title="0.2.0"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.1.1 logo">
+                   alt="0.2.0 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.1.1</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.0</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.1.1" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.2.0" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.1.1">msdss-data-api</a>
+       title="0.2.0">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -394,8 +394,8 @@
 <span class="sd">                .. jupyter-execute::</span>
 <span class="sd">                    :hide-code:</span>
 
-<span class="sd">                    from msdss_base_database import SUPPORTED_OPERATORS</span>
-<span class="sd">                    for operator in SUPPORTED_OPERATORS:</span>
+<span class="sd">                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS</span>
+<span class="sd">                    for operator in DEFAULT_SUPPORTED_OPERATORS:</span>
 <span class="sd">                        print(operator)</span>
 
 <span class="sd">            * Example: ``'column_two &lt; 3'``</span>
@@ -485,15 +485,15 @@
 <span class="sd">                .. jupyter-execute::</span>
 <span class="sd">                    :hide-code:</span>
 
-<span class="sd">                    from msdss_base_database import SUPPORTED_OPERATORS</span>
-<span class="sd">                    for operator in SUPPORTED_OPERATORS:</span>
+<span class="sd">                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS</span>
+<span class="sd">                    for operator in DEFAULT_SUPPORTED_OPERATORS:</span>
 <span class="sd">                        print(operator)</span>
 
 <span class="sd">            * Example: ``'column_two &lt; 3'``</span>
 <span class="sd">        </span>
-<span class="sd">        group_by : slist(str) or None</span>
+<span class="sd">        group_by : list(str) or None</span>
 <span class="sd">            Single or list of column names to group by. This should be used with ``aggregate`` and ``aggregate_func``.</span>
-<span class="sd">        aggregate : slist(str) or None</span>
+<span class="sd">        aggregate : list(str) or None</span>
 <span class="sd">            Single or list of column names to aggregate using the ``aggregate_func``. This should be used with ``group_by`` and ``aggregate_func``.</span>
 <span class="sd">        aggregate_func : list(str)</span>
 <span class="sd">            Function name (such as 'count' or 'sum') from :class:`sqlalchemy:sqlalchemy.sql.functions.Function` for aggregating records from each ``aggregate`` column.</span>
@@ -637,8 +637,8 @@
 <span class="sd">                .. jupyter-execute::</span>
 <span class="sd">                    :hide-code:</span>
 
-<span class="sd">                    from msdss_base_database import SUPPORTED_OPERATORS</span>
-<span class="sd">                    for operator in SUPPORTED_OPERATORS:</span>
+<span class="sd">                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS</span>
+<span class="sd">                    for operator in DEFAULT_SUPPORTED_OPERATORS:</span>
 <span class="sd">                        print(operator)</span>
 <span class="sd">                            </span>
 <span class="sd">            * Example: ``'column_two &lt; 3'``</span>
@@ -777,7 +777,7 @@
 
 <div class="viewcode-block" id="MetadataManager.create"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.MetadataManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">"""</span>
-<span class="sd">        Delete a metadata entry.</span>
+<span class="sd">        Create a metadata entry.</span>
 
 <span class="sd">        See :meth:`msdss_data_api.managers.DataManager.delete`.</span>
 <span class="sd">        </span>
@@ -1089,8 +1089,8 @@
 <span class="sd">        ----------</span>
 <span class="sd">        dataset : str</span>
 <span class="sd">            Name of the dataset to update.</span>
-<span class="sd">        dt : :class:`datetime.datetime`</span>
-<span class="sd">            Datetime object representing the last updated time.</span>
+<span class="sd">        dt : :class:`datetime.datetime` or None</span>
+<span class="sd">            Datetime object representing the last updated time. If ``None``, will be set to now.</span>
 <span class="sd">        </span>
 <span class="sd">        Author</span>
 <span class="sd">        ------</span>
@@ -1163,7 +1163,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

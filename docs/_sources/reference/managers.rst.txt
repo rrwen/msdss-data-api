@@ -23,6 +23,11 @@ get
 
 .. automethod:: msdss_data_api.managers.DataManager.get
 
+insert
+^^^^^^
+
+.. automethod:: msdss_data_api.managers.DataManager.insert
+
 update
 ^^^^^^
 

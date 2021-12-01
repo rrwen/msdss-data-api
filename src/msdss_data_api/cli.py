@@ -1,10 +1,16 @@
 import argparse
-import inspect
+import ast
+import os
+import pandas
 
-from msdss_data_api.defaults import DEFAULT_RESTRICTED_TABLES
+from datetime import datetime
+from msdss_base_database import Database
+from msdss_base_database.env import DatabaseDotEnv
+from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
 
 from .core import DataAPI
 from .defaults import *
+from .managers import *
 
 try:
     from msdss_users_api import UsersAPI
@@ -39,121 +45,155 @@ def _get_parser():
     # (_get_parser_parsers) Create main parser and sub parsers
     parser = argparse.ArgumentParser(description='Manages data with a database')
     subparsers = parser.add_subparsers(title='commands', dest='command')
-    
-    # (_get_parser_register) Add register command
-    register_parser = subparsers.add_parser('register', help='register a user')
-    register_parser.add_argument('email', type=str, nargs='?', help='email for user')
-    register_parser.add_argument('password', type=str, nargs='?', help='password for user')
-    register_parser.add_argument('--superuser', dest='superuser', action='store_true', help='register a superuser')
-    register_parser.set_defaults(superuser=False)
 
-    # (_get_parser_get) Add get command
-    get_parser = subparsers.add_parser('get', help='get user attributes')
-    get_parser.add_argument('email', type=str, help='email for user')
+    # (_get_parser_create) Add create command
+    create_parser = subparsers.add_parser('create', help='create a dataset')
+    create_parser.add_argument('dataset', type=str, help='dataset name')
+    create_parser.add_argument('data', type=str, help='file path for data to create - supports .csv, .xlsx, .json, .xml')
+    create_parser.add_argument('--metadata', metavar=('COL', 'VALUE'), nargs=2, action='append', help='metadata columns to set - e.g. title "Some Title", description "Some descr.."')
 
     # (_get_parser_delete) Add delete command
-    delete_parser = subparsers.add_parser('delete', help='delete a user')
-    delete_parser.add_argument('email', type=str, help='email of user to delete')
+    delete_parser = subparsers.add_parser('delete', help='delete a dataset')
+    delete_parser.add_argument('dataset', type=str, help='dataset name')
+    delete_parser.add_argument('--where', action='append', help='where statement for filtering rows to delete in the form of "col operator value" (e.g. "col_a = 1") - operators supported are' + ', '.join(DEFAULT_SUPPORTED_OPERATORS))
+    delete_parser.add_argument('--where_boolean', type=str, default='AND', help='bool to join multiple where statements')
+    delete_parser.add_argument('--delete_all', dest='delete_all', action='store_true', help='flag to delete the entire dataset')
+    delete_parser.set_defaults(delete_all=False)
 
-    # (_get_parser_reset) Add reset command
-    reset_parser = subparsers.add_parser('reset', help='reset user password')
-    reset_parser.add_argument('email', type=str, help='email of user to reset')
-    reset_parser.add_argument('password', type=str, nargs='?', help='new password to use')
-
+    # (_get_parser_get) Add get command
+    get_parser = subparsers.add_parser('get', help='query a dataset')
+    get_parser.add_argument('dataset', type=str, help='dataset name')
+    get_parser.add_argument('--select', action='append', help='column names to select')
+    get_parser.add_argument('--where', action='append', help='where statement for filtering rows to get in the form of "col operator value" (e.g. "col_a = 1") - operators supported are' + ', '.join(DEFAULT_SUPPORTED_OPERATORS))
+    get_parser.add_argument('--group_by', action='append', help='column names to group by')
+    get_parser.add_argument('--aggregate', action='append', help='column names to aggregate')
+    get_parser.add_argument('--aggregate_func', action='append', help='aggregate func name (e.g. sum, count) in the order of --aggregate')
+    get_parser.add_argument('--order_by', action='append', help='column names to sort by')
+    get_parser.add_argument('--order_by_sort', action='append', help='asc or desc for each col in --order_by')
+    get_parser.add_argument('--limit', type=int, default=None, help='')
+    get_parser.add_argument('--where_boolean', type=str, default='AND', help='bool to join multiple where statements')
+    
+    # (_get_parser_insert) Add insert command
+    insert_parser = subparsers.add_parser('insert', help='insert data into a dataset')
+    insert_parser.add_argument('dataset', type=str, help='dataset name')
+    insert_parser.add_argument('data', type=str, help='data to insert - e.g. [ {"col_a": 1, "col_b": "a"}, {"col_a": 2, "col_b": "b"} ]')
+    
     # (_get_parser_update) Add update command
-    update_parser = subparsers.add_parser('update', help='update a user\'s attribute')
-    update_parser.add_argument('email', type=str, help='email of user')
-    update_parser.add_argument('--is_active', type=bool, default=None, help='set is_active attribute')
-    update_parser.add_argument('--is_superuser', type=bool, default=None, help='set is_superuser attribute')
-    update_parser.add_argument('--is_verified', type=bool, default=None, help='set is_verified attribute')
+    update_parser = subparsers.add_parser('update', help='update data in a dataset')
+    update_parser.add_argument('--data', required=True, metavar=('COL', 'VALUE'), nargs=2, action='append', help='column names and values to update with')
+    update_parser.add_argument('--where', action='append', help='where statement for filtering rows to update in the form of "col operator value" (e.g. "col_a = 1") - operators supported are' + ', '.join(DEFAULT_SUPPORTED_OPERATORS))
+
+    # (_get_parser_get) Add get command
+    search_parser = subparsers.add_parser('search', help='search datasets')
+    search_parser.add_argument('--select', action='append', help='column names to select')
+    search_parser.add_argument('--where', action='append', help='where statement for filtering rows to get in the form of "col operator value" (e.g. "col_a = 1") - operators supported are' + ', '.join(DEFAULT_SUPPORTED_OPERATORS))
+    search_parser.add_argument('--group_by', action='append', help='column names to group by')
+    search_parser.add_argument('--aggregate', action='append', help='column names to aggregate')
+    search_parser.add_argument('--aggregate_func', action='append', help='aggregate func name (e.g. sum, count) in the order of --aggregate')
+    search_parser.add_argument('--order_by', action='append', help='column names to sort by')
+    search_parser.add_argument('--order_by_sort', action='append', help='asc or desc for each col in --order_by')
+    search_parser.add_argument('--limit', type=int, default=None, help='')
+    search_parser.add_argument('--where_boolean', type=str, default='AND', help='bool to join multiple where statements')
 
     # (_get_parser_start) Add start command
-    start_parser = subparsers.add_parser('start', help='start a users api server')
+    start_parser = subparsers.add_parser('start', help='start a data api server')
     start_parser.add_argument('--host', type=str, default='127.0.0.1', help='address to host server')
     start_parser.add_argument('--port', type=int, default=8000, help='port to host server')
     start_parser.add_argument('--log_level', type=str, default='info', help='level of verbose messages to display')
-    start_parser.add_argument('--data_prefix', type=str, default='/data', help='path prefix for data routes')
-    start_parser.add_argument('--auth_prefix', type=str, default='/auth', help='path prefix for auth routes')
-    start_parser.add_argument('--users_prefix', type=str, default='/users', help='path prefix for users routes')
-    start_parser.add_argument('--auth_lifetime', type=int, default=3600, help='token/cookie lifetime before expiry in secs')
-    start_parser.add_argument('--disable_data_router', dest='enable_data_router', action='store_false', help='disable data router')
-    start_parser.add_argument('--enable_users', dest='enable_users', action='store_true', help='enable users authentication')
-    start_parser.add_argument('--restricted_tables', type=str, default=','.join(DEFAULT_RESTRICTED_TABLES), help='restricted data table names separated by ,')
-    start_parser.add_argument('--disable_create_route', dest='enable_create_route', action='store_false', help='disable data create route')
-    start_parser.add_argument('--disable_delete_route', dest='enable_delete_route', action='store_false', help='disable data delete route')
-    start_parser.add_argument('--disable_id_route', dest='enable_id_route', action='store_false', help='disable data id route')
-    start_parser.add_argument('--disable_insert_route', dest='enable_insert_route', action='store_false', help='disable data insert route')
-    start_parser.add_argument('--disable_metadata_route', dest='enable_metadata_route', action='store_false', help='disable metadata GET route')
-    start_parser.add_argument('--disable_metadata_update_route', dest='enable_metadata_update_route', action='store_false', help='disable metadata UPDATE route')
-    start_parser.add_argument('--disable_query_route', dest='enable_query_route', action='store_false', help='disable data query route')
-    start_parser.add_argument('--disable_search_route', dest='enable_search_route', action='store_false', help='disable data search route')
-    start_parser.add_argument('--disable_update_route', dest='enable_update_route', action='store_false', help='disable data update route')
-    start_parser.add_argument('--disable_create_superuser', dest='create_superuser', action='store_false', help='disable superuser req for create route')
-    start_parser.add_argument('--disable_delete_superuser', dest='delete_superuser', action='store_false', help='disable superuser req for delete route')
-    start_parser.add_argument('--enable_id_superuser', dest='id_superuser', action='store_true', help='enable superuser req for id route')
-    start_parser.add_argument('--disable_insert_superuser', dest='insert_superuser', action='store_false', help='disable superuser req for insert route')
-    start_parser.add_argument('--enable_metadata_superuser', dest='metadata_superuser', action='store_true', help='enable superuser req for metadata GET route')
-    start_parser.add_argument('--disable_metadata_update_superuser', dest='metadata_update_superuser', action='store_false', help='disable superuser req for metadata PUT route')
-    start_parser.add_argument('--enable_query_superuser', dest='query_superuser', action='store_true', help='enable superuser req for query route')
-    start_parser.add_argument('--enable_search_superuser', dest='search_superuser', action='store_true', help='enable superuser req for search route')
-    start_parser.add_argument('--disable_update_superuser', dest='update_superuser', action='store_false', help='disable superuser req for update route')
-    start_parser.add_argument('--disable_register_superuser', dest='register_router_superuser', action='store_false', help='disable superuser requirement for register route')
-    start_parser.add_argument('--disable_auth_router', dest='enable_auth_router', action='store_false', help='disable auth router')
-    start_parser.add_argument('--disable_register_router', dest='enable_register_router', action='store_false', help='disable register router')
-    start_parser.add_argument('--disable_verify_router', dest='enable_verify_router', action='store_false', help='disable verify router')
-    start_parser.add_argument('--disable_reset_password_router', dest='enable_reset_password_router', action='store_false', help='disable reset password router')
-    start_parser.add_argument('--disable_users_router', dest='enable_users_router', action='store_false', help='disable users router')
-    start_parser.add_argument('--disable_jwt_auth', dest='enable_jwt_auth', action='store_false', help='disable jwt authentication')
-    start_parser.add_argument('--disable_cookie_auth', dest='enable_cookie_auth', action='store_false', help='disable cookie authentication')
-    start_parser.add_argument('--secret_key', type=str, default='MSDSS_USERS_SECRET', help='env var name for secret phrase')
-    start_parser.add_argument('--jwt_secret_key', type=str, default='MSDSS_USERS_JWT_SECRET', help='env var name for jwt secret')
-    start_parser.add_argument('--cookie_secret_key', type=str, default='MSDSS_USERS_COOKIE_SECRET', help='env var name for cookie secret')
-    start_parser.add_argument('--reset_password_token_secret_key', type=str, default='MSDSS_USERS_RESET_PASSWORD_TOKEN_SECRET', help='env var name for reset password secret')
-    start_parser.add_argument('--verification_token_secret_key', type=str, default='MSDSS_USERS_VERIFICATION_TOKEN_SECRET', help='env var name for verify token secret')
-    start_parser.add_argument('--driver_key', type=str, default='MSDSS_DATABASE_DRIVER', help='env var name for db driver')
-    start_parser.add_argument('--user_key', type=str, default='MSDSS_DATABASE_USER', help='env var name for db user')
-    start_parser.add_argument('--password_key', type=str, default='MSDSS_DATABASE_PASSWORD', help='env var name for db user password')
-    start_parser.add_argument('--host_key', type=str, default='MSDSS_DATABASE_HOST', help='env var name for db host')
-    start_parser.add_argument('--port_key', type=str, default='MSDSS_DATABASE_PORT', help='env var name for db port')
-    start_parser.add_argument('--database_key', type=str, default='MSDSS_DATABASE_NAME', help='env var name for db name')
-    start_parser.set_defaults(
-        enable_data_router=True,
-        enable_users=False,
-        enable_create_route=True,
-        enable_delete_route=True,
-        enable_id_route=True,
-        enable_insert_route=True,
-        enable_metadata_route=True,
-        enable_metadata_update_route=True,
-        enable_query_route=True,
-        enable_search_route=True,
-        enable_update_route=True,
-        create_superuser=True,
-        delete_superuser=True,
-        id_superuser=False,
-        insert_superuser=True,
-        metadata_superuser=False,
-        metadata_update_superuser=True,
-        query_superuser=False,
-        search_superuser=False,
-        update_superuser=True,
-        register_router_superuser=True,
-        enable_auth_router=True,
-        enable_register_router=True,
-        enable_verify_router=True,
-        enable_reset_password_router=True,
-        enable_users_router=True,
-        enable_jwt_auth=True,
-        enable_cookie_auth=True
-    )
+    start_parser.add_argument('--set', metavar=('ROUTE', 'KEY', 'VALUE'), nargs=3, action='append', help='set route settings, where ROUTE is the route name (create, delete, metadata, etc), KEY is the setting name (e.g. path, _enable, etc), and VALUE is value for the setting')
+    start_parser.add_argument('--enable_users', dest='enable_users', action='store_true', help='enable user auth for routes')
+    start_parser.set_defaults(enable_users=False)
 
     # (_get_parser_file_key) Add file and key arguments to all commands
-    for p in [parser, register_parser, delete_parser, update_parser, get_parser, reset_parser, start_parser]:
+    for p in [parser, create_parser, delete_parser, get_parser, insert_parser, update_parser, search_parser, start_parser]:
         p.add_argument('--env_file', type=str, default='./.env', help='path of .env file')
         p.add_argument('--key_path', type=str, default=None, help='path of key file')
     
     # (_get_parser_out) Return the parser
     out = parser
+    return out
+
+def _parse_route_settings(cli_route_settings):
+    """
+    Parses ``--set`` route settings for the ``msdss-data`` command line tool.
+
+    Parameters
+    ----------
+    cli_route_settings : list(tuple)
+        List of tuples of length 3, representing the route, key setting and value setting in order.
+
+    Returns
+    -------
+    dict
+        A dictionary that can be passed to parameter ``route_settings`` in :func:`msdss_data_api.routers.get_data_router`
+
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+
+    Example
+    -------
+
+    .. jupyter-execute::
+        :hide-output:
+
+        from msdss_data_api.cli import _parse_route_settings
+        from pprint import pprint
+
+        cli_route_settings = [
+            ('create', '_restricted_tables', '["user", "data"]'),
+            ('create', '_enable', 'True'),
+            ('create', '_get_user', '{"superuser": True}'),
+            ('delete', 'path', '/{dataset}'),
+            ('delete', 'tags', '["data"]')
+        ]
+        route_settings = _parse_route_settings(cli_route_settings)
+        pprint(route_settings)
+    """
+    out = {route: {} for route, k, v in cli_route_settings}
+    for route, key, value in cli_route_settings:
+        if key in ('tags', '_restricted_tables', '_get_user', '_enable'):
+            out[route][key] = ast.literal_eval(value)
+        else:
+            out[route][key] = value
+    return out
+
+def _read_data_file(data_path):
+    """
+    Reads a data file into a :class:`pandas:pandas.DataFrame` object.
+
+    Parameters
+    ----------
+    data_path : str
+        Path of the data file with extension. Supports ``.csv``, ``.xlsx``/``.xls``, ``.json``, and ``.xml``.
+
+    Returns
+    -------
+    :class:`pandas:pandas.DataFrame`
+        A dataframe object of the file data.
+
+    Author
+    ------
+    Richard Wen <rrwen.dev@gmail.com>
+
+    Example
+    -------
+
+    .. code::
+
+        from msdss_data_api.cli import _read_data_file
+
+        data = _read_data_file('path/to/data.json')
+    """
+    data_ext = os.path.splitext(data_path)[1].lower()
+    if data_ext == '.csv':
+        out = pandas.read_csv(data_path)
+    elif data_ext in ('.xlsx', '.xls'):
+        out = pandas.read_excel(data_path)
+    elif data_ext == '.json':
+        out = pandas.read_json(data_path)
+    elif data_ext == '.xml':
+        out = pandas.read_xml(data_path)
     return out
 
 def run():
@@ -176,25 +216,29 @@ def run():
         parser = _get_parser()
         parser.print_help()
 
-    Create a user interactively:
+    Create a dataset:
 
-    >>> msdss-data register
+    >>> msdss-data create <data_name> <path/to/data.json> --metadata title "Test Data"
 
-    Get user attributes:
+    Query dataset:
 
-    >>> msdss-data get test@example.com
+    >>> msdss-data get <data_name>
 
-    Update user attributes:
+    Update dataset values:
 
-    >>> msdss-data update test@example.com --is_verified True
+    >>> msdss-data update <data_name> --data <col_name> <update_value> --where <col_name> = <value>
 
-    Reset user password:
+    Insert data into dataset:
 
-    >>> msdss-data reset test@example.com
+    >>> msdss-data insert <data_name> "[{'col_a': 1, 'col_b': 'a'}]"
 
-    Delete a user:
+    Delete a dataset:
 
-    >>> msdss-data delete test@example.com
+    >>> msdss-data delete <data_name> --delete_all
+
+    Search datasets:
+
+    >>> msdss-data search --where "dataset = <data_name>"
 
     Start an API server:
 
@@ -206,131 +250,122 @@ def run():
     kwargs = vars(parser.parse_args())
     command = kwargs.pop('command')
 
+    # (run_env) Get env vars
+    env_kwargs = dict(
+        env_file=kwargs.pop('env_file'),
+        key_path=kwargs.pop('key_path')
+    )
+
+    # (run_database) Create database obj
+    database = Database(env=DatabaseDotEnv(**env_kwargs))
+
+    # (run_managers) Create data and metadata managers
+    data_manager = DataManager(database=database)
+    metadata_manager = MetadataManager(database=database)
+
     # (run_command) Run commands
-    if command == 'register':
+    if command == 'create':
 
-        # (run_command_register) Execute user register
-        pass
-    elif command == 'get':
+        # (run_command_create_metadata) Get metadata attrs 
+        metadata = kwargs.pop('metadata', None)
+        metadata = dict(metadata) if metadata else {}
+        metadata['created_by'] = 'admin'
+        metadata['created_at'] = datetime.now()
+        metadata['updated_at'] = datetime.now()
 
-        # (run_command_get) Execute user get
-        pass
+        # (run_command_create_read) Read data from file
+        kwargs['data'] = _read_data_file(kwargs.pop('data'))
+
+        # (run_command_create_run) Create the dataset
+        try:
+            dataset = kwargs.get('dataset')
+            data_manager.create(**kwargs)
+            metadata_manager.create(dataset, metadata)
+            print('Dataset created ' + dataset)
+        except HTTPException as e:
+            print(e.detail)
 
     elif command == 'delete':
 
         # (run_command_delete) Execute user delete
-        pass
+        try:
+            dataset = kwargs.get('dataset')
+            data_manager.delete(**kwargs)
+            metadata_manager.delete(dataset)
+            print('Dataset deleted ' + dataset)
+        except HTTPException as e:
+            print(e.detail)
 
-    elif command == 'reset':
+    elif command == 'get':
 
-        # (run_command_reset) Reset password for user
-        pass
+        # (run_command_get) Query a dataset
+        try:
+            dataset = kwargs.get('dataset')
+            data = data_manager.get(**kwargs)
+            print(pandas.DataFrame(data))
+        except HTTPException as e:
+            print(e.detail)
+
+    elif command == 'insert':
+
+        # (run_command_insert) Insert data into a dataset
+        try:
+            kwargs['data'] = ast.literal_eval(kwargs['data'])
+            dataset = kwargs.get('dataset')
+            data_manager.insert(**kwargs)
+            metadata_manager.updated_at(dataset)
+            print('Dataset insert ' + dataset)
+        except HTTPException as e:
+            print(e.detail)
 
     elif command == 'update':
 
-        # (run_command_update) Execute user update
-        pass
+        # (run_command_update_data) Get data attrs 
+        kwargs['data'] = dict(kwargs['data'])
+
+        # (run_command_update_run) Update dataset data
+        try:
+            dataset = kwargs.get('dataset')
+            data_manager.update(**kwargs)
+            metadata_manager.updated_at(dataset)
+            print('Dataset update ' + dataset)
+        except HTTPException as e:
+            print(e.detail)
+
+    elif command == 'search':
+
+        # (run_command_search_run) Search datasets
+        try:
+            data = metadata_manager.search(**kwargs)
+            print(pandas.DataFrame(data))
+        except HTTPException as e:
+            print(e.detail)
 
     elif command == 'start':
 
-        # (run_command_start_data) Get data router args
-        data_router_kwargs = dict(
-            prefix=kwargs.pop('data_prefix'),
-            enable_create_route=kwargs.pop('enable_create_route'),
-            enable_delete_route=kwargs.pop('enable_delete_route'),
-            enable_id_route=kwargs.pop('enable_id_route'),
-            enable_insert_route=kwargs.pop('enable_insert_route'),
-            enable_metadata_route=kwargs.pop('enable_metadata_route'),
-            enable_metadata_update_route=kwargs.pop('enable_metadata_update_route'),
-            enable_query_route=kwargs.pop('enable_query_route'),
-            enable_search_route=kwargs.pop('enable_search_route'),
-            enable_update_route=kwargs.pop('enable_update_route'),
-            restricted_tables=[t.strip() for t in kwargs.pop('restricted_tables').split(',')]
-        )
-        
-        # (run_command_start_get_user) Extract get user args
-        get_current_user_kwargs = dict(
-            create_get_current_user_kwargs=dict(superuser=kwargs.pop('create_superuser')),
-            delete_get_current_user_kwargs=dict(superuser=kwargs.pop('delete_superuser')),
-            id_get_current_user_kwargs=dict(superuser=kwargs.pop('id_superuser')),
-            insert_get_current_user_kwargs=dict(superuser=kwargs.pop('insert_superuser')),
-            metadata_get_current_user_kwargs=dict(superuser=kwargs.pop('metadata_superuser')),
-            metadata_update_get_current_user_kwargs=dict(superuser=kwargs.pop('metadata_update_superuser')),
-            query_get_current_user_kwargs=dict(superuser=kwargs.pop('query_superuser')),
-            search_get_current_user_kwargs=dict(superuser=kwargs.pop('search_superuser')),
-            update_get_current_user_kwargs=dict(superuser=kwargs.pop('update_superuser'))
-        )
-
-        # (run_command_start_user) Extract user api args
-        users_kwargs = dict(
-            secret_key=kwargs.pop('secret_key'),
-            jwt_secret_key=kwargs.pop('jwt_secret_key'),
-            cookie_secret_key=kwargs.pop('cookie_secret_key'),
-            reset_password_token_secret_key=kwargs.pop('reset_password_token_secret_key'),
-            verification_token_secret_key=kwargs.pop('verification_token_secret_key'),
-            register_router_superuser=kwargs.pop('register_router_superuser'),
-            enable_auth_router=kwargs.pop('enable_auth_router'),
-            enable_register_router=kwargs.pop('enable_register_router'),
-            enable_verify_router=kwargs.pop('enable_verify_router'),
-            enable_reset_password_router=kwargs.pop('enable_reset_password_router'),
-            enable_users_router=kwargs.pop('enable_users_router'),
-            enable_jwt_auth=kwargs.pop('enable_jwt_auth'),
-            enable_cookie_auth=kwargs.pop('enable_cookie_auth')
-        )
-
-        # (run_command_start_route) Extract route args
-        auth_prefix = kwargs.pop('auth_prefix')
-        users_prefix = kwargs.pop('users_prefix')
-        auth_lifetime = kwargs.pop('auth_lifetime')
-
-        # (run_command_start_serve) Extract server args
-        app_kwargs = dict(
+        # (run_command_start_server) Extract server kwargs
+        start_kwargs = dict(
             host=kwargs.pop('host'),
             port=kwargs.pop('port'),
             log_level=kwargs.pop('log_level')
         )
 
-        # (run_command_start_defaults) Get default parameters for data api
-        defaults = inspect.signature(DataAPI).parameters
-        for k, v in defaults.items():
-            is_not_empty = v.default is not inspect.Parameter.empty 
-            if k not in kwargs and is_not_empty:
-                kwargs[k] = defaults[k].default
+        # (run_command_start_env) Configure env database and users api
+        kwargs['database'] = database
+        enable_users = kwargs.pop('enable_users')
+        if enable_users:
+            from msdss_users_api import UsersAPI
+            from msdss_users_api.env import UsersDotEnv
+            kwargs['users_api'] = UsersAPI(env=UsersDotEnv(**env_kwargs))
+        else:
+            kwargs['users_api'] = None
 
-        # (run_command_start_merge_users) Merge get user args to standard args
-        for k in get_current_user_kwargs:
-            if kwargs[k]:
-                kwargs[k].update(get_current_user_kwargs[k])
-
-        # (run_command_start_merge_data) Merge data router args to standard args
-        kwargs['data_router_kwargs'].update(data_router_kwargs)
-
-        # (run_command_start_users) Add users kwargs if enabled
-        if kwargs['enable_users']:
-
-            # (run_command_start_users_merge) Merge single value users kwargs
-            kwargs['users_kwargs'].update(users_kwargs)
-
-            # (run_command_start_users_defaults) Set default parameters for users api
-            users_defaults = inspect.signature(UsersAPI).parameters
-            for k, v in users_defaults.items():
-                is_not_empty = v.default is not inspect.Parameter.empty 
-                if k not in kwargs['users_kwargs'] and is_not_empty:
-                    kwargs['users_kwargs'][k] = users_defaults[k].default
-
-            # (run_command_start_users_merge) Merge users args to standard args
-            kwargs['users_kwargs']['auth_router_jwt_include_kwargs']['prefix'] = auth_prefix + '/jwt'
-            kwargs['users_kwargs']['auth_router_cookie_include_kwargs']['prefix'] = auth_prefix
-            kwargs['users_kwargs']['register_router_include_kwargs']['prefix'] = auth_prefix
-            kwargs['users_kwargs']['verify_router_include_kwargs']['prefix'] = auth_prefix
-            kwargs['users_kwargs']['reset_password_router_include_kwargs']['prefix'] = auth_prefix
-            kwargs['users_kwargs']['users_router_include_kwargs']['prefix'] = users_prefix
-            kwargs['users_kwargs']['cookie_kwargs']['lifetime_seconds'] = auth_lifetime
-            kwargs['users_kwargs']['jwt_kwargs'].update(dict(
-                lifetime_seconds=auth_lifetime,
-                tokenUrl=auth_prefix[1:] + '/jwt/login'
-            ))
+        # (run_command_start_settings) Convert route settings
+        cli_route_settings = kwargs.pop('set', None)
+        kwargs['data_router_settings'] = dict(
+            route_settings=_parse_route_settings(cli_route_settings) if cli_route_settings else {}
+        )
 
         # (run_command_start) Execute users api server
         app = DataAPI(**kwargs)
-        app.start(**app_kwargs)
+        app.start(**start_kwargs)

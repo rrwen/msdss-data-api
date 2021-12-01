@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_data_api.core &#8212; 0.1.1</title>
+    <title>msdss_data_api.core &#8212; 0.2.0</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.1.1"
+        <a href="../../index.html" title="0.2.0"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.1.1 logo">
+                   alt="0.2.0 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.1.1</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.0</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.1.1" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.2.0" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.1.1">msdss-data-api</a>
+       title="0.2.0">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -272,6 +272,7 @@
 <span></span><span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span>
 <span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
 <span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
 <span class="kn">from</span> <span class="nn">msdss_base_dotenv</span> <span class="kn">import</span> <span class="n">env_exists</span><span class="p">,</span> <span class="n">load_env_file</span>
@@ -290,90 +291,20 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    driver : str</span>
-<span class="sd">        The driver name of the database connection, which are commonly ``postgresql``, ``sqlite``, ``mysql``, ``oracle`` or ``mssql``.  (see `SQLAlchemy supported databases &lt;https://docs.sqlalchemy.org/en/14/core/engines.html#supported-databases&gt;`_).</span>
-<span class="sd">    user : str</span>
-<span class="sd">        User name for the connection.</span>
-<span class="sd">    password : str</span>
-<span class="sd">        Password for the user.</span>
-<span class="sd">    host : str</span>
-<span class="sd">        Host address of the connection.</span>
-<span class="sd">    port : str</span>
-<span class="sd">        Port number of the connection.</span>
-<span class="sd">    database : str</span>
-<span class="sd">        Database name of the connection.</span>
-<span class="sd">    enable_data_router : bool</span>
-<span class="sd">        Whether to include the data api router.</span>
-<span class="sd">    enable_users : bool</span>
-<span class="sd">        Whether to include the users router, which enables route protection for data routes. See :class:`msdss_users_api:msdss_users_api.core.UsersAPI`.</span>
-<span class="sd">    data_router_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to :func:`msdss_data_api.routers.get_data_router`.</span>
-<span class="sd">    users_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to :class:`msdss_users_api:msdss_users_api.core.UsersAPI` if ``enable_users`` is ``True``. </span>
-
-<span class="sd">        * Note that any arguments with the same names as :class:`msdss_users_api:msdss_users_api.core.UsersAPI` will also be passed to it - however anything defined in this parameter will take priority</span>
-
-<span class="sd">    get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for all data routes if ``enable_users`` is ``True``.</span>
-<span class="sd">    create_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data create route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
-<span class="sd">    delete_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data delete route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
-<span class="sd">    id_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data id route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
-<span class="sd">    insert_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
-<span class="sd">    metadata_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
-<span class="sd">    metadata_update_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data insert route if ``enable_users`` is ``True``. The default is to only allow superusers to access this route.</span>
-<span class="sd">    query_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data query route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
-<span class="sd">    search_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data search route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
-<span class="sd">    update_get_current_user_kwargs : dict</span>
-<span class="sd">        Additional arguments passed to the :meth:`msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user` function for the data update route if ``enable_users`` is ``True``. The default is to only allow users to access this route.</span>
-<span class="sd">    load_env : bool</span>
-<span class="sd">        Whether to load variables from a file with environmental variables at ``env_file`` or not.</span>
-<span class="sd">    env_file : str</span>
-<span class="sd">        The path of the file with environmental variables.</span>
-<span class="sd">    key_path : str</span>
-<span class="sd">        The path of the key file for the ``env_file``.</span>
-<span class="sd">    driver_key : str</span>
-<span class="sd">        The environmental variable name for ``driver``.</span>
-<span class="sd">    user_key : str</span>
-<span class="sd">        The environmental variable name for ``user``.</span>
-<span class="sd">    password_key : str</span>
-<span class="sd">        The environmental variable name for ``password``.</span>
-<span class="sd">    host_key : str</span>
-<span class="sd">        The environmental variable name for ``key``.</span>
-<span class="sd">    port_key : str</span>
-<span class="sd">        The environmental variable name for ``port``.</span>
-<span class="sd">    database_key : str</span>
-<span class="sd">        The environmental variable name for ``database``.</span>
+<span class="sd">    users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None</span>
+<span class="sd">        Users API object to enable user authentication for data routes.</span>
+<span class="sd">        If ``None``, user authentication will not be used for data routes.</span>
+<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
+<span class="sd">        A :class:`msdss_base_database:msdss_base_database.core.Database` object for managing data.</span>
+<span class="sd">    data_router_settings : dict</span>
+<span class="sd">        Additional arguments passed to :func:`msdss_data_api.routers.get_data_router` except ``database``.</span>
+<span class="sd">    api : :class:`fastapi:fastapi.FastAPI`</span>
+<span class="sd">        API object for creating routes.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
-<span class="sd">    data_database : :class:`msdss_base_datbase:msdss_base_database.core.Database`</span>
+<span class="sd">    data_api_database : :class:`msdss_base_datbase:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object used for the data API.</span>
-<span class="sd">    data_routers : dict</span>
-<span class="sd">        Routers from the data API:</span>
-
-<span class="sd">        * ``data`` (:class:`fastapi:fastapi.APIRouter`): configured data router from :func:`msdss_data_api.routers.get_data_router`</span>
-
-<span class="sd">    _data_functions : dict</span>
-<span class="sd">        Functions from creating the data API:</span>
-
-<span class="sd">        * ``get_current_user`` (func): current user dependency function default</span>
-<span class="sd">        * ``create_get_current_user`` (func): current user dependency function for the data create route</span>
-<span class="sd">        * ``delete_get_current_user`` (func): current user dependency function for the data delete route</span>
-<span class="sd">        * ``id_get_current_user`` (func): current user dependency function for the data id route</span>
-<span class="sd">        * ``insert_get_current_user`` (func): current user dependency function for the data insert route</span>
-<span class="sd">        * ``metadata_get_current_user`` (func): current user dependency function for the data get route</span>
-<span class="sd">        * ``metadata_update_get_current_user`` (func): current user dependency function for the data metadata update route</span>
-<span class="sd">        * ``query_get_current_user`` (func): current user dependency function for the data query route</span>
-<span class="sd">        * ``search_get_current_user`` (func): current user dependency function for the data search route</span>
-<span class="sd">        * ``update_get_current_user`` (func): current user dependency function for the data update route</span>
 
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -383,10 +314,12 @@
 <span class="sd">    -------</span>
 <span class="sd">    .. jupyter-execute::</span>
 
+<span class="sd">        from msdss_base_database import Database</span>
 <span class="sd">        from msdss_data_api import DataAPI</span>
+<span class="sd">        from msdss_users_api import UsersAPI</span>
 
-<span class="sd">        # Create a data api without users</span>
-<span class="sd">        app = DataAPI(</span>
+<span class="sd">        # Create database object</span>
+<span class="sd">        database = Database(</span>
 <span class="sd">            driver='postgresql',</span>
 <span class="sd">            user='msdss',</span>
 <span class="sd">            password='msdss123',</span>
@@ -395,20 +328,19 @@
 <span class="sd">            database='msdss'</span>
 <span class="sd">        )</span>
 
+<span class="sd">        # Create a data api without users</span>
+<span class="sd">        app = DataAPI(database=database)</span>
+
 <span class="sd">        # Create a data api with users</span>
-<span class="sd">        # NOTE: Change parameter secret to a more secure value</span>
-<span class="sd">        app = DataAPI(</span>
-<span class="sd">            driver='postgresql',</span>
-<span class="sd">            user='msdss',</span>
-<span class="sd">            password='msdss123',</span>
-<span class="sd">            host='localhost',</span>
-<span class="sd">            port='5432',</span>
-<span class="sd">            database='msdss',</span>
-<span class="sd">            enable_users=True,</span>
-<span class="sd">            users_kwargs={</span>
-<span class="sd">                'secret': 'CHANGE-THIS'</span>
-<span class="sd">            }</span>
+<span class="sd">        # CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="sd">        users_api = UsersAPI(</span>
+<span class="sd">            'cookie-secret',</span>
+<span class="sd">            'jwt-secret',</span>
+<span class="sd">            'reset-secret',</span>
+<span class="sd">            'verification-secret',</span>
+<span class="sd">            database=database</span>
 <span class="sd">        )</span>
+<span class="sd">        app = DataAPI(users_api, database=database)</span>
 
 <span class="sd">        # Run the app with app.start()</span>
 <span class="sd">        # Try API at http://localhost:8000/docs</span>
@@ -416,107 +348,30 @@
 <span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">driver</span><span class="o">=</span><span class="s1">'postgresql'</span><span class="p">,</span>
-        <span class="n">user</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
-        <span class="n">password</span><span class="o">=</span><span class="s1">'msdss123'</span><span class="p">,</span>
-        <span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span>
-        <span class="n">port</span><span class="o">=</span><span class="s1">'5432'</span><span class="p">,</span>
-        <span class="n">database</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
-        <span class="n">enable_data_router</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">enable_users</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">data_router_kwargs</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">users_kwargs</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">get_current_user_kwargs</span><span class="o">=</span><span class="p">{},</span>
-        <span class="n">create_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
+        <span class="n">users_api</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span>
+        <span class="n">data_router_settings</span><span class="o">=</span><span class="p">{},</span>
+        <span class="n">api</span><span class="o">=</span><span class="n">FastAPI</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">'MSDSS Data API'</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s1">'0.2.0'</span>
         <span class="p">),</span>
-        <span class="n">delete_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">),</span>
-        <span class="n">id_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">insert_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">),</span>
-        <span class="n">metadata_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">metadata_update_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">),</span>
-        <span class="n">query_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">search_get_current_user_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">update_get_current_user_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
-            <span class="n">superuser</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">),</span>
-        <span class="n">load_env</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">env_file</span><span class="o">=</span><span class="s1">'./.env'</span><span class="p">,</span>
-        <span class="n">key_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">driver_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_DRIVER'</span><span class="p">,</span>
-        <span class="n">user_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_USER'</span><span class="p">,</span>
-        <span class="n">password_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_PASSWORD'</span><span class="p">,</span>
-        <span class="n">host_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_HOST'</span><span class="p">,</span>
-        <span class="n">port_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_PORT'</span><span class="p">,</span>
-        <span class="n">database_key</span><span class="o">=</span><span class="s1">'MSDSS_DATABASE_NAME'</span><span class="p">,</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-        <span class="c1"># (DataAPI_env) Load env vars</span>
-        <span class="n">has_env</span> <span class="o">=</span> <span class="n">env_exists</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">env_file</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">load_env</span> <span class="ow">and</span> <span class="n">has_env</span><span class="p">:</span>
-            <span class="n">load_env_file</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">env_file</span><span class="p">,</span> <span class="n">key_path</span><span class="o">=</span><span class="n">key_path</span><span class="p">)</span>
-            <span class="n">driver</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">driver_key</span><span class="p">,</span> <span class="n">driver</span><span class="p">)</span>
-            <span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">user_key</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
-            <span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">password_key</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-            <span class="n">host</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">host_key</span><span class="p">,</span> <span class="n">host</span><span class="p">)</span>
-            <span class="n">port</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">port_key</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-            <span class="n">database</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">database_key</span><span class="p">,</span> <span class="n">database</span><span class="p">)</span>
-
-        <span class="c1"># (DataAPI_users) Enable user routes and app</span>
-        <span class="k">if</span> <span class="n">enable_users</span><span class="p">:</span>
-            
-            <span class="c1"># (DataAPI_users) Get matching parameters to set defaults if applicable</span>
-            <span class="n">params</span> <span class="o">=</span> <span class="nb">locals</span><span class="p">()</span>
-            <span class="n">users_param_names</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getfullargspec</span><span class="p">(</span><span class="n">UsersAPI</span><span class="p">)</span><span class="o">.</span><span class="n">args</span>
-            <span class="n">matching_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">users_param_names</span> <span class="ow">and</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">'self'</span><span class="p">}</span>
-
-            <span class="c1"># (DataAPI_users_kwargs) Set default args if not set</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">matching_params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">users_kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-
-            <span class="c1"># (DataAPI_users_attr) Set base api as users api</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">users_app</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span><span class="o">**</span><span class="n">users_kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">api</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">users_app</span><span class="o">.</span><span class="n">api</span>
-
-            <span class="c1"># (DataAPI_users_depends) Add current user dependencies if not set</span>
-            <span class="n">get_current_user_mappings</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s1">'get_current_user'</span><span class="p">:</span> <span class="n">get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'create_get_current_user'</span><span class="p">:</span> <span class="n">create_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'delete_get_current_user'</span><span class="p">:</span> <span class="n">delete_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'id_get_current_user'</span><span class="p">:</span> <span class="n">id_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'insert_get_current_user'</span><span class="p">:</span> <span class="n">insert_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'metadata_get_current_user'</span><span class="p">:</span> <span class="n">metadata_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'metadata_update_get_current_user'</span><span class="p">:</span> <span class="n">metadata_update_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'query_get_current_user'</span><span class="p">:</span> <span class="n">query_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'search_get_current_user'</span><span class="p">:</span> <span class="n">search_get_current_user_kwargs</span><span class="p">,</span>
-                <span class="s1">'update_get_current_user'</span><span class="p">:</span> <span class="n">update_get_current_user_kwargs</span>
-            <span class="p">}</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">get_current_user_mappings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="k">if</span> <span class="n">v</span> <span class="k">else</span> <span class="n">get_current_user_kwargs</span>
-                <span class="n">get_current_user_mappings</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">users_app</span><span class="o">.</span><span class="n">get_current_user</span><span class="p">(</span><span class="o">**</span><span class="n">v</span><span class="p">)</span>
-                <span class="n">data_router_kwargs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_router_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">get_current_user_mappings</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+        <span class="c1"># (DataAPI_settings) Setup router params</span>
+        <span class="n">data_router_settings</span><span class="p">[</span><span class="s1">'database'</span><span class="p">]</span> <span class="o">=</span> <span class="n">database</span>
+        
+        <span class="c1"># (DataAPI_users) Add users app if specified</span>
+        <span class="k">if</span> <span class="n">users_api</span><span class="p">:</span>
+            <span class="n">data_router_settings</span><span class="p">[</span><span class="s1">'users_api'</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_api</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_apps</span><span class="p">(</span><span class="n">users_api</span><span class="p">)</span>
         
         <span class="c1"># (DataAPI_router_data) Add data router</span>
-        <span class="k">if</span> <span class="n">enable_data_router</span><span class="p">:</span>
-            <span class="n">db</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span><span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
-            <span class="n">data_router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">,</span> <span class="o">**</span><span class="n">data_router_kwargs</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">data_router</span><span class="p">)</span>
+        <span class="n">data_router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">(</span><span class="o">**</span><span class="n">data_router_settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">data_router</span><span class="p">)</span>
 
         <span class="c1"># (DataAPI_attr) Set attributes</span>
-        <span class="k">if</span> <span class="n">enable_data_router</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_database</span> <span class="o">=</span> <span class="n">db</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_routers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">data_router</span>
-            <span class="p">)</span>
-        <span class="k">if</span> <span class="n">enable_users</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_data_functions</span> <span class="o">=</span> <span class="n">get_current_user_mappings</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_api_database</span> <span class="o">=</span> <span class="n">database</span></div>
         
 </pre></div>
 
@@ -542,7 +397,7 @@
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

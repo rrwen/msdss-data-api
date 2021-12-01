@@ -1,5 +1,6 @@
 from fastapi import HTTPException
-from msdss_base_database import Database, SUPPORTED_OPERATORS
+from msdss_base_database import Database
+from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
 
 from .defaults import *
 
@@ -216,8 +217,8 @@ class DataHandler:
                 .. jupyter-execute::
                     :hide-code:
 
-                    from msdss_base_database import SUPPORTED_OPERATORS
-                    for operator in SUPPORTED_OPERATORS:
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
                         print(operator)
 
             * Example: ``['column_two', '<'. '3']'``
@@ -247,8 +248,8 @@ class DataHandler:
 
             # (DataHandler_handle_where_op) Handle unsupported operator
             for w in where_list:
-                if w[1].upper() not in SUPPORTED_OPERATORS:
-                    raise HTTPException(status_code=400, detail='Operator \'' + w[1] + '\' is not supported - supported operators are: ' + ', '.join(SUPPORTED_OPERATORS))
+                if w[1].upper() not in DEFAULT_SUPPORTED_OPERATORS:
+                    raise HTTPException(status_code=400, detail='Operator \'' + w[1] + '\' is not supported - supported operators are: ' + ', '.join(DEFAULT_SUPPORTED_OPERATORS))
 
     def handle_write(self, dataset):
         """

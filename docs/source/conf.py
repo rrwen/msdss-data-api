@@ -27,7 +27,7 @@ author = 'Richard Wen rrwen.dev@gmail.com'
 project = 'msdss_data_api'
 description = 'Data management API for the Modular Spatial Decision Support Systems (MSDSS) framework'
 copyright = str(datetime.now().year) + ', ' + 'Richard Wen'
-version = '0.1.1'
+version = '0.2.0'
 release = version
 
 # -- General configuration ------------------------------------------------
@@ -52,6 +52,7 @@ extensions = [
     'sphinx.ext.mathjax'
 ]
 intersphinx_mapping = {
+    'pandas': ('https://pandas.pydata.org/pandas-docs/stable/', None),
     'python': ('https://docs.python.org/3/', None),
     'msdss_base_database': ('https://rrwen.github.io/msdss-base-database/', None),
     'msdss_base_api': ('https://rrwen.github.io/msdss-base-api/', None),

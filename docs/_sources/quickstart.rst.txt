@@ -36,13 +36,15 @@ After installing the package, set up user environment variables using ``msdss-do
 
 .. code::
    
-   msdss-dotenv init
-   msdss-dotenv set MSDSS_USERS_SECRET secret-phrase
-   msdss-dotenv set MSDSS_USERS_JWT_SECRET secret-phrase-02
+    msdss-dotenv init
+    msdss-dotenv set MSDSS_USERS_COOKIE_SECRET cookie-secret
+    msdss-dotenv set MSDSS_USERS_JWT_SECRET jwt-secret
+    msdss-dotenv set MSDSS_USERS_RESET_PASSWORD_TOKEN_SECRET reset-phrase
+    msdss-dotenv set MSDSS_USERS_VERIFICATION_TOKEN_SECRET verification-phrase
 
 .. note::
 
-    You can generate a strong ``secret-phrase`` and ``secret-phrase-02`` with: 
+    The variables above should be a strong passphrase - you can generate strong phrases with:
     
     .. code::
 
@@ -70,9 +72,13 @@ In Python, use the package via :class:`msdss_data_api.core.DataAPI`:
 .. jupyter-execute::
 
     from msdss_data_api import DataAPI
+    from msdss_users_api import UsersAPI
 
-    # Create app using env vars
-    app = DataAPI(enable_users=True)
+    # Create a users app
+    users_api = UsersAPI()
+
+    # Create app with users
+    app = DataAPI(users_api)
 
     # Run the app with app.start()
     # API is hosted at http://localhost:8000

@@ -47,7 +47,7 @@
   
   
   
-    <title>routers &#8212; 0.1.1</title>
+    <title>routers &#8212; 0.2.0</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.1.1"
+        <a href="../index.html" title="0.2.0"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.1.1 logo">
+                   alt="0.2.0 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.1.1</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.0</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.1.1" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.2.0" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.1.1">msdss-data-api</a>
+       title="0.2.0">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -285,82 +285,78 @@
 <h2 id="get-data-router">get_data_router<a class="headerlink" href="#get-data-router" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="msdss_data_api.routers.get_data_router">
-<span class="sig-prename descclassname"><span class="pre">msdss_data_api.routers.</span></span><span class="sig-name descname"><span class="pre">get_data_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">prefix='/data',</span> <span class="pre">tags=['data'],</span> <span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">get_current_user=&lt;function</span> <span class="pre">_no_current_user&gt;,</span> <span class="pre">restricted_tables=['data',</span> <span class="pre">'user'],</span> <span class="pre">enable_create_route=True,</span> <span class="pre">enable_delete_route=True,</span> <span class="pre">enable_id_route=True,</span> <span class="pre">enable_insert_route=True,</span> <span class="pre">enable_metadata_route=True,</span> <span class="pre">enable_metadata_update_route=True,</span> <span class="pre">enable_query_route=True,</span> <span class="pre">enable_search_route=True,</span> <span class="pre">enable_update_route=True,</span> <span class="pre">create_route_path='/',</span> <span class="pre">create_route_kwargs={},</span> <span class="pre">create_route_restricted_tables=None,</span> <span class="pre">create_get_current_user=None,</span> <span class="pre">delete_route_path='/',</span> <span class="pre">delete_route_kwargs={},</span> <span class="pre">delete_route_restricted_tables=None,</span> <span class="pre">delete_get_current_user=None,</span> <span class="pre">id_route_path='/{dataset}/id/{id}',</span> <span class="pre">id_route_kwargs={},</span> <span class="pre">id_route_restricted_tables=None,</span> <span class="pre">id_get_current_user=None,</span> <span class="pre">insert_route_path='/{dataset}/insert',</span> <span class="pre">insert_route_kwargs={},</span> <span class="pre">insert_route_restricted_tables=None,</span> <span class="pre">insert_get_current_user=None,</span> <span class="pre">metadata_route_path='/{dataset}/metadata',</span> <span class="pre">metadata_route_kwargs={'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">metadata_get_current_user=None,</span> <span class="pre">metadata_update_route_path='/{dataset}/metadata',</span> <span class="pre">metadata_update_route_kwargs={'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">metadata_update_get_current_user=None,</span> <span class="pre">query_route_path='/{dataset}',</span> <span class="pre">query_route_kwargs={},</span> <span class="pre">query_route_restricted_tables=None,</span> <span class="pre">query_get_current_user=None,</span> <span class="pre">search_route_path='/',</span> <span class="pre">search_route_kwargs={},</span> <span class="pre">search_get_current_user=None,</span> <span class="pre">update_route_path='/{dataset}',</span> <span class="pre">update_route_kwargs={},</span> <span class="pre">update_route_restricted_tables=None,</span> <span class="pre">update_get_current_user=None,</span> <span class="pre">*args,</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/routers.html#get_data_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.routers.get_data_router" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">msdss_data_api.routers.</span></span><span class="sig-name descname"><span class="pre">get_data_router</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">users_api=None,</span> <span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">route_settings={'create':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'delete':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}'},</span> <span class="pre">'id':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}/id/{id}'},</span> <span class="pre">'insert':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}/insert'},</span> <span class="pre">'metadata':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'metadata_update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}/metadata',</span> <span class="pre">'tags':</span> <span class="pre">['metadata']},</span> <span class="pre">'query':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}'},</span> <span class="pre">'search':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/'},</span> <span class="pre">'update':</span> <span class="pre">{'_enable':</span> <span class="pre">True,</span> <span class="pre">'_get_user':</span> <span class="pre">{'superuser':</span> <span class="pre">True},</span> <span class="pre">'_restricted_tables':</span> <span class="pre">['data',</span> <span class="pre">'user'],</span> <span class="pre">'path':</span> <span class="pre">'/{dataset}'}},</span> <span class="pre">prefix='/data',</span> <span class="pre">tags=['data'],</span> <span class="pre">*args,</span> <span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/routers.html#get_data_router"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.routers.get_data_router" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a data router.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>users_api</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.0)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> or None) – Users API object to enable user authentication for data routes.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, user authentication will not be used for data routes.</p></li>
+<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.1)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – A <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.1)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> object for managing data.</p></li>
+<li><p><strong>route_settings</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – <p>Dictionary of settings for the data routes. Each route consists of the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code>: resource path for the route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tags</span></code>: tags for open api spec</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_enable</span></code> (bool): Whether this route should be included or not</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_restricted_tables</span></code> (list(str)): List of table names not accessible by this route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">_get_user</span></code> (dict or None): Additional arguments passed to the <code class="xref py py-meth docutils literal notranslate"><span class="pre">msdss_users_api.msdss_users_api.core.UsersAPI.get_current_user()</span></code> function for the route - only applies if parameter <code class="docutils literal notranslate"><span class="pre">users_api</span></code> is not <code class="docutils literal notranslate"><span class="pre">None</span></code> and this settings is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, otherwise no user authentication will be added for this route</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">**kwargs</span></code>: Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the id route</p></li>
+</ul>
+<p>The default settings are:</p>
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>{'create': {'_enable': True,
+            '_get_user': {'superuser': True},
+            '_restricted_tables': ['data', 'user'],
+            'path': '/'},
+ 'delete': {'_enable': True,
+            '_get_user': {'superuser': True},
+            '_restricted_tables': ['data', 'user'],
+            'path': '/{dataset}'},
+ 'id': {'_enable': True,
+        '_get_user': {},
+        '_restricted_tables': ['data', 'user'],
+        'path': '/{dataset}/id/{id}'},
+ 'insert': {'_enable': True,
+            '_get_user': {'superuser': True},
+            '_restricted_tables': ['data', 'user'],
+            'path': '/{dataset}/insert'},
+ 'metadata': {'_enable': True,
+              '_get_user': {},
+              '_restricted_tables': ['data', 'user'],
+              'path': '/{dataset}/metadata',
+              'tags': ['metadata']},
+ 'metadata_update': {'_enable': True,
+                     '_get_user': {'superuser': True},
+                     '_restricted_tables': ['data', 'user'],
+                     'path': '/{dataset}/metadata',
+                     'tags': ['metadata']},
+ 'query': {'_enable': True,
+           '_get_user': {},
+           '_restricted_tables': ['data', 'user'],
+           'path': '/{dataset}'},
+ 'search': {'_enable': True,
+            '_get_user': {},
+            '_restricted_tables': ['data', 'user'],
+            'path': '/'},
+ 'update': {'_enable': True,
+            '_get_user': {'superuser': True},
+            '_restricted_tables': ['data', 'user'],
+            'path': '/{dataset}'}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>Any unspecified settings will be replaced by their defaults.</p>
+</p></li>
 <li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Prefix path to all routes belonging to this router.</p></li>
 <li><p><strong>tags</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Tags for all routes in this router.</p></li>
-<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.6)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – A <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.6)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> object.</p></li>
-<li><p><strong>get_current_user</strong> (<em>func</em>) – A function to get the current user. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.</p></li>
-<li><p><strong>restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of restricted table names that are not accessible on this router. If any of these are accessed, a 401 unauthorized http exception will be thrown. See <code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_data_api.data.handle_table_restrictions()</span></code>.</p></li>
-<li><p><strong>enable_create_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the create path for this router or not.</p></li>
-<li><p><strong>enable_delete_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the delete path for this router or not.</p></li>
-<li><p><strong>enable_id_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the id path for this router or not.</p></li>
-<li><p><strong>enable_insert_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the insert path for this router or not.</p></li>
-<li><p><strong>enable_metadata_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the GET metadata path for this router or not.</p></li>
-<li><p><strong>enable_metadata_update_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the PUT metadata path for this router or not.</p></li>
-<li><p><strong>enable_query_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the query path for this router or not.</p></li>
-<li><p><strong>enable_search_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the search path for this router or not.</p></li>
-<li><p><strong>enable_update_route</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a>) – Whether to enable the update path for this router or not.</p></li>
-<li><p><strong>create_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the create route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>create_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the create route.</p></li>
-<li><p><strong>create_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>create_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>delete_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the delete route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>delete_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the delete route.</p></li>
-<li><p><strong>delete_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>delete_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>id_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the id route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>id_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the id route.</p></li>
-<li><p><strong>id_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>id_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>insert_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the insert route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>insert_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the insert route.</p></li>
-<li><p><strong>insert_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>insert_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>metadata_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the metadata route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>metadata_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the metadata route.</p></li>
-<li><p><strong>metadata_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>metadata_update_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the metadata update route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>metadata_update_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the metadata update route.</p></li>
-<li><p><strong>metadata_update_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>query_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the query route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>query_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the query route.</p></li>
-<li><p><strong>query_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>query_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>search_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the search route in this router. The full path will include the param <code class="docutils literal notranslate"><span class="pre">prefix</span></code>.</p></li>
-<li><p><strong>search_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the search route.</p></li>
-<li><p><strong>search_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
-<li><p><strong>update_route_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Path for the update route in this router.</p></li>
-<li><p><strong>update_route_kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Additional arguments passed to <code class="xref py py-meth docutils literal notranslate"><span class="pre">fastapi:fastapi.FastAPI.get()</span></code> for the update route.</p></li>
-<li><p><strong>update_route_restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – Same as parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code> except router specific. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, will default to parameter <code class="docutils literal notranslate"><span class="pre">restricted_tables</span></code>.</p></li>
-<li><p><strong>update_get_current_user</strong> (<em>func</em>) – <p>A function to get the current user, but route specific. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/security/get-current-user/">FastAPI get_current_user</a>.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, it will default to parameter <code class="docutils literal notranslate"><span class="pre">get_current_user</span></code>.</p>
-</p></li>
 <li><p><strong>*args</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
 <li><p><strong>**kwargs</strong> – Additional arguments to accept any extra parameters passed to <code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A router object used for organizing larger applications and for modularity. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/bigger-applications/">FastAPI bigger apps</a></p>
+<dd class="field-even"><p>A router object used for data routes. See <a class="reference external" href="https://fastapi.tiangolo.com/tutorial/bigger-applications/">FastAPI bigger apps</a></p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">fastapi:fastapi.routing.APIRouter</span></code></p>
@@ -371,14 +367,39 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 <p class="rubric">Example</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">msdss_base_database</span> <span class="kn">import</span> <span class="n">Database</span>
+<span class="kn">from</span> <span class="nn">msdss_base_api</span> <span class="kn">import</span> <span class="n">API</span>
+<span class="kn">from</span> <span class="nn">msdss_users_api</span> <span class="kn">import</span> <span class="n">UsersAPI</span>
 <span class="kn">from</span> <span class="nn">msdss_data_api.routers</span> <span class="kn">import</span> <span class="n">get_data_router</span>
+
+<span class="c1"># Create database object</span>
+<span class="n">database</span> <span class="o">=</span> <span class="n">Database</span><span class="p">(</span>
+    <span class="n">driver</span><span class="o">=</span><span class="s1">'postgresql'</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s1">'msdss'</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s1">'msdss123'</span><span class="p">,</span>
+    <span class="n">host</span><span class="o">=</span><span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="s1">'5432'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="s1">'msdss'</span>
+<span class="p">)</span>
 
 <span class="c1"># Create an app</span>
 <span class="n">app</span> <span class="o">=</span> <span class="n">API</span><span class="p">()</span>
 
 <span class="c1"># Add the data router</span>
-<span class="n">router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">()</span>
+<span class="n">router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">router</span><span class="p">)</span>
+
+<span class="c1"># Add the data router with users</span>
+<span class="c1"># CHANGE SECRETS TO STRONG PHRASES</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">API</span><span class="p">()</span>
+<span class="n">users_api</span> <span class="o">=</span> <span class="n">UsersAPI</span><span class="p">(</span>
+    <span class="s1">'cookie-secret'</span><span class="p">,</span>
+    <span class="s1">'jwt-secret'</span><span class="p">,</span>
+    <span class="s1">'reset-secret'</span><span class="p">,</span>
+    <span class="s1">'verification-secret'</span><span class="p">,</span>
+    <span class="n">database</span><span class="o">=</span><span class="n">database</span>
+<span class="p">)</span>
+<span class="n">router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">(</span><span class="n">users_api</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
 <span class="n">app</span><span class="o">.</span><span class="n">add_router</span><span class="p">(</span><span class="n">router</span><span class="p">)</span>
 
 <span class="c1"># Host app at https://localhost:8000</span>
@@ -388,6 +409,9 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>cookie-secret
+</pre></div>
+</div>
 </div>
 </div>
 </dd></dl>
@@ -441,7 +465,7 @@ If <code class="docutils literal notranslate"><span class="pre">None</span></cod
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>

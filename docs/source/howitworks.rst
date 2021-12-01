@@ -24,10 +24,11 @@ For user authentication and management, the :class:`msdss_users_api:msdss_users_
 
    datamanager[label="DataManager" shape=rect];
    datahandler[label="DataHandler" shape=rect];
-   metadatamanager[label="MetaDataManager" shape=rect];
+   metadatamanager[label="MetadataManager" shape=rect];
 
-   datamanagerfunc[label="create_data_manager_func" shape=rect style=rounded URL=""];
-   getdatarouter[label="get_data_router" shape=rect style=rounded URL=""];
+   metadatafunc[label="create_metadata_manager_func" shape=rect style=rounded];
+   datamanagerfunc[label="create_data_manager_func" shape=rect style=rounded];
+   getdatarouter[label="get_data_router" shape=rect style=rounded];
 
    subgraph cluster0 {
       label=< <B>msdss_data_api.core.DataAPI</B> >;
@@ -49,6 +50,12 @@ For user authentication and management, the :class:`msdss_users_api:msdss_users_
       datahandler -> datamanager[lhead=cluster2 ltail=cluster2];
       basedb -> {datahandler;metadatamanager}[lhead=cluster2 ltail=cluster2];
 
-      datamanagerfunc -> getdatarouter;
+      subgraph cluster3 {
+         label=< <B>msdss_data_api.tools</B> >;
+         datamanagerfunc;
+         metadatafunc;
+      }
+      datamanagerfunc -> getdatarouter[lhead=cluster3 ltail=cluster3];
+
       {usersapi;getdatarouter} -> baseapi; 
    }

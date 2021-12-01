@@ -3,6 +3,7 @@ API Reference
 
 .. toctree::
 
+    cli
     core
     handlers
     managers

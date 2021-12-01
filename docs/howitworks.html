@@ -47,7 +47,7 @@
   
   
   
-    <title>How it Works &#8212; 0.1.1</title>
+    <title>How it Works &#8212; 0.2.0</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/material.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="0.1.1"
+        <a href="index.html" title="0.2.0"
            class="md-header-nav__button md-logo">
           
               <img src="_static/logo.svg" height="26"
-                   alt="0.1.1 logo">
+                   alt="0.2.0 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">0.1.1</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">0.2.0</a></li>
       </ul>
     </div>
   </nav>
@@ -189,13 +189,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="0.1.1" class="md-nav__button md-logo">
+    <a href="index.html" title="0.2.0" class="md-nav__button md-logo">
       
         <img src="_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="0.1.1">msdss-data-api</a>
+       title="0.2.0">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -285,10 +285,10 @@
             
   <section id="how-it-works">
 <h1 id="howitworks--page-root">How it Works<a class="headerlink" href="#howitworks--page-root" title="Permalink to this headline">¶</a></h1>
-<p>This package uses <a class="reference external" href="https://fastapi-users.github.io/fastapi-users/">FastAPI Users</a> to create an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.0.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application.</p>
-<p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/database.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.0.6)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> through the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.DataManager" title="msdss_data_api.managers.DataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> class, while data operation checks are handled by <a class="reference internal" href="reference/handlers.html#msdss_data_api.handlers.DataHandler" title="msdss_data_api.handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.handlers.DataHandler</span></code></a>. Similarly, metadata is handled via the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.MetadataManager" title="msdss_data_api.managers.MetadataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a> class, but using a single table.</p>
+<p>This package uses <a class="reference external" href="https://fastapi-users.github.io/fastapi-users/">FastAPI Users</a> to create an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application.</p>
+<p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.1)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> through the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.DataManager" title="msdss_data_api.managers.DataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> class, while data operation checks are handled by <a class="reference internal" href="reference/handlers.html#msdss_data_api.handlers.DataHandler" title="msdss_data_api.handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.handlers.DataHandler</span></code></a>. Similarly, metadata is handled via the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.MetadataManager" title="msdss_data_api.managers.MetadataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a> class, but using a single table.</p>
 <p>Request bodies with known parameters are represented with models in the <a class="reference internal" href="reference/models.html#module-msdss_data_api.models" title="msdss_data_api.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_data_api.models</span></code></a> module.</p>
-<p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/usersapi.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies.</p>
+<p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.0)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies.</p>
 <div class="graphviz"><img alt='digraph methods {
 compound=true;
 rankdir=TB;
@@ -303,10 +303,11 @@ metadataupdatemodel[label="MetadataUpdate" shape=rect];
 
 datamanager[label="DataManager" shape=rect];
 datahandler[label="DataHandler" shape=rect];
-metadatamanager[label="MetaDataManager" shape=rect];
+metadatamanager[label="MetadataManager" shape=rect];
 
-datamanagerfunc[label="create_data_manager_func" shape=rect style=rounded URL=""];
-getdatarouter[label="get_data_router" shape=rect style=rounded URL=""];
+metadatafunc[label="create_metadata_manager_func" shape=rect style=rounded];
+datamanagerfunc[label="create_data_manager_func" shape=rect style=rounded];
+getdatarouter[label="get_data_router" shape=rect style=rounded];
 
 subgraph cluster0 {
    label=&lt; &lt;B&gt;msdss_data_api.core.DataAPI&lt;/B&gt; &gt;;
@@ -328,14 +329,20 @@ subgraph cluster0 {
    datahandler -&gt; datamanager[lhead=cluster2 ltail=cluster2];
    basedb -&gt; {datahandler;metadatamanager}[lhead=cluster2 ltail=cluster2];
 
-   datamanagerfunc -&gt; getdatarouter;
+   subgraph cluster3 {
+      label=&lt; &lt;B&gt;msdss_data_api.tools&lt;/B&gt; &gt;;
+      datamanagerfunc;
+      metadatafunc;
+   }
+   datamanagerfunc -&gt; getdatarouter[lhead=cluster3 ltail=cluster3];
+
    {usersapi;getdatarouter} -&gt; baseapi;
 }
-}' class="graphviz" src="_images/graphviz-7912d3ba4e841c9eeb78dbcb80a6190b00d0f589.png" usemap="#methods"/></div>
+}' class="graphviz" src="_images/graphviz-6042bcdc5bede9a4450d870dccd7f3918717bd5e.png" usemap="#methods"/></div>
 <map id="methods" name="methods">
-<area alt="" coords="583,724,579,717,566,710,547,705,522,701,495,700,467,701,443,705,423,710,411,717,406,724,411,731,423,738,443,743,467,747,495,748,522,747,547,743,566,738,579,731" href="https://rrwen.github.io/msdss-base-api/" id="node1" shape="poly" title="msdss-base-api"/>
-<area alt="" coords="579,148,574,141,557,134,532,129,500,125,464,124,428,125,396,129,371,134,354,141,349,148,354,155,371,162,396,167,428,171,464,172,500,171,532,167,557,162,574,155" href="https://rrwen.github.io/msdss-base-database/" id="node2" shape="poly" title="msdss-base-database"/>
-<area alt="" coords="680,580,675,573,662,566,642,561,616,557,588,556,560,557,534,561,514,566,501,573,496,580,501,587,514,594,534,599,560,603,588,604,616,603,642,599,662,594,675,587" href="https://rrwen.github.io/msdss-users-api/" id="node3" shape="poly" title="msdss-users-api"/>
+<area alt="" coords="550,724,545,717,533,710,513,705,489,701,461,700,434,701,409,705,390,710,377,717,373,724,377,731,390,738,409,743,434,747,461,748,489,747,513,743,533,738,545,731" href="https://rrwen.github.io/msdss-base-api/" id="node1" shape="poly" title="msdss-base-api"/>
+<area alt="" coords="345,148,339,141,323,134,297,129,265,125,229,124,194,125,162,129,136,134,120,141,114,148,120,155,136,162,162,167,194,171,229,172,265,171,297,167,323,162,339,155" href="https://rrwen.github.io/msdss-base-database/" id="node2" shape="poly" title="msdss-base-database"/>
+<area alt="" coords="461,580,457,573,444,566,423,561,398,557,369,556,341,557,315,561,295,566,282,573,277,580,282,587,295,594,315,599,341,603,369,604,398,603,423,599,444,594,457,587" href="https://rrwen.github.io/msdss-users-api/" id="node3" shape="poly" title="msdss-users-api"/>
 </map></section>
 
 
@@ -385,7 +392,7 @@ subgraph cluster0 {
               
           </div>
             Created using
-            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.0.
+            <a href="http://www.sphinx-doc.org/">Sphinx</a> 4.3.1.
              and
             <a href="https://github.com/bashtage/sphinx-material/">Material for
               Sphinx</a>
