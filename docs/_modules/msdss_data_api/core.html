@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_data_api.core &#8212; 0.2.0</title>
+    <title>msdss_data_api.core &#8212; 0.2.1</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.2.0"
+        <a href="../../index.html" title="0.2.1"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.2.0 logo">
+                   alt="0.2.1 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.0</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.1</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.2.0" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.2.1" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.2.0">msdss-data-api</a>
+       title="0.2.1">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -300,6 +300,8 @@
 <span class="sd">        Additional arguments passed to :func:`msdss_data_api.routers.get_data_router` except ``database``.</span>
 <span class="sd">    api : :class:`fastapi:fastapi.FastAPI`</span>
 <span class="sd">        API object for creating routes.</span>
+<span class="sd">    *args, **kwargs</span>
+<span class="sd">        Additional arguments passed to :class:`msdss_base_api:msdss_base_api.core.API`.</span>
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -312,6 +314,8 @@
 <span class="sd">    </span>
 <span class="sd">    Example</span>
 <span class="sd">    -------</span>
+<span class="sd">    Create Data API without users:</span>
+
 <span class="sd">    .. jupyter-execute::</span>
 
 <span class="sd">        from msdss_base_database import Database</span>
@@ -331,6 +335,24 @@
 <span class="sd">        # Create a data api without users</span>
 <span class="sd">        app = DataAPI(database=database)</span>
 
+<span class="sd">    Create Data API with users:</span>
+
+<span class="sd">    .. jupyter-execute::</span>
+
+<span class="sd">        from msdss_base_database import Database</span>
+<span class="sd">        from msdss_data_api import DataAPI</span>
+<span class="sd">        from msdss_users_api import UsersAPI</span>
+
+<span class="sd">        # Create database object</span>
+<span class="sd">        database = Database(</span>
+<span class="sd">            driver='postgresql',</span>
+<span class="sd">            user='msdss',</span>
+<span class="sd">            password='msdss123',</span>
+<span class="sd">            host='localhost',</span>
+<span class="sd">            port='5432',</span>
+<span class="sd">            database='msdss'</span>
+<span class="sd">        )</span>
+
 <span class="sd">        # Create a data api with users</span>
 <span class="sd">        # CHANGE SECRETS TO STRONG PHRASES</span>
 <span class="sd">        users_api = UsersAPI(</span>
@@ -341,6 +363,9 @@
 <span class="sd">            database=database</span>
 <span class="sd">        )</span>
 <span class="sd">        app = DataAPI(users_api, database=database)</span>
+
+<span class="sd">        # Add users routes</span>
+<span class="sd">        app.add_apps(users_api)</span>
 
 <span class="sd">        # Run the app with app.start()</span>
 <span class="sd">        # Try API at http://localhost:8000/docs</span>
@@ -353,7 +378,7 @@
         <span class="n">data_router_settings</span><span class="o">=</span><span class="p">{},</span>
         <span class="n">api</span><span class="o">=</span><span class="n">FastAPI</span><span class="p">(</span>
             <span class="n">title</span><span class="o">=</span><span class="s1">'MSDSS Data API'</span><span class="p">,</span>
-            <span class="n">version</span><span class="o">=</span><span class="s1">'0.2.0'</span>
+            <span class="n">version</span><span class="o">=</span><span class="s1">'0.2.1'</span>
         <span class="p">),</span>
         <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">api</span><span class="o">=</span><span class="n">api</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -364,7 +389,6 @@
         <span class="c1"># (DataAPI_users) Add users app if specified</span>
         <span class="k">if</span> <span class="n">users_api</span><span class="p">:</span>
             <span class="n">data_router_settings</span><span class="p">[</span><span class="s1">'users_api'</span><span class="p">]</span> <span class="o">=</span> <span class="n">users_api</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">add_apps</span><span class="p">(</span><span class="n">users_api</span><span class="p">)</span>
         
         <span class="c1"># (DataAPI_router_data) Add data router</span>
         <span class="n">data_router</span> <span class="o">=</span> <span class="n">get_data_router</span><span class="p">(</span><span class="o">**</span><span class="n">data_router_settings</span><span class="p">)</span>

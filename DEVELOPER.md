@@ -10,14 +10,15 @@ Setup and install a development environment:
 1. Install [git](https://git-scm.com/)
 2. Install [Anaconda Python 3](https://www.anaconda.com/distribution/)
 3. Install [GraphViz](https://www.graphviz.org/)
-4. Clone this repository `git clone`
-5. Move to the cloned folder `cd msdss-data-api`
-6. Install python dependencies with `bin\install.bat` or `bin/install.sh`
+4. Install [PostgreSQL](https://www.postgresql.org)
+5. Clone this repository `git clone`
+6. Move to the cloned folder `cd msdss-data-api`
+7. Install python dependencies with `bin\install.bat` or `bin/install.sh`
 
 In Mac OS (with [Homebrew](https://brew.sh/) installed):
 
 ```
-brew install git graphviz -y
+brew install git graphviz postgresql -y
 git clone https://www.github.com/rrwen/msdss-data-api
 cd msdss-data-api
 chmod +x bin/install.sh
@@ -27,7 +28,7 @@ source bin/install.sh
 In Linux (Ubuntu):
 
 ```
-apt install git graphviz -y
+apt install git graphviz postgresql postgresql-contrib -y
 git clone https://www.github.com/rrwen/msdss-data-api
 cd msdss-data-api
 chmod +x bin/install.sh
@@ -37,7 +38,7 @@ source bin/install.sh
 In Windows (with [Chocolatey](https://chocolatey.org/) installed):
 
 ```
-choco install git graphviz -y
+choco install git graphviz postgresql -y
 git clone https://www.github.com/rrwen/msdss-data-api
 cd msdss-data-api
 bin\install

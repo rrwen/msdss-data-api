@@ -29,6 +29,8 @@ class DataAPI(API):
         Additional arguments passed to :func:`msdss_data_api.routers.get_data_router` except ``database``.
     api : :class:`fastapi:fastapi.FastAPI`
         API object for creating routes.
+    *args, **kwargs
+        Additional arguments passed to :class:`msdss_base_api:msdss_base_api.core.API`.
 
     Attributes
     ----------
@@ -41,6 +43,8 @@ class DataAPI(API):
     
     Example
     -------
+    Create Data API without users:
+
     .. jupyter-execute::
 
         from msdss_base_database import Database
@@ -60,6 +64,24 @@ class DataAPI(API):
         # Create a data api without users
         app = DataAPI(database=database)
 
+    Create Data API with users:
+
+    .. jupyter-execute::
+
+        from msdss_base_database import Database
+        from msdss_data_api import DataAPI
+        from msdss_users_api import UsersAPI
+
+        # Create database object
+        database = Database(
+            driver='postgresql',
+            user='msdss',
+            password='msdss123',
+            host='localhost',
+            port='5432',
+            database='msdss'
+        )
+
         # Create a data api with users
         # CHANGE SECRETS TO STRONG PHRASES
         users_api = UsersAPI(
@@ -70,6 +92,9 @@ class DataAPI(API):
             database=database
         )
         app = DataAPI(users_api, database=database)
+
+        # Add users routes
+        app.add_apps(users_api)
 
         # Run the app with app.start()
         # Try API at http://localhost:8000/docs
@@ -82,7 +107,7 @@ class DataAPI(API):
         data_router_settings={},
         api=FastAPI(
             title='MSDSS Data API',
-            version='0.2.0'
+            version='0.2.1'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)
@@ -93,7 +118,6 @@ class DataAPI(API):
         # (DataAPI_users) Add users app if specified
         if users_api:
             data_router_settings['users_api'] = users_api
-            self.add_apps(users_api)
         
         # (DataAPI_router_data) Add data router
         data_router = get_data_router(**data_router_settings)

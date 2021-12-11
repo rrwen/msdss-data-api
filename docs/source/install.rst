@@ -7,7 +7,8 @@ Without Users
 This package can be installed without user authentication support:
 
 1. Install `Anaconda 3 <https://www.anaconda.com/>`_ for Python
-2. Install ``msdss-data-api`` via pip or through a conda environment
+2. Install `PostgreSQL <https://www.postgresql.org/>`_ or your preferred database
+3. Install ``msdss-data-api`` via pip or through a conda environment
 
 .. code::
 
@@ -30,7 +31,8 @@ With Users
 This package can be installed with user authentication support:
 
 1. Install `Anaconda 3 <https://www.anaconda.com/>`_ for Python
-2. Install ``msdss-data-api`` via pip or through a conda environment
+2. Install `PostgreSQL <https://www.postgresql.org/>`_ or your preferred database
+3. Install ``msdss-data-api`` via pip or through a conda environment
 
 .. code::
 
