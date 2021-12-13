@@ -13,7 +13,6 @@ handle_permissions
 
 .. automethod:: msdss_data_api.handlers.DataHandler.handle_permissions
 
-
 handle_read
 ^^^^^^^^^^^
 

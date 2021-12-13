@@ -189,7 +189,7 @@ class DataManager:
     def get(
         self,
         dataset,
-        select=None,
+        select='*',
         where=None,
         group_by=None,
         aggregate=None,
@@ -210,7 +210,11 @@ class DataManager:
         dataset : str
             Name of the database table to query from.
         select : list(str) or None
-            List of column names or a single column name to filter or select from the table. If ``None`` then all columns will be selected.
+            List of column names or a single column name to filter or select from the table.
+            
+            * If ``None``, columns will not be added to the select statement.
+            * If ``'*'``, then all columns will be selected
+            
         where : list(str)
             list of where statements the form of ``column operator value`` to further filter individual values or rows.
             
@@ -668,7 +672,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{
@@ -723,7 +727,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{
@@ -790,7 +794,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{
@@ -850,7 +854,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{
@@ -906,7 +910,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{
@@ -969,7 +973,7 @@ class MetadataManager:
 
             # Setup metadata manager
             data_manager = DataManager(database=db)
-            mdm = MetadataManager()
+            mdm = MetadataManager(data_manager)
 
             # Add metadata
             metadata = [{

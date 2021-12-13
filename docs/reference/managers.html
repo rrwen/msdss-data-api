@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.2.2</title>
+    <title>managers &#8212; 0.2.3</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.2.2"
+        <a href="../index.html" title="0.2.3"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.2.2 logo">
+                   alt="0.2.3 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.2</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.3</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.2.2" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.2.3" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.2.2">msdss-data-api</a>
+       title="0.2.3">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -498,7 +498,7 @@ ENDSWITH
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 2, 'column_one': 'b', 'column_two': 4}, {'id': 3, 'column_one': 'c', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -509,14 +509,19 @@ ENDSWITH
 <h3 id="get">get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.get">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by_sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by_sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query data from the database.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.select" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.select()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the database table to query from.</p></li>
-<li><p><strong>select</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – List of column names or a single column name to filter or select from the table. If <code class="docutils literal notranslate"><span class="pre">None</span></code> then all columns will be selected.</p></li>
+<li><p><strong>select</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>List of column names or a single column name to filter or select from the table.</p>
+<ul>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will not be added to the select statement.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">'*'</span></code>, then all columns will be selected</p></li>
+</ul>
+</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows.</p>
 <ul>
 <li><p>Operators are one of</p>
@@ -598,7 +603,7 @@ If a list of str, then it must have the same number of elements as <code class="
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'b', 'column_two': 4}, {'id': 3, 'column_one': 'c', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -850,7 +855,7 @@ ENDSWITH
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'id': 1, 'column_one': 'a', 'column_two': 2}, {'id': 2, 'column_one': 'updated_at', 'column_two': 4}, {'id': 3, 'column_one': 'updated_at', 'column_two': 6}]
 </pre></div>
 </div>
 </div>
@@ -1014,7 +1019,7 @@ This defines the table to store the metadata, where the default is:</p>
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1034,7 +1039,14 @@ This defines the table to store the metadata, where the default is:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 00:54:41.909327'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:41.909336')}]
 </pre></div>
 </div>
 </div>
@@ -1073,7 +1085,7 @@ This defines the table to store the metadata, where the default is:</p>
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1103,7 +1115,14 @@ This defines the table to store the metadata, where the default is:</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_delete:
 
-[]
+[{'created_at': Timestamp('2021-12-13 00:54:41.981537'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:41.981545')}]
 
 after_delete:
 
@@ -1152,7 +1171,7 @@ after_delete:
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1172,7 +1191,14 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 00:54:42.054994'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:42.055002')}]
 </pre></div>
 </div>
 </div>
@@ -1220,7 +1246,7 @@ after_delete:
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1240,7 +1266,14 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 00:54:42.115869'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:42.115877')}]
 </pre></div>
 </div>
 </div>
@@ -1282,7 +1315,7 @@ after_delete:
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1311,11 +1344,25 @@ after_delete:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[]
+[{'created_at': Timestamp('2021-12-13 00:54:42.177290'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:42.177299')}]
 
 after_update:
 
-[]
+[{'created_at': Timestamp('2021-12-13 00:54:42.177290'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'NEW DESCRIPTION',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:42.177299')}]
 </pre></div>
 </div>
 </div>
@@ -1357,7 +1404,7 @@ after_update:
 
 <span class="c1"># Setup metadata manager</span>
 <span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
-<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">()</span>
+<span class="n">mdm</span> <span class="o">=</span> <span class="n">MetadataManager</span><span class="p">(</span><span class="n">data_manager</span><span class="p">)</span>
 
 <span class="c1"># Add metadata</span>
 <span class="n">metadata</span> <span class="o">=</span> <span class="p">[{</span>
@@ -1385,11 +1432,28 @@ after_update:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[]
+[{'created_at': Timestamp('2021-12-13 00:54:42.248247'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': None}]
 
 after_update:
 
-[]
+[{'created_at': Timestamp('2021-12-13 00:54:42.248247'),
+  'created_by': 'msdss',
+  'dataset': 'test_data',
+  
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>'description': 'Data used for testing',
+  'id': 1,
+  'source': 'Automatically generated from Python',
+  'title': 'Testing Data',
+  'updated_at': Timestamp('2021-12-13 00:54:42.263174')}]
 </pre></div>
 </div>
 </div>
