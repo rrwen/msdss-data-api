@@ -555,6 +555,10 @@ class MetadataManager:
             from pprint import pprint
 
             pprint(DEFAULT_METADATA_COLUMNS)
+    name_column : str
+        Name of the column identifying each entry.
+    updated_column : str
+        Name of the column for storing the last updated date/time.
 
     Attributes
     ----------
@@ -614,7 +618,9 @@ class MetadataManager:
         self,
         data_manager=DataManager(),
         table=DEFAULT_METADATA_TABLE,
-        columns=DEFAULT_METADATA_COLUMNS):
+        columns=DEFAULT_METADATA_COLUMNS,
+        name_column=DEFAULT_NAME_COLUMN,
+        updated_column=DEFAULT_UPDATE_COLUMN):
         
         # (MetadataManager_table) Create table if not exists
         if not data_manager.database.has_table(table):
@@ -622,13 +628,15 @@ class MetadataManager:
         
         # (MetadataManager_attr) Set attributes
         self.table = table
+        self.name_column = name_column
+        self.updated_column = updated_column
 
         # (MetadataManager_manager) Setup data manager
         self.data_manager = data_manager
         self.data_manager.handler.permitted_tables = [self.table]
         self.data_manager.handler.restricted_tables = []
 
-    def create(self, dataset, data):
+    def create(self, name, data):
         """
         Create a metadata entry.
 
@@ -636,8 +644,8 @@ class MetadataManager:
         
         Parameters
         ----------
-        dataset : str
-            Name of the dataset to add metadata for.
+        name : str
+            Name of the entry (e.g. dataset) to add metadata for.
         data : list(dict) or dict
             Metadata to insert into the table, where each key represents a metadata descriptor. The default key names are:
 
@@ -690,10 +698,10 @@ class MetadataManager:
             pprint(tb)
         """
         data = [data] if isinstance(data, dict) else data
-        data[0]['dataset'] = dataset
+        data[0][self.name_column] = name
         self.data_manager.insert(self.table, data)
 
-    def delete(self, dataset):
+    def delete(self, name):
         """
         Delete a metadata entry.
 
@@ -701,8 +709,8 @@ class MetadataManager:
         
         Parameters
         ----------
-        dataset : str
-            Name of the dataset to delete metadata for.
+        name : str
+            Name of the entry (e.g. dataset) to add metadata for.
 
         Author
         ------
@@ -752,10 +760,10 @@ class MetadataManager:
             print('\\nafter_delete:\\n')
             pprint(after_delete)
         """
-        where = [f'dataset = {dataset}']
+        where = [f'{self.name_column} = {name}']
         self.data_manager.delete(self.table, where=where)
 
-    def get(self, dataset):
+    def get(self, name):
         """
         Search metadata entries.
 
@@ -763,8 +771,8 @@ class MetadataManager:
         
         Parameters
         ----------
-        dataset : str
-            Name of the dataset to get metadata for.
+        name : str
+            Name of the entry (e.g. dataset) to add metadata for.
 
         Returns
         -------
@@ -811,7 +819,7 @@ class MetadataManager:
             metadata_get = mdm.get('test_data')
             pprint(metadata_get)
         """
-        where = [f'dataset = {dataset}']
+        where = [f'{self.name_column} = {name}']
         out = self.data_manager.get(self.table, where=where)
         return out
 
@@ -874,7 +882,7 @@ class MetadataManager:
         out = self.data_manager.get(self.table, *args, **kwargs)
         return out
 
-    def update(self, dataset, data):
+    def update(self, name, data):
         """
         Update metadata entry.
 
@@ -882,8 +890,8 @@ class MetadataManager:
         
         Parameters
         ----------
-        dataset : str
-            Name of the dataset to update.
+        name : str
+            Name of the entry (e.g. dataset) to add metadata for.
         data : dict
             Dictionary representing values to update.
         
@@ -934,19 +942,19 @@ class MetadataManager:
             print('\\nafter_update:\\n')
             pprint(after_update)
         """
-        where = [f'dataset = {dataset}']
+        where = [f'{self.name_column} = {name}']
         self.data_manager.update(self.table, data, where=where)
 
-    def updated_at(self, dataset, dt=None):
+    def updated_at(self, name, dt=None):
         """
-        Set last updated entry for a dataset.
+        Set last updated entry.
 
         See :meth:`msdss_data_api.managers.MetadataManager.update`.
         
         Parameters
         ----------
-        dataset : str
-            Name of the dataset to update.
+        name : str
+            Name of the entry (e.g. dataset) to add metadata for.
         dt : :class:`datetime.datetime` or None
             Datetime object representing the last updated time. If ``None``, will be set to now.
         
@@ -996,5 +1004,6 @@ class MetadataManager:
             print('\\nafter_update:\\n')
             pprint(after_update)
         """
-        data = {'updated_at': dt if dt else datetime.now()}
-        self.update(dataset, data)
+        data = {}
+        data[self.updated_column] = dt if dt else datetime.now()
+        self.update(name, data)
