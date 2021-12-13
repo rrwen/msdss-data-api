@@ -595,6 +595,7 @@ class MetadataManager:
         metadata = [{
             'title': 'Testing Data',
             'description': 'Data used for testing',
+            'tags': 'test exp auto',
             'source': 'Automatically generated from Python',
             'created_by': 'msdss',
             'created_at': datetime.now(),
@@ -686,6 +687,7 @@ class MetadataManager:
             metadata = [{
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),
@@ -742,6 +744,7 @@ class MetadataManager:
                 'dataset': 'test_data',
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),
@@ -808,6 +811,7 @@ class MetadataManager:
             metadata = [{
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),
@@ -868,6 +872,7 @@ class MetadataManager:
             metadata = [{
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),
@@ -924,6 +929,7 @@ class MetadataManager:
             metadata = [{
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),
@@ -987,6 +993,7 @@ class MetadataManager:
             metadata = [{
                 'title': 'Testing Data',
                 'description': 'Data used for testing',
+                'tags': 'test exp auto',
                 'source': 'Automatically generated from Python',
                 'created_by': 'msdss',
                 'created_at': datetime.now(),

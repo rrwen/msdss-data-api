@@ -8,6 +8,7 @@ DEFAULT_METADATA_COLUMNS = [
     dict(name='dataset', type_='String', unique=True),
     ('title', 'String'),
     ('description', 'String'),
+    ('tags', 'String'),
     ('source', 'String'),
     ('created_by', 'String'),
     ('created_at', 'DateTime'),
