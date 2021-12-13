@@ -75,7 +75,8 @@ def create_metadata_manager_func(database=Database()):
         # Create a function yielding the metadata manager to use as a dependency
         get_metadata_manager = create_metadata_manager_func()
     """
-    metadata_manager = MetadataManager(database=database)
+    data_manager = DataManager(database=database)
+    metadata_manager = MetadataManager(data_manager=data_manager)
     async def out():
         yield metadata_manager
     return out

@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_data_api.managers &#8212; 0.2.0</title>
+    <title>msdss_data_api.managers &#8212; 0.2.2</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.2.0"
+        <a href="../../index.html" title="0.2.2"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.2.0 logo">
+                   alt="0.2.2 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.0</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.2</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.2.0" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.2.2" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.2.0">msdss-data-api</a>
+       title="0.2.2">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -286,7 +286,9 @@
 <span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
 <span class="sd">        Database object to use for creating data.</span>
 <span class="sd">    handler : :class:`msdss_data_api.data.DataHandler` or None</span>
-<span class="sd">        Handler for handling dataset events. If ``None``, one will be created using the ``database`` parameter.</span>
+<span class="sd">        Handler for handling dataset events.</span>
+<span class="sd">        If ``None``, dataset events will not be handled.</span>
+<span class="sd">        Sets the handler database to be the parameter ``database``.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -328,9 +330,11 @@
 <span class="sd">        # Delete the entire dataset</span>
 <span class="sd">        dm.delete('test_table', delete_all=True)</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">handler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">()):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span> <span class="k">if</span> <span class="n">handler</span> <span class="k">else</span> <span class="n">DataHandler</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
 
 <div class="viewcode-block" id="DataManager.create"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -372,8 +376,9 @@
 <span class="sd">            ]</span>
 <span class="sd">            dm.create('test_table', data)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_write</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_write</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataManager.delete"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">,</span> <span class="n">delete_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -440,19 +445,17 @@
 <span class="sd">            # Delete the entire dataset</span>
 <span class="sd">            dm.delete('test_table', delete_all=True)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># (DataManager_delete_handle) Handle delete operation on data</span>
+        <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span> <span class="k">if</span> <span class="n">where</span> <span class="k">else</span> <span class="n">where</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">delete_all</span><span class="p">)</span>
+
+        <span class="c1"># (DataManager_delete_run) Delete data</span>
         <span class="k">if</span> <span class="n">delete_all</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">drop_table</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="n">delete_all</span> <span class="ow">and</span> <span class="n">where</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">'Parameter where is required'</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">detail</span> <span class="o">=</span> <span class="s1">'Variable '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s1">' not found'</span>
-                <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataManager.get"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -465,7 +468,9 @@
         <span class="n">order_by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">order_by_sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">):</span>
+        <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">where_boolean</span><span class="o">=</span><span class="s1">'AND'</span><span class="p">,</span>
+        <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">"""</span>
 <span class="sd">        Query data from the database.</span>
 
@@ -505,8 +510,12 @@
 <span class="sd">            If a list of str, then it must have the same number of elements as ``order_by`` or else only the shortest length list will be used.</span>
 <span class="sd">        limit : int or None</span>
 <span class="sd">            Integer number to limit the number of rows returned.</span>
+<span class="sd">        offset : int or None</span>
+<span class="sd">            Number of rows to skip.</span>
 <span class="sd">        where_boolean : str</span>
 <span class="sd">            One of ``AND`` or ``OR`` to combine ``where`` statements with. Defaults to ``AND`` if not one of ``AND`` or ``OR``.</span>
+<span class="sd">        *args, **kwargs</span>
+<span class="sd">            Additional arguments passed to :meth:`msdss_base_database:msdss_base_database.core.Database.select`.</span>
 <span class="sd">        </span>
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
@@ -544,25 +553,132 @@
 <span class="sd">            result = dm.get('test_table')</span>
 <span class="sd">            print(result)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+
+        <span class="c1"># (DataManager_get_handle) Handle get operation on data</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span> <span class="k">if</span> <span class="n">where</span> <span class="k">else</span> <span class="n">where</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-                <span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
-                <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span>
-                <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
-                <span class="n">group_by</span><span class="o">=</span><span class="n">group_by</span><span class="p">,</span>
-                <span class="n">aggregate</span><span class="o">=</span><span class="n">aggregate</span><span class="p">,</span>
-                <span class="n">aggregate_func</span><span class="o">=</span><span class="n">aggregate_func</span><span class="p">,</span>
-                <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span>
-                <span class="n">order_by_sort</span><span class="o">=</span><span class="n">order_by_sort</span><span class="p">,</span>
-                <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
-                <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span>
-            <span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">'records'</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">detail</span> <span class="o">=</span> <span class="s1">'Variable '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s1">' not found'</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
+
+        <span class="c1"># (DataManager_get_run) Query the database</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+            <span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span>
+            <span class="n">select</span><span class="o">=</span><span class="n">select</span><span class="p">,</span>
+            <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
+            <span class="n">group_by</span><span class="o">=</span><span class="n">group_by</span><span class="p">,</span>
+            <span class="n">aggregate</span><span class="o">=</span><span class="n">aggregate</span><span class="p">,</span>
+            <span class="n">aggregate_func</span><span class="o">=</span><span class="n">aggregate_func</span><span class="p">,</span>
+            <span class="n">order_by</span><span class="o">=</span><span class="n">order_by</span><span class="p">,</span>
+            <span class="n">order_by_sort</span><span class="o">=</span><span class="n">order_by_sort</span><span class="p">,</span>
+            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span>
+            <span class="n">where_boolean</span><span class="o">=</span><span class="n">where_boolean</span><span class="p">,</span>
+            <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">orient</span><span class="o">=</span><span class="s1">'records'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="DataManager.get_columns"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.get_columns">[docs]</a>    <span class="k">def</span> <span class="nf">get_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get number of columns for a dataset.</span>
+
+<span class="sd">        See :meth:`msdss_base_database:msdss_base_database.core.Database.columns`.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset : str</span>
+<span class="sd">            Name of the dataset or table in the database.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Number of columns for the dataset.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
+<span class="sd">            dm = DataManager(database=db)</span>
+
+<span class="sd">            # Check if the table exists and drop if it does</span>
+<span class="sd">            if db.has_table("test_table"):</span>
+<span class="sd">                db.drop_table("test_table")</span>
+
+<span class="sd">            # Create sample data</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
+<span class="sd">            dm.create('test_table', data)</span>
+
+<span class="sd">            # Get num of cols</span>
+<span class="sd">            columns = dm.get_columns('test_table')</span>
+<span class="sd">            print(f'columns: {columns}')</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">columns</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="DataManager.get_rows"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.get_rows">[docs]</a>    <span class="k">def</span> <span class="nf">get_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">):</span>
+        <span class="sd">"""</span>
+<span class="sd">        Get number of rows for a dataset.</span>
+
+<span class="sd">        See :meth:`msdss_base_database:msdss_base_database.core.Database.rows`.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dataset : str</span>
+<span class="sd">            Name of the dataset or table in the database.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Number of rows for the dataset.</span>
+<span class="sd">        </span>
+<span class="sd">        Author</span>
+<span class="sd">        ------</span>
+<span class="sd">        Richard Wen &lt;rrwen.dev@gmail.com&gt;</span>
+<span class="sd">        </span>
+<span class="sd">        Example</span>
+<span class="sd">        -------</span>
+<span class="sd">        .. jupyter-execute::</span>
+
+<span class="sd">            from msdss_base_database import Database</span>
+<span class="sd">            from msdss_data_api.managers import *</span>
+<span class="sd">            </span>
+<span class="sd">            # Setup database</span>
+<span class="sd">            db = Database()</span>
+<span class="sd">            dm = DataManager(database=db)</span>
+
+<span class="sd">            # Check if the table exists and drop if it does</span>
+<span class="sd">            if db.has_table("test_table"):</span>
+<span class="sd">                db.drop_table("test_table")</span>
+
+<span class="sd">            # Create sample data</span>
+<span class="sd">            data = [</span>
+<span class="sd">                {'id': 1, 'column_one': 'a', 'column_two': 2},</span>
+<span class="sd">                {'id': 2, 'column_one': 'b', 'column_two': 4},</span>
+<span class="sd">                {'id': 3, 'column_one': 'c', 'column_two': 6},</span>
+<span class="sd">            ]</span>
+<span class="sd">            dm.create('test_table', data)</span>
+
+<span class="sd">            # Get num of rows</span>
+<span class="sd">            rows = dm.get_rows('test_table')</span>
+<span class="sd">            print(f'rows: {rows}')</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">rows</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">out</span></div>
 
 <div class="viewcode-block" id="DataManager.insert"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.insert">[docs]</a>    <span class="k">def</span> <span class="nf">insert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
@@ -613,8 +729,9 @@
 <span class="sd">            ]</span>
 <span class="sd">            dm.insert('test_table', more_data)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_restrictions</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_read</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataManager.update"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.DataManager.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="p">):</span>
@@ -678,14 +795,10 @@
 <span class="sd">            result = dm.get('test_table')</span>
 <span class="sd">            print(result)</span>
 <span class="sd">        """</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         <span class="n">where</span> <span class="o">=</span> <span class="p">[</span><span class="n">split</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">where</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_where</span><span class="p">(</span><span class="n">where</span><span class="p">)</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">detail</span> <span class="o">=</span> <span class="s1">'Variable '</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">+</span> <span class="s1">' not found'</span>
-            <span class="k">raise</span> <span class="n">HTTPException</span><span class="p">(</span><span class="n">status_code</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">)</span></div></div>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">handle_update</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">where</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">table</span><span class="o">=</span><span class="n">dataset</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">data</span><span class="p">)</span></div></div>
 
 <div class="viewcode-block" id="MetadataManager"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.MetadataManager">[docs]</a><span class="k">class</span> <span class="nc">MetadataManager</span><span class="p">:</span>
     <span class="sd">"""</span>
@@ -693,6 +806,9 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
+<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager`</span>
+<span class="sd">        Data manager object for managing datasets in a database.</span>
+<span class="sd">        The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.</span>
 <span class="sd">    table : str</span>
 <span class="sd">        The name of the table to store the metadata.</span>
 <span class="sd">    columns : list(dict) or list(list)</span>
@@ -707,8 +823,12 @@
 
 <span class="sd">            pprint(DEFAULT_METADATA_COLUMNS)</span>
 
-<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
-<span class="sd">        Database object to use for managing metadata.</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    table : str</span>
+<span class="sd">        The name of the metadata table.</span>
+<span class="sd">    data_manager : :class:`msdss_data_api.managers.DataManager`</span>
+<span class="sd">        Same as parameter ``data_manager``.</span>
 <span class="sd">    </span>
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
@@ -731,7 +851,8 @@
 <span class="sd">            db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">        # Setup metadata manager</span>
-<span class="sd">        mdm = MetadataManager(database=db)</span>
+<span class="sd">        data_manager = DataManager(database=db)</span>
+<span class="sd">        mdm = MetadataManager(data_manager)</span>
 
 <span class="sd">        # Add metadata</span>
 <span class="sd">        metadata = [{</span>
@@ -758,22 +879,21 @@
 <span class="sd">    """</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data_manager</span><span class="o">=</span><span class="n">DataManager</span><span class="p">(),</span>
         <span class="n">table</span><span class="o">=</span><span class="n">DEFAULT_METADATA_TABLE</span><span class="p">,</span>
-        <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_METADATA_COLUMNS</span><span class="p">,</span>
-        <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span>
-        <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">columns</span><span class="o">=</span><span class="n">DEFAULT_METADATA_COLUMNS</span><span class="p">):</span>
         
         <span class="c1"># (MetadataManager_table) Create table if not exists</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
-            <span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data_manager</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">has_table</span><span class="p">(</span><span class="n">table</span><span class="p">):</span>
+            <span class="n">data_manager</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">columns</span><span class="p">)</span>
         
         <span class="c1"># (MetadataManager_attr) Set attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
 
-        <span class="c1"># (MetadataManager_manager) Create data manager</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span> <span class="o">=</span> <span class="n">DataHandler</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">permitted_tables</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">],</span> <span class="n">restricted_tables</span><span class="o">=</span><span class="p">[])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span> <span class="o">=</span> <span class="n">DataManager</span><span class="p">(</span><span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_handler</span><span class="p">)</span>
+        <span class="c1"># (MetadataManager_manager) Setup data manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span> <span class="o">=</span> <span class="n">data_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">permitted_tables</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_manager</span><span class="o">.</span><span class="n">handler</span><span class="o">.</span><span class="n">restricted_tables</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="MetadataManager.create"><a class="viewcode-back" href="../../reference/managers.html#msdss_data_api.managers.MetadataManager.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">"""</span>
@@ -818,7 +938,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>
@@ -872,7 +993,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>
@@ -938,7 +1060,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>
@@ -997,7 +1120,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>
@@ -1052,7 +1176,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>
@@ -1114,7 +1239,8 @@
 <span class="sd">                db.drop_table(DEFAULT_METADATA_TABLE)</span>
 
 <span class="sd">            # Setup metadata manager</span>
-<span class="sd">            mdm = MetadataManager(database=db)</span>
+<span class="sd">            data_manager = DataManager(database=db)</span>
+<span class="sd">            mdm = MetadataManager()</span>
 
 <span class="sd">            # Add metadata</span>
 <span class="sd">            metadata = [{</span>

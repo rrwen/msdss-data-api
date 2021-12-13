@@ -261,7 +261,7 @@ def run():
 
     # (run_managers) Create data and metadata managers
     data_manager = DataManager(database=database)
-    metadata_manager = MetadataManager(database=database)
+    metadata_manager = MetadataManager(data_manager=data_manager)
 
     # (run_command) Run commands
     if command == 'create':

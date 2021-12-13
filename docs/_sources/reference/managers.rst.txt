@@ -23,6 +23,16 @@ get
 
 .. automethod:: msdss_data_api.managers.DataManager.get
 
+get_columns
+^^^^^^^^^^^
+
+.. automethod:: msdss_data_api.managers.DataManager.get_columns
+
+get_rows
+^^^^^^^^
+
+.. automethod:: msdss_data_api.managers.DataManager.get_rows
+
 insert
 ^^^^^^
 

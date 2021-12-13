@@ -130,11 +130,22 @@ def get_data_router(
     # (get_data_router_create) Create api router for data routes
     out = APIRouter(prefix=prefix, tags=tags, *args, **kwargs)
 
+    # (get_data_router_columns) Add columns route to data router
+    if enable['columns']:
+        @out.get(**settings['columns'])
+        async def get_columns(
+            dataset: str = Query(..., description='Name of the dataset'),
+            data_manager = Depends(get_data_manager['query']),
+            user = Depends(get_user['columns'])
+        ):
+            response = data_manager.get_columns(dataset)
+            return response
+
     # (get_data_router_create) Add create route to data router
     if enable['create']:
         @out.post(**settings['create'])
         async def create_data(
-            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a variable and its corresponding value. Objects in this list should have the same keys.'),
+            dataset: str = Query(..., description='Name of the dataset to create - the request body is used to upload JSON data under the "data" key in the form of "[{col: val, col2: val2, ...}, {col: val, col2: val2, ...}]", where each key represents a column and its corresponding value. Objects in this list should have the same keys.'),
             body: DataCreate = Body(
                 ...,
                 example={
@@ -175,7 +186,7 @@ def get_data_router(
         @out.delete(**settings['delete'])
         async def delete_data(
             dataset: str = Query(..., description='Name of the dataset to delete data from'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data to remove in the form of "column operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             delete_all: Optional[bool] = Query(False, description='Whether to remove the entire dataset or not'),
             data_manager = Depends(get_data_manager['delete']),
@@ -193,11 +204,11 @@ def get_data_router(
         async def get_data_by_id(
             dataset: str = Query(..., description='Name of the dataset'),
             id: str = Query(..., description='Identifier value to retrieve a specific document in the dataset'),
-            id_variable: Optional[str] =  Query('id', description='Identifier variable name for the dataset'),
+            id_column: Optional[str] =  Query('id', description='Identifier column name for the dataset'),
             data_manager = Depends(get_data_manager['id']),
             user = Depends(get_user['id'])
         ):
-            where = [f'{id_variable} = {id}']
+            where = [f'{id_column} = {id}']
             response = data_manager.get(dataset=dataset, where=where)
             return response
 
@@ -205,7 +216,7 @@ def get_data_router(
     if enable['insert']:
         @out.put(**settings['insert'])
         async def insert_data(
-            dataset: str = Query(..., description='Name of the dataset to insert - the request body is used to upload JSON data in the form of "[{key: value, key2: value2, ... }, {key: value, key2: value2, ...}]" where each key is a variable name'),
+            dataset: str = Query(..., description='Name of the dataset to insert - the request body is used to upload JSON data in the form of "[{key: value, key2: value2, ... }, {key: value, key2: value2, ...}]" where each key is a column name'),
             data: List[Dict[str, Any]] = Body(...),
             data_manager = Depends(get_data_manager['insert']),
             metadata_manager = Depends(get_metadata_manager),
@@ -249,18 +260,20 @@ def get_data_router(
         @out.get(**settings['query'])
         async def query_data(
             dataset: str = Query(..., description='Name of the dataset to query'),
-            select: Optional[List[str]] = Query(None, description='Variables to include'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
-            group_by: Optional[List[str]] = Query(None, alias='group-by', description='Variable names to group by - should be used with aggregate and aggregate_func parameters'),
-            aggregate: Optional[List[str]] = Query(None, description='Variable names to aggregate with the same order as the aggregate_func parameter'),
+            select: Optional[List[str]] = Query('*', description='columns to include - "*" means all columns and "None" means to omit selection (useful for aggregate queries)'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            group_by: Optional[List[str]] = Query(None, alias='group-by', description='column names to group by - should be used with aggregate and aggregate_func parameters'),
+            aggregate: Optional[List[str]] = Query(None, description='column names to aggregate with the same order as the aggregate_func parameter'),
             aggregate_func: Optional[List[str]] = Query(None, alias='aggregate-func', description='Aggregate functions in the same order as the aggregate parameter'),
-            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='column names to order by in the same order as parameter order_by_sort'),
             order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
+            offset: Optional[int] = Query(None, description='Number of items to skip'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             data_manager = Depends(get_data_manager['query']),
             user = Depends(get_user['query'])
         ):
+            select = None if select[0] == 'None' else select
             response = data_manager.get(
                 dataset=dataset,
                 select=select,
@@ -271,29 +284,44 @@ def get_data_router(
                 order_by=order_by,
                 order_by_sort=order_by_sort,
                 limit=limit,
+                offset=offset,
                 where_boolean=where_boolean
             )
+            return response
+
+    # (get_data_router_rows) Add rows route to data router
+    if enable['rows']:
+        @out.get(**settings['rows'])
+        async def get_rows(
+            dataset: str = Query(..., description='Name of the dataset'),
+            data_manager = Depends(get_data_manager['query']),
+            user = Depends(get_user['rows'])
+        ):
+            response = data_manager.get_rows(dataset)
             return response
     
     # (get_data_router_search) Add search route to data router
     if enable['search']:
         @out.get(**settings['search'])
         async def search_data(
-            select: Optional[List[str]] = Query(None, description='Variables to include in search'),
-            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "variable operator value" (e.g. "dataset = test_data") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
-            order_by: Optional[List[str]] = Query(None, alias='order-by', description='Variable names to order by in the same order as parameter order_by_sort'),
+            select: Optional[List[str]] = Query('*', description='columns to include in search - "*" means all columns and "None" means to omit selection (useful for aggregate queries).'),
+            where: Optional[List[str]] = Query(None, description='Where statements to filter data in the form of "column operator value" (e.g. "dataset = test_data") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            order_by: Optional[List[str]] = Query(None, alias='order-by', description='column names to order by in the same order as parameter order_by_sort'),
             order_by_sort: Optional[List[Literal['asc', 'desc']]] = Query(None, alias='order-by-sort', description='Either "asc" for ascending or "desc" for descending order in the same order as parameter order_by'),
             limit: Optional[int] = Query(None, description='Number of items to return'),
+            offset: Optional[int] = Query(None, description='Number of items to skip'),
             where_boolean: Literal['AND', 'OR'] = Query('AND', alias='where-boolean', description='Either "AND" or "OR" to combine where statements'),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['search'])
         ):
+            select = None if select[0] == 'None' else select
             response = metadata_manager.search(
                 select=select,
                 where=where,
                 order_by=order_by,
                 order_by_sort=order_by_sort,
                 limit=limit,
+                offset=offset,
                 where_boolean=where_boolean
             )
             return response
@@ -302,12 +330,12 @@ def get_data_router(
     if enable['update']:
         @out.put(**settings['update'])
         async def update_data(
-            dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a variable name and each value is the new value to use (matching the where parameter)'),
+            dataset: str = Query(..., description='Name of the dataset to update - the request body is used to upload JSON data in the form of "{key: value, key2: value2, ... }" where each key is a column name and each value is the new value to use (matching the where parameter)'),
             body: Dict[str, Any] = Body(
                 ...,
                 example={'col_one': 1, 'col_two': 'a'}
             ),
-            where: List[str] = Query(..., description='Where statements to filter data to update in the form of "variable operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
+            where: List[str] = Query(..., description='Where statements to filter data to update in the form of "column operator value" (e.g. "var < 3") - valid operators are: =, !=, >, >=, >, <, <=, !=, LIKE, ILIKE, NOTLIKE, NOTILIKE, CONTAINS, STARTSWITH, ENDSWITH'),
             data_manager = Depends(get_data_manager['update']),
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['update'])

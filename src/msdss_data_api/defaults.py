@@ -12,6 +12,12 @@ DEFAULT_METADATA_COLUMNS = [
     ('updated_at', 'DateTime')
 ]
 DEFAULT_DATA_ROUTE_SETTINGS = dict(
+    columns=dict(
+        path='/{dataset}/columns',
+        _restricted_tables=DEFAULT_RESTRICTED_TABLES,
+        _enable=True,
+        _get_user={}
+    ),
     create=dict(
         path='/',
         _restricted_tables=DEFAULT_RESTRICTED_TABLES,
@@ -52,6 +58,12 @@ DEFAULT_DATA_ROUTE_SETTINGS = dict(
     ),
     query=dict(
         path='/{dataset}',
+        _restricted_tables=DEFAULT_RESTRICTED_TABLES,
+        _enable=True,
+        _get_user={}
+    ),
+    rows=dict(
+        path='/{dataset}/rows',
         _restricted_tables=DEFAULT_RESTRICTED_TABLES,
         _enable=True,
         _get_user={}

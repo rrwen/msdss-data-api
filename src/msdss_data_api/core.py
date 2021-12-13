@@ -107,7 +107,7 @@ class DataAPI(API):
         data_router_settings={},
         api=FastAPI(
             title='MSDSS Data API',
-            version='0.2.1'
+            version='0.2.2'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)

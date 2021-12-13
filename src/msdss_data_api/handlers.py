@@ -63,6 +63,70 @@ class DataHandler:
         self.permitted_tables = permitted_tables
         self.restricted_tables = restricted_tables
 
+    def handle_delete(self, dataset, where_list, delete_all):
+        """
+        Handle a table delete operation.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the table to check.
+        where_list : list(list(str))
+            list of where statements the form of ``['column', 'operator', 'value']`` to further filter individual values or rows.
+            
+            * Operators are one of:
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
+                        print(operator)
+
+            * Example: ``['column_two', '<'. '3']'``
+
+        delete_all : bool
+            Whether to delete the entire table or not.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.handlers import *
+            from msdss_data_api.managers import *
+            
+            # Setup objects
+            db = Database()
+            dm = DataManager(database=db)
+            handler = DataHandler(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table('test_table'):
+                db.drop_table('test_table')
+
+            # Create sample data
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
+            dm.create('test_table', data)
+
+            # Check table name
+            # Should not raise exceptions
+            handler.handle_delete('test_table', where=None, delete_all=True)
+        """
+        self.handle_read(dataset)
+        if not delete_all and where_list is None:
+            raise HTTPException(status_code=400, detail='Parameter where is required')
+        else:
+            self.handle_where(where_list)
+
     def handle_permissions(self, dataset):
         """
         Handle a permitted table access.
@@ -244,7 +308,7 @@ class DataHandler:
             # (DataHandler_handle_where_len) Handle wrong length
             where_has_wrong_len = any([len(w) != 3 for w in where_list])
             if where_has_wrong_len:
-                raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "variable operator value" e.g. "col < 3"')
+                raise HTTPException(status_code=400, detail='Parameter where is formatted incorrectly - should be in the form of "column operator value" e.g. "col < 3"')
 
             # (DataHandler_handle_where_op) Handle unsupported operator
             for w in where_list:
@@ -290,7 +354,7 @@ class DataHandler:
         if self.database.has_table(dataset):
             raise HTTPException(status_code=400, detail='Dataset already exists')
 
-    def handle_update(self, dataset, data):
+    def handle_update(self, dataset, data, where_list=None):
         """
         Handle a table update, checking for existence and restrictions.
         
@@ -300,6 +364,19 @@ class DataHandler:
             Name of the table to check.
         data : dict
             Dictionary of update values to check. Each key should represent a column name in the table.
+        where_list : list(list(str))
+            list of where statements the form of ``['column', 'operator', 'value']`` to further filter individual values or rows.
+            
+            * Operators are one of:
+
+                .. jupyter-execute::
+                    :hide-code:
+
+                    from msdss_base_database.defaults import DEFAULT_SUPPORTED_OPERATORS
+                    for operator in DEFAULT_SUPPORTED_OPERATORS:
+                        print(operator)
+
+            * Example: ``['column_two', '<'. '3']'``
         
         Author
         ------
@@ -338,7 +415,8 @@ class DataHandler:
         self.handle_restrictions(dataset)
         self.handle_permissions(dataset)
         self.handle_read(dataset)
+        self.handle_where(where_list)
         columns = self.database._get_table(dataset).c
         for k in data.keys():
             if k not in columns:
-                raise HTTPException(status_code=400, detail='Variable \'' + k + '\' not found')
+                raise HTTPException(status_code=400, detail='column \'' + k + '\' not found')

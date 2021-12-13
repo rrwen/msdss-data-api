@@ -15,7 +15,9 @@ class DataManager:
     database : :class:`msdss_base_database:msdss_base_database.core.Database`
         Database object to use for creating data.
     handler : :class:`msdss_data_api.data.DataHandler` or None
-        Handler for handling dataset events. If ``None``, one will be created using the ``database`` parameter.
+        Handler for handling dataset events.
+        If ``None``, dataset events will not be handled.
+        Sets the handler database to be the parameter ``database``.
     
     Author
     ------
@@ -57,9 +59,11 @@ class DataManager:
         # Delete the entire dataset
         dm.delete('test_table', delete_all=True)
     """
-    def __init__(self, database=Database(), handler=None):
+    def __init__(self, database=Database(), handler=DataHandler()):
         self.database = database
-        self.handler = handler if handler else DataHandler(database=database)
+        self.handler = handler
+        if self.handler:
+            self.handler.database = database
 
     def create(self, dataset, data):
         """
@@ -101,8 +105,9 @@ class DataManager:
             ]
             dm.create('test_table', data)
         """
-        self.handler.handle_restrictions(dataset)
-        self.handler.handle_write(dataset)
+        if self.handler:
+            self.handler.handle_restrictions(dataset)
+            self.handler.handle_write(dataset)
         self.database.insert(dataset, data)
 
     def delete(self, dataset, where=None, where_boolean='AND', delete_all=False):
@@ -169,19 +174,17 @@ class DataManager:
             # Delete the entire dataset
             dm.delete('test_table', delete_all=True)
         """
-        self.handler.handle_read(dataset)
+
+        # (DataManager_delete_handle) Handle delete operation on data
+        where = [split(w) for w in where] if where else where
+        if self.handler:
+            self.handler.handle_delete(dataset, where, delete_all)
+
+        # (DataManager_delete_run) Delete data
         if delete_all:
             self.database.drop_table(dataset)
-        elif not delete_all and where is None:
-            raise HTTPException(status_code=400, detail='Parameter where is required')
         else:
-            where = [split(w) for w in where]
-            self.handler.handle_where(where)
-            try:
-                self.database.delete(dataset, where=where, where_boolean=where_boolean)
-            except KeyError as e:
-                detail = 'Variable ' + str(e) + ' not found'
-                raise HTTPException(status_code=400, detail=detail)
+            self.database.delete(dataset, where=where, where_boolean=where_boolean)
 
     def get(
         self,
@@ -194,7 +197,9 @@ class DataManager:
         order_by=None,
         order_by_sort=None,
         limit=None,
-        where_boolean='AND'):
+        offset=None,
+        where_boolean='AND',
+        *args, **kwargs):
         """
         Query data from the database.
 
@@ -234,8 +239,12 @@ class DataManager:
             If a list of str, then it must have the same number of elements as ``order_by`` or else only the shortest length list will be used.
         limit : int or None
             Integer number to limit the number of rows returned.
+        offset : int or None
+            Number of rows to skip.
         where_boolean : str
             One of ``AND`` or ``OR`` to combine ``where`` statements with. Defaults to ``AND`` if not one of ``AND`` or ``OR``.
+        *args, **kwargs
+            Additional arguments passed to :meth:`msdss_base_database:msdss_base_database.core.Database.select`.
         
         Returns
         -------
@@ -273,25 +282,132 @@ class DataManager:
             result = dm.get('test_table')
             print(result)
         """
-        self.handler.handle_read(dataset)
+
+        # (DataManager_get_handle) Handle get operation on data
         where = [split(w) for w in where] if where else where
-        self.handler.handle_where(where)
-        try:
-            out = self.database.select(
-                table=dataset,
-                select=select,
-                where=where,
-                group_by=group_by,
-                aggregate=aggregate,
-                aggregate_func=aggregate_func,
-                order_by=order_by,
-                order_by_sort=order_by_sort,
-                limit=limit,
-                where_boolean=where_boolean
-            ).to_dict(orient='records')
-        except KeyError as e:
-            detail = 'Variable ' + str(e) + ' not found'
-            raise HTTPException(status_code=400, detail=detail)
+        if self.handler:
+            self.handler.handle_read(dataset)
+            self.handler.handle_where(where)
+
+        # (DataManager_get_run) Query the database
+        out = self.database.select(
+            table=dataset,
+            select=select,
+            where=where,
+            group_by=group_by,
+            aggregate=aggregate,
+            aggregate_func=aggregate_func,
+            order_by=order_by,
+            order_by_sort=order_by_sort,
+            limit=limit,
+            offset=offset,
+            where_boolean=where_boolean,
+            *args, **kwargs
+        ).to_dict(orient='records')
+        return out
+
+    def get_columns(self, dataset):
+        """
+        Get number of columns for a dataset.
+
+        See :meth:`msdss_base_database:msdss_base_database.core.Database.columns`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset or table in the database.
+
+        Returns
+        -------
+        int
+            Number of columns for the dataset.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            
+            # Setup database
+            db = Database()
+            dm = DataManager(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table("test_table"):
+                db.drop_table("test_table")
+
+            # Create sample data
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
+            dm.create('test_table', data)
+
+            # Get num of cols
+            columns = dm.get_columns('test_table')
+            print(f'columns: {columns}')
+        """
+        if self.handler:
+            self.handler.handle_read(dataset)
+        out = self.database.columns(dataset)
+        return out
+
+    def get_rows(self, dataset):
+        """
+        Get number of rows for a dataset.
+
+        See :meth:`msdss_base_database:msdss_base_database.core.Database.rows`.
+        
+        Parameters
+        ----------
+        dataset : str
+            Name of the dataset or table in the database.
+
+        Returns
+        -------
+        int
+            Number of rows for the dataset.
+        
+        Author
+        ------
+        Richard Wen <rrwen.dev@gmail.com>
+        
+        Example
+        -------
+        .. jupyter-execute::
+
+            from msdss_base_database import Database
+            from msdss_data_api.managers import *
+            
+            # Setup database
+            db = Database()
+            dm = DataManager(database=db)
+
+            # Check if the table exists and drop if it does
+            if db.has_table("test_table"):
+                db.drop_table("test_table")
+
+            # Create sample data
+            data = [
+                {'id': 1, 'column_one': 'a', 'column_two': 2},
+                {'id': 2, 'column_one': 'b', 'column_two': 4},
+                {'id': 3, 'column_one': 'c', 'column_two': 6},
+            ]
+            dm.create('test_table', data)
+
+            # Get num of rows
+            rows = dm.get_rows('test_table')
+            print(f'rows: {rows}')
+        """
+        if self.handler:
+            self.handler.handle_read(dataset)
+        out = self.database.rows(dataset)
         return out
 
     def insert(self, dataset, data):
@@ -342,8 +458,9 @@ class DataManager:
             ]
             dm.insert('test_table', more_data)
         """
-        self.handler.handle_restrictions(dataset)
-        self.handler.handle_read(dataset)
+        if self.handler:
+            self.handler.handle_restrictions(dataset)
+            self.handler.handle_read(dataset)
         self.database.insert(dataset, data)
 
     def update(self, dataset, data, where):
@@ -407,14 +524,10 @@ class DataManager:
             result = dm.get('test_table')
             print(result)
         """
-        self.handler.handle_update(dataset, data)
         where = [split(w) for w in where]
-        self.handler.handle_where(where)
-        try:
-            self.database.update(table=dataset, where=where, values=data)
-        except KeyError as e:
-            detail = 'Variable ' + str(e) + ' not found'
-            raise HTTPException(status_code=400, detail=detail)
+        if self.handler:
+            self.handler.handle_update(dataset, data, where)
+        self.database.update(table=dataset, where=where, values=data)
 
 class MetadataManager:
     """
@@ -422,6 +535,9 @@ class MetadataManager:
     
     Parameters
     ----------
+    data_manager : :class:`msdss_data_api.managers.DataManager`
+        Data manager object for managing datasets in a database.
+        The restricted tables for the handler will be set to ``[]`` while the only permitted table will be the table name of the parameter ``table``.
     table : str
         The name of the table to store the metadata.
     columns : list(dict) or list(list)
@@ -436,8 +552,12 @@ class MetadataManager:
 
             pprint(DEFAULT_METADATA_COLUMNS)
 
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for managing metadata.
+    Attributes
+    ----------
+    table : str
+        The name of the metadata table.
+    data_manager : :class:`msdss_data_api.managers.DataManager`
+        Same as parameter ``data_manager``.
     
     Author
     ------
@@ -460,7 +580,8 @@ class MetadataManager:
             db.drop_table(DEFAULT_METADATA_TABLE)
 
         # Setup metadata manager
-        mdm = MetadataManager(database=db)
+        data_manager = DataManager(database=db)
+        mdm = MetadataManager(data_manager)
 
         # Add metadata
         metadata = [{
@@ -487,22 +608,21 @@ class MetadataManager:
     """
     def __init__(
         self,
+        data_manager=DataManager(),
         table=DEFAULT_METADATA_TABLE,
-        columns=DEFAULT_METADATA_COLUMNS,
-        database=Database(),
-        handler=None):
+        columns=DEFAULT_METADATA_COLUMNS):
         
         # (MetadataManager_table) Create table if not exists
-        if not database.has_table(table):
-            database.create_table(table, columns)
+        if not data_manager.database.has_table(table):
+            data_manager.database.create_table(table, columns)
         
         # (MetadataManager_attr) Set attributes
         self.table = table
-        self.database = database
 
-        # (MetadataManager_manager) Create data manager
-        self.data_handler = DataHandler(database=database, permitted_tables=[self.table], restricted_tables=[])
-        self.data_manager = DataManager(database=database, handler=self.data_handler)
+        # (MetadataManager_manager) Setup data manager
+        self.data_manager = data_manager
+        self.data_manager.handler.permitted_tables = [self.table]
+        self.data_manager.handler.restricted_tables = []
 
     def create(self, dataset, data):
         """
@@ -547,7 +667,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
@@ -601,7 +722,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
@@ -667,7 +789,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
@@ -726,7 +849,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
@@ -781,7 +905,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
@@ -843,7 +968,8 @@ class MetadataManager:
                 db.drop_table(DEFAULT_METADATA_TABLE)
 
             # Setup metadata manager
-            mdm = MetadataManager(database=db)
+            data_manager = DataManager(database=db)
+            mdm = MetadataManager()
 
             # Add metadata
             metadata = [{
