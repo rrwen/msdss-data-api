@@ -8,12 +8,17 @@ After installing the package, set up database environment variables using ``msds
 
 .. code::
 
-    msdss-dotenv set MSDSS_DATABASE_DRIVER postgresql
-    msdss-dotenv set MSDSS_DATABASE_USER msdss
-    msdss-dotenv set MSDSS_DATABASE_PASSWORD msdss123
-    msdss-dotenv set MSDSS_DATABASE_HOST localhost
-    msdss-dotenv set MSDSS_DATABASE_PORT 5432
-    msdss-dotenv set MSDSS_DATABASE_NAME msdss
+    msdss-dotenv init --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_DRIVER postgresql --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_USER msdss --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_PASSWORD msdss123 --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_HOST localhost --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_PORT 5432 --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_NAME msdss --key_path <KEY_PATH>
+
+.. note::
+
+    Set the ``<KEY_PATH>`` to a secure location (preferable outside of the project directory) as you will need this to unlock your created ``.env`` file
 
 In Python, use the package via :class:`msdss_data_api.core.DataAPI`:
 
@@ -36,15 +41,15 @@ After installing the package, set up user environment variables using ``msdss-do
 
 .. code::
    
-    msdss-dotenv init
-    msdss-dotenv set MSDSS_USERS_COOKIE_SECRET cookie-secret
-    msdss-dotenv set MSDSS_USERS_JWT_SECRET jwt-secret
-    msdss-dotenv set MSDSS_USERS_RESET_PASSWORD_TOKEN_SECRET reset-phrase
-    msdss-dotenv set MSDSS_USERS_VERIFICATION_TOKEN_SECRET verification-phrase
+    msdss-dotenv init --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_USERS_COOKIE_SECRET cookie-secret --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_USERS_JWT_SECRET jwt-secret --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_USERS_RESET_PASSWORD_TOKEN_SECRET reset-phrase --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_USERS_VERIFICATION_TOKEN_SECRET verification-phrase --key_path <KEY_PATH>
 
 .. note::
 
-    The variables above should be a strong passphrase - you can generate strong phrases with:
+    The variables above (e.g. ``cookie-secret``, ``jwt-secret``, etc) should be a strong passphrase - you can generate strong phrases with:
     
     .. code::
 
@@ -54,12 +59,16 @@ Then setup the database environment variables:
 
 .. code::
 
-    msdss-dotenv set MSDSS_DATABASE_DRIVER postgresql
-    msdss-dotenv set MSDSS_DATABASE_USER msdss
-    msdss-dotenv set MSDSS_DATABASE_PASSWORD msdss123
-    msdss-dotenv set MSDSS_DATABASE_HOST localhost
-    msdss-dotenv set MSDSS_DATABASE_PORT 5432
-    msdss-dotenv set MSDSS_DATABASE_NAME msdss
+    msdss-dotenv set MSDSS_DATABASE_DRIVER postgresql --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_USER msdss --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_PASSWORD msdss123 --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_HOST localhost --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_PORT 5432 --key_path <KEY_PATH>
+    msdss-dotenv set MSDSS_DATABASE_NAME msdss --key_path <KEY_PATH>
+
+.. note::
+
+    Set the ``<KEY_PATH>`` to a secure location (preferable outside of the project directory) as you will need this to unlock your created ``.env`` file
 
 Finally, create a ``superuser`` with the ``msdss-users`` command line interface:
 

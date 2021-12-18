@@ -16,7 +16,7 @@ class DataManager:
         Database object to use for creating data.
     handler : :class:`msdss_data_api.data.DataHandler` or None
         Handler for handling dataset events.
-        If ``None``, dataset events will not be handled.
+        If ``None``, name events will not be handled.
         Sets the handler database to be the parameter ``database``.
     
     Author
@@ -65,7 +65,7 @@ class DataManager:
         if self.handler:
             self.handler.database = database
 
-    def create(self, dataset, data):
+    def create(self, name, data):
         """
         Create a dataset.
 
@@ -73,7 +73,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the dataset or table to hold the data.
         data : list(dict)
             Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.
@@ -106,11 +106,11 @@ class DataManager:
             dm.create('test_table', data)
         """
         if self.handler:
-            self.handler.handle_restrictions(dataset)
-            self.handler.handle_write(dataset)
-        self.database.insert(dataset, data)
+            self.handler.handle_restrictions(name)
+            self.handler.handle_write(name)
+        self.database.insert(name, data)
 
-    def delete(self, dataset, where=None, where_boolean='AND', delete_all=False):
+    def delete(self, name, where=None, where_boolean='AND', delete_all=False):
         """
         Delete a dataset.
 
@@ -118,7 +118,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the dataset or table in the database to delete.
         where : list(str)
             list of where statements the form of ``column operator value`` to further filter individual values or rows for deleting.
@@ -178,17 +178,17 @@ class DataManager:
         # (DataManager_delete_handle) Handle delete operation on data
         where = [split(w) for w in where] if where else where
         if self.handler:
-            self.handler.handle_delete(dataset, where, delete_all)
+            self.handler.handle_delete(name, where, delete_all)
 
         # (DataManager_delete_run) Delete data
         if delete_all:
-            self.database.drop_table(dataset)
+            self.database.drop_table(name)
         else:
-            self.database.delete(dataset, where=where, where_boolean=where_boolean)
+            self.database.delete(name, where=where, where_boolean=where_boolean)
 
     def get(
         self,
-        dataset,
+        name,
         select='*',
         where=None,
         group_by=None,
@@ -207,7 +207,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the database table to query from.
         select : list(str) or None
             List of column names or a single column name to filter or select from the table.
@@ -290,12 +290,12 @@ class DataManager:
         # (DataManager_get_handle) Handle get operation on data
         where = [split(w) for w in where] if where else where
         if self.handler:
-            self.handler.handle_read(dataset)
+            self.handler.handle_read(name)
             self.handler.handle_where(where)
 
         # (DataManager_get_run) Query the database
         out = self.database.select(
-            table=dataset,
+            table=name,
             select=select,
             where=where,
             group_by=group_by,
@@ -310,7 +310,7 @@ class DataManager:
         ).to_dict(orient='records')
         return out
 
-    def get_columns(self, dataset):
+    def get_columns(self, name):
         """
         Get number of columns for a dataset.
 
@@ -318,7 +318,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the dataset or table in the database.
 
         Returns
@@ -358,11 +358,11 @@ class DataManager:
             print(f'columns: {columns}')
         """
         if self.handler:
-            self.handler.handle_read(dataset)
-        out = self.database.columns(dataset)
+            self.handler.handle_read(name)
+        out = self.database.columns(name)
         return out
 
-    def get_rows(self, dataset):
+    def get_rows(self, name):
         """
         Get number of rows for a dataset.
 
@@ -370,7 +370,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the dataset or table in the database.
 
         Returns
@@ -410,11 +410,11 @@ class DataManager:
             print(f'rows: {rows}')
         """
         if self.handler:
-            self.handler.handle_read(dataset)
-        out = self.database.rows(dataset)
+            self.handler.handle_read(name)
+        out = self.database.rows(name)
         return out
 
-    def insert(self, dataset, data):
+    def insert(self, name, data):
         """
         Create a dataset.
 
@@ -422,7 +422,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the dataset or table to hold the data.
         data : list(dict)
             Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.
@@ -463,11 +463,11 @@ class DataManager:
             dm.insert('test_table', more_data)
         """
         if self.handler:
-            self.handler.handle_restrictions(dataset)
-            self.handler.handle_read(dataset)
-        self.database.insert(dataset, data)
+            self.handler.handle_restrictions(name)
+            self.handler.handle_read(name)
+        self.database.insert(name, data)
 
-    def update(self, dataset, data, where):
+    def update(self, name, data, where):
         """
         Update data from the database.
 
@@ -475,7 +475,7 @@ class DataManager:
         
         Parameters
         ----------
-        dataset : str
+        name : str
             Name of the table to update.
         data : dict
             Dictionary representing values to update if they match the ``where`` parameter requirements. Each key is a column and the value is the updated new value.
@@ -530,8 +530,8 @@ class DataManager:
         """
         where = [split(w) for w in where]
         if self.handler:
-            self.handler.handle_update(dataset, data, where)
-        self.database.update(table=dataset, where=where, values=data)
+            self.handler.handle_update(name, data, where)
+        self.database.update(table=name, where=where, values=data)
 
 class MetadataManager:
     """

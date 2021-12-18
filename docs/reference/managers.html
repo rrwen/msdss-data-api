@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.2.5</title>
+    <title>managers &#8212; 0.2.6</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.2.5"
+        <a href="../index.html" title="0.2.6"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.2.5 logo">
+                   alt="0.2.6 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.5</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.6</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.2.5" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.2.6" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.2.5">msdss-data-api</a>
+       title="0.2.6">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -324,7 +324,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – Database object to use for creating data.</p></li>
 <li><p><strong>handler</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.data.DataHandler</span></code> or None) – Handler for handling dataset events.
-If <code class="docutils literal notranslate"><span class="pre">None</span></code>, dataset events will not be handled.
+If <code class="docutils literal notranslate"><span class="pre">None</span></code>, name events will not be handled.
 Sets the handler database to be the parameter <code class="docutils literal notranslate"><span class="pre">database</span></code>.</p></li>
 </ul>
 </dd>
@@ -376,13 +376,13 @@ Sets the handler database to be the parameter <code class="docutils literal notr
 <h3 id="create">create<a class="headerlink" href="#create" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.create">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.create" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.create" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a dataset.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.insert" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.insert()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table to hold the data.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table to hold the data.</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>)</em>) – Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</p></li>
 </ul>
 </dd>
@@ -422,13 +422,13 @@ Sets the handler database to be the parameter <code class="docutils literal notr
 <h3 id="delete">delete<a class="headerlink" href="#delete" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.delete">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.delete" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_all</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.delete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Delete a dataset.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.delete" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.delete()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database to delete.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database to delete.</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows for deleting.</p>
 <ul>
 <li><p>Operators are one of</p>
@@ -509,13 +509,13 @@ ENDSWITH
 <h3 id="get">get<a class="headerlink" href="#get" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.get">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by_sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_by_sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where_boolean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'AND'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Query data from the database.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.select" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.select()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the database table to query from.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the database table to query from.</p></li>
 <li><p><strong>select</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>) or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.10)"><em>None</em></a>) – <p>List of column names or a single column name to filter or select from the table.</p>
 <ul>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, columns will not be added to the select statement.</p></li>
@@ -614,12 +614,12 @@ If a list of str, then it must have the same number of elements as <code class="
 <h3 id="get-columns">get_columns<a class="headerlink" href="#get-columns" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.get_columns">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get_columns" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get_columns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get_columns" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get number of columns for a dataset.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.columns" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.columns()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database.</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Number of columns for the dataset.</p>
@@ -670,12 +670,12 @@ If a list of str, then it must have the same number of elements as <code class="
 <h3 id="get-rows">get_rows<a class="headerlink" href="#get-rows" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.get_rows">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get_rows" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">get_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.get_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.get_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get number of rows for a dataset.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.rows" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.rows()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database.</p>
+<dd class="field-odd"><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table in the database.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Number of rows for the dataset.</p>
@@ -726,13 +726,13 @@ If a list of str, then it must have the same number of elements as <code class="
 <h3 id="insert">insert<a class="headerlink" href="#insert" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.insert">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.insert" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a dataset.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.insert" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.insert()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table to hold the data.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the dataset or table to hold the data.</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em>)</em>) – Data to insert into the table. Should be a list of dictionaries with the same keys, where each key in each dict is a column name.</p></li>
 </ul>
 </dd>
@@ -780,13 +780,13 @@ If a list of str, then it must have the same number of elements as <code class="
 <h3 id="update">update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h3>
 <dl class="py method">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager.update">
-<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.update" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">DataManager.</span></span><span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">where</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update data from the database.</p>
 <p>See <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database.update" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database.update()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table to update.</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Name of the table to update.</p></li>
 <li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Dictionary representing values to update if they match the <code class="docutils literal notranslate"><span class="pre">where</span></code> parameter requirements. Each key is a column and the value is the updated new value.</p></li>
 <li><p><strong>where</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – <p>list of where statements the form of <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">operator</span> <span class="pre">value</span></code> to further filter individual values or rows.</p>
 <ul>
@@ -1045,7 +1045,7 @@ This defines the table to store the metadata, where the default is:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 01:29:34.889326'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.790832'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1053,7 +1053,7 @@ This defines the table to store the metadata, where the default is:</p>
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:34.889352')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.790839')}]
 </pre></div>
 </div>
 </div>
@@ -1123,7 +1123,7 @@ This defines the table to store the metadata, where the default is:</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_delete:
 
-[{'created_at': Timestamp('2021-12-13 01:29:34.945698'),
+[{'created_at': Timestamp('2021-12-17 23:20:01.839527'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1131,7 +1131,7 @@ This defines the table to store the metadata, where the default is:</p>
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:34.945705')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.839541')}]
 
 after_delete:
 
@@ -1201,7 +1201,7 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 01:29:35.020527'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.895011'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1209,7 +1209,7 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:35.020534')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.895019')}]
 </pre></div>
 </div>
 </div>
@@ -1278,7 +1278,7 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-13 01:29:35.078356'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.941926'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1286,7 +1286,7 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:35.078362')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.941934')}]
 </pre></div>
 </div>
 </div>
@@ -1358,7 +1358,7 @@ after_delete:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[{'created_at': Timestamp('2021-12-13 01:29:35.143237'),
+[{'created_at': Timestamp('2021-12-17 23:20:01.992868'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1366,11 +1366,11 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:35.143243')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.992875')}]
 
 after_update:
 
-[{'created_at': Timestamp('2021-12-13 01:29:35.143237'),
+[{'created_at': Timestamp('2021-12-17 23:20:01.992868'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'NEW DESCRIPTION',
@@ -1378,7 +1378,7 @@ after_update:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:35.143243')}]
+  'updated_at': Timestamp('2021-12-17 23:20:01.992875')}]
 </pre></div>
 </div>
 </div>
@@ -1449,7 +1449,7 @@ after_update:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[{'created_at': Timestamp('2021-12-13 01:29:35.220883'),
+[{'created_at': Timestamp('2021-12-17 23:20:02.054646'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1461,7 +1461,7 @@ after_update:
 
 after_update:
 
-[{'created_at': Timestamp('2021-12-13 01:29:35.220883'),
+[{'created_at': Timestamp('2021-12-17 23:20:02.054646'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1469,7 +1469,7 @@ after_update:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-13 01:29:35.232264')}]
+  'updated_at': Timestamp('2021-12-17 23:20:02.063656')}]
 </pre></div>
 </div>
 </div>

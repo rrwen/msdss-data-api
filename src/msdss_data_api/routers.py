@@ -178,8 +178,8 @@ def get_data_router(
                 metadata['created_by'] = user.email
 
             # (get_data_router_create_run) Create dataset and metadata
-            data_manager.create(dataset=dataset, data=data)
-            metadata_manager.create(dataset=dataset, data=metadata)
+            data_manager.create(name=dataset, data=data)
+            metadata_manager.create(name=dataset, data=metadata)
 
     # (get_data_router_delete) Add delete route to data router
     if enable['delete']:
@@ -193,10 +193,10 @@ def get_data_router(
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['delete'])
         ):
-            data_manager.delete(dataset=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
-            metadata_manager.updated_at(dataset=dataset)
+            data_manager.delete(name=dataset, where=where, where_boolean=where_boolean, delete_all=delete_all)
+            metadata_manager.updated_at(name=dataset)
             if delete_all:
-                metadata_manager.delete(dataset=dataset)
+                metadata_manager.delete(name=dataset)
 
     # (get_data_router_id) Add id route to data router
     if enable['id']:
@@ -209,7 +209,7 @@ def get_data_router(
             user = Depends(get_user['id'])
         ):
             where = [f'{id_column} = {id}']
-            response = data_manager.get(dataset=dataset, where=where)
+            response = data_manager.get(name=dataset, where=where)
             return response
 
     # (get_data_router_insert) Add insert route to data router
@@ -222,7 +222,7 @@ def get_data_router(
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['insert'])
         ):
-            data_manager.insert(dataset=dataset, data=data)
+            data_manager.insert(name=dataset, data=data)
             metadata_manager.updated_at(dataset)
 
     # (get_data_router_metadata) Add metadata route to data router
@@ -233,7 +233,7 @@ def get_data_router(
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['metadata'])
         ):
-            response = metadata_manager.get(dataset=dataset)
+            response = metadata_manager.get(name=dataset)
             return response
 
     # (get_data_router_metadata) Add metadata route to data router
@@ -252,7 +252,7 @@ def get_data_router(
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['metadata_update'])
         ):
-            response = metadata_manager.update(dataset=dataset, data=body.dict())
+            response = metadata_manager.update(name=dataset, data=body.dict())
             return response
 
     # (get_data_router_query) Add query route to data router
@@ -275,7 +275,7 @@ def get_data_router(
         ):
             select = None if select[0] == 'None' else select
             response = data_manager.get(
-                dataset=dataset,
+                name=dataset,
                 select=select,
                 where=where,
                 group_by=group_by,
@@ -340,6 +340,6 @@ def get_data_router(
             metadata_manager = Depends(get_metadata_manager),
             user = Depends(get_user['update'])
         ):
-            data_manager.update(dataset=dataset, data=body, where=where)
+            data_manager.update(name=dataset, data=body, where=where)
             metadata_manager.updated_at(dataset)
     return out
