@@ -3,14 +3,14 @@ from msdss_base_database import Database
 from .handlers import *
 from .managers import *
 
-def create_data_manager_func(database=Database(), permitted_tables=[], restricted_tables=DEFAULT_RESTRICTED_TABLES):
+def create_data_manager_func(database=None, permitted_tables=[], restricted_tables=DEFAULT_RESTRICTED_TABLES):
     """
     Create a function yielding a :class:`msdss_data_api.managers.DataManager`.
     
     Parameters
     ----------
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for APIs.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        Database object to use for APIs. If ``None``, a default database will be used.
     permitted_tables : list(str)
         List of permitted tables in the database that can only be accessed.
     restricted_tables : list(str)
@@ -38,20 +38,21 @@ def create_data_manager_func(database=Database(), permitted_tables=[], restricte
         # Create a function yielding the data manager to use as a dependency
         get_data_manager = create_data_manager_func(database=db)
     """
+    database = database if database else Database()
     data_handler = DataHandler(database=database, permitted_tables=permitted_tables, restricted_tables=restricted_tables)
     data_manager = DataManager(database=database, handler=data_handler)
     async def out():
         yield data_manager
     return out
 
-def create_metadata_manager_func(database=Database()):
+def create_metadata_manager_func(database=None):
     """
     Create a function yielding a :class:`msdss_data_api.managers.MetadataManager`.
     
     Parameters
     ----------
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for APIs.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        Database object to use for APIs. If ``None``, a default database will be used.
 
     Returns
     -------
@@ -75,6 +76,7 @@ def create_metadata_manager_func(database=Database()):
         # Create a function yielding the metadata manager to use as a dependency
         get_metadata_manager = create_metadata_manager_func()
     """
+    database = database if database else Database()
     data_manager = DataManager(database=database)
     metadata_manager = MetadataManager(data_manager=data_manager)
     async def out():

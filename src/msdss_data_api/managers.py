@@ -12,8 +12,8 @@ class DataManager:
     
     Parameters
     ----------
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for creating data.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        Database object to use for creating data. If ``None``, a default database will be used.
     handler : :class:`msdss_data_api.data.DataHandler` or None
         Handler for handling dataset events.
         If ``None``, name events will not be handled.
@@ -59,7 +59,8 @@ class DataManager:
         # Delete the entire dataset
         dm.delete('test_table', delete_all=True)
     """
-    def __init__(self, database=Database(), handler=DataHandler()):
+    def __init__(self, database=None, handler=DataHandler()):
+        database = database if database else Database()
         self.database = database
         self.handler = handler
         if self.handler:

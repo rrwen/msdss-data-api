@@ -10,8 +10,8 @@ class DataHandler:
     
     Parameters
     ----------
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        Database object to use for managing datasets.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        Database object to use for managing datasets. If ``None``, a default database will be used.
     permitted_tables : list(str)
         List of permitted table names that are only accessible. If any tables not in this list are accessed, a 401 unauthorized http exception will be thrown.
     restricted_tables : list(str)
@@ -58,7 +58,8 @@ class DataHandler:
         # Should not raise exceptions
         handler.handle_restrictions('test_table')
     """
-    def __init__(self, database=Database(), permitted_tables=[], restricted_tables=DEFAULT_RESTRICTED_TABLES):
+    def __init__(self, database=None, permitted_tables=[], restricted_tables=DEFAULT_RESTRICTED_TABLES):
+        database = database if database else Database()
         self.database = database
         self.permitted_tables = permitted_tables
         self.restricted_tables = restricted_tables

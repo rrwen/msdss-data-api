@@ -46,7 +46,7 @@
   
   
   
-    <title>msdss_data_api.managers &#8212; 0.2.6</title>
+    <title>msdss_data_api.managers &#8212; 0.2.7</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
@@ -87,11 +87,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../../index.html" title="0.2.6"
+        <a href="../../index.html" title="0.2.7"
            class="md-header-nav__button md-logo">
           
               <img src="../../_static/logo.svg" height="26"
-                   alt="0.2.6 logo">
+                   alt="0.2.7 logo">
           
         </a>
       </div>
@@ -174,7 +174,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.6</a></li>
+          <li class="md-tabs__item"><a href="../../index.html" class="md-tabs__link">0.2.7</a></li>
           <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">Module code</a></li>
       </ul>
     </div>
@@ -187,13 +187,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../../index.html" title="0.2.6" class="md-nav__button md-logo">
+    <a href="../../index.html" title="0.2.7" class="md-nav__button md-logo">
       
         <img src="../../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../../index.html"
-       title="0.2.6">msdss-data-api</a>
+       title="0.2.7">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -283,8 +283,8 @@
 <span class="sd">    </span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database`</span>
-<span class="sd">        Database object to use for creating data.</span>
+<span class="sd">    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None</span>
+<span class="sd">        Database object to use for creating data. If ``None``, a default database will be used.</span>
 <span class="sd">    handler : :class:`msdss_data_api.data.DataHandler` or None</span>
 <span class="sd">        Handler for handling dataset events.</span>
 <span class="sd">        If ``None``, name events will not be handled.</span>
@@ -330,7 +330,8 @@
 <span class="sd">        # Delete the entire dataset</span>
 <span class="sd">        dm.delete('test_table', delete_all=True)</span>
 <span class="sd">    """</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="n">Database</span><span class="p">(),</span> <span class="n">handler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">()):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="n">DataHandler</span><span class="p">()):</span>
+        <span class="n">database</span> <span class="o">=</span> <span class="n">database</span> <span class="k">if</span> <span class="n">database</span> <span class="k">else</span> <span class="n">Database</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">database</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">handler</span> <span class="o">=</span> <span class="n">handler</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">handler</span><span class="p">:</span>

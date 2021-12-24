@@ -47,7 +47,7 @@
   
   
   
-    <title>How it Works &#8212; 0.2.6</title>
+    <title>How it Works &#8212; 0.2.7</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/material.css" />
     <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="index.html" title="0.2.6"
+        <a href="index.html" title="0.2.7"
            class="md-header-nav__button md-logo">
           
               <img src="_static/logo.svg" height="26"
-                   alt="0.2.6 logo">
+                   alt="0.2.7 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">0.2.6</a></li>
+          <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">0.2.7</a></li>
       </ul>
     </div>
   </nav>
@@ -189,13 +189,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="index.html" title="0.2.6" class="md-nav__button md-logo">
+    <a href="index.html" title="0.2.7" class="md-nav__button md-logo">
       
         <img src="_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="index.html"
-       title="0.2.6">msdss-data-api</a>
+       title="0.2.7">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -285,10 +285,16 @@
             
   <section id="how-it-works">
 <h1 id="howitworks--page-root">How it Works<a class="headerlink" href="#howitworks--page-root" title="Permalink to this headline">¶</a></h1>
-<p>This package uses <a class="reference external" href="https://fastapi-users.github.io/fastapi-users/">FastAPI Users</a> to create an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application.</p>
-<p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> through the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.DataManager" title="msdss_data_api.managers.DataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.DataManager</span></code></a> class, while data operation checks are handled by <a class="reference internal" href="reference/handlers.html#msdss_data_api.handlers.DataHandler" title="msdss_data_api.handlers.DataHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.handlers.DataHandler</span></code></a>. Similarly, metadata is handled via the <a class="reference internal" href="reference/managers.html#msdss_data_api.managers.MetadataManager" title="msdss_data_api.managers.MetadataManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.managers.MetadataManager</span></code></a> class, but using a single table.</p>
-<p>Request bodies with known parameters are represented with models in the <a class="reference internal" href="reference/models.html#module-msdss_data_api.models" title="msdss_data_api.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_data_api.models</span></code></a> module.</p>
-<p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.1)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies.</p>
+<p>This package creates an extended <a class="reference external" href="https://rrwen.github.io/msdss-base-api/reference/api.html#msdss_base_api.core.API" title="(in msdss_base_api v0.1.2)"><code class="docutils literal notranslate"><span class="pre">msdss_base_api.core.API</span></code></a> application using <a class="reference internal" href="reference/core.html#msdss_data_api.core.DataAPI" title="msdss_data_api.core.DataAPI"><code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.core.DataAPI</span></code></a>.
+The <code class="docutils literal notranslate"><span class="pre">DataAPI</span></code> class uses <a class="reference internal" href="reference/routers.html#msdss_data_api.routers.get_data_router" title="msdss_data_api.routers.get_data_router"><code class="xref py py-func docutils literal notranslate"><span class="pre">msdss_data_api.routers.get_data_router()</span></code></a> to setup routes for managing data.
+Data management is handled by managers in <a class="reference internal" href="reference/managers.html#module-msdss_data_api.managers" title="msdss_data_api.managers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_data_api.managers</span></code></a>, which uses handlers in <a class="reference internal" href="reference/handlers.html#module-msdss_data_api.handlers" title="msdss_data_api.handlers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_data_api.handlers</span></code></a> to check route inputs.
+The general process is: <code class="docutils literal notranslate"><span class="pre">handlers</span> <span class="pre">-&gt;</span> <span class="pre">managers</span> <span class="pre">-&gt;</span> <span class="pre">get_data_router</span> <span class="pre">-&gt;</span> <span class="pre">DataAPI</span></code>.</p>
+<p><strong>Other notes:</strong></p>
+<ul class="simple">
+<li><p>Database operations are handled by <a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a></p></li>
+<li><p>Request bodies with known parameters are represented with models in the <a class="reference internal" href="reference/models.html#module-msdss_data_api.models" title="msdss_data_api.models"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msdss_data_api.models</span></code></a> module</p></li>
+<li><p>For user authentication and management, the <a class="reference external" href="https://rrwen.github.io/msdss-users-api/reference/core.html#msdss_users_api.core.UsersAPI" title="(in msdss_users_api v0.2.1)"><code class="docutils literal notranslate"><span class="pre">msdss_users_api.core.UsersAPI</span></code></a> object is used to create user management routes and dependencies</p></li>
+</ul>
 <div class="graphviz"><img alt='digraph methods {
 compound=true;
 rankdir=TB;

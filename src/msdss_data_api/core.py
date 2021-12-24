@@ -1,18 +1,9 @@
-import inspect
-import os
-
 from fastapi import FastAPI
 from msdss_base_api import API
 from msdss_base_database import Database
-from msdss_base_dotenv import env_exists, load_env_file
 
 from .routers import *
 from .handlers import *
-
-try:
-    from msdss_users_api import UsersAPI
-except ImportError:
-    pass
 
 class DataAPI(API):
     """
@@ -23,8 +14,8 @@ class DataAPI(API):
     users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None
         Users API object to enable user authentication for data routes.
         If ``None``, user authentication will not be used for data routes.
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        A :class:`msdss_base_database:msdss_base_database.core.Database` object for managing data.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        A :class:`msdss_base_database:msdss_base_database.core.Database` object for managing data. If ``None``, a default database will be setup.
     data_router_settings : dict
         Additional arguments passed to :func:`msdss_data_api.routers.get_data_router` except ``database``.
     api : :class:`fastapi:fastapi.FastAPI`
@@ -103,16 +94,17 @@ class DataAPI(API):
     def __init__(
         self,
         users_api=None,
-        database=Database(),
+        database=None,
         data_router_settings={},
         api=FastAPI(
             title='MSDSS Data API',
-            version='0.2.6'
+            version='0.2.7'
         ),
         *args, **kwargs):
         super().__init__(api=api, *args, **kwargs)
 
         # (DataAPI_settings) Setup router params
+        database = database if database else Database()
         data_router_settings['database'] = database
         
         # (DataAPI_users) Add users app if specified

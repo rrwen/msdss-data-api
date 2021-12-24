@@ -1,13 +1,16 @@
 How it Works
 ============
 
-This package uses `FastAPI Users <https://fastapi-users.github.io/fastapi-users/>`_ to create an extended :class:`msdss_base_api:msdss_base_api.core.API` application.
+This package creates an extended :class:`msdss_base_api:msdss_base_api.core.API` application using :class:`msdss_data_api.core.DataAPI`.
+The ``DataAPI`` class uses :func:`msdss_data_api.routers.get_data_router` to setup routes for managing data.
+Data management is handled by managers in :mod:`msdss_data_api.managers`, which uses handlers in :mod:`msdss_data_api.handlers` to check route inputs.
+The general process is: ``handlers -> managers -> get_data_router -> DataAPI``.
 
-Database operations are handled by :class:`msdss_base_database:msdss_base_database.core.Database` through the :class:`msdss_data_api.managers.DataManager` class, while data operation checks are handled by :class:`msdss_data_api.handlers.DataHandler`. Similarly, metadata is handled via the :class:`msdss_data_api.managers.MetadataManager` class, but using a single table.
+**Other notes:**
 
-Request bodies with known parameters are represented with models in the :mod:`msdss_data_api.models` module.
-
-For user authentication and management, the :class:`msdss_users_api:msdss_users_api.core.UsersAPI` object is used to create user management routes and dependencies.
+* Database operations are handled by :class:`msdss_base_database:msdss_base_database.core.Database`
+* Request bodies with known parameters are represented with models in the :mod:`msdss_data_api.models` module
+* For user authentication and management, the :class:`msdss_users_api:msdss_users_api.core.UsersAPI` object is used to create user management routes and dependencies
 
 .. digraph:: methods
 
@@ -57,5 +60,5 @@ For user authentication and management, the :class:`msdss_users_api:msdss_users_
       }
       datamanagerfunc -> getdatarouter[lhead=cluster3 ltail=cluster3];
 
-      {usersapi;getdatarouter} -> baseapi; 
+      {usersapi;getdatarouter} -> baseapi;
    }

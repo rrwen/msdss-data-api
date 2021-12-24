@@ -47,7 +47,7 @@
   
   
   
-    <title>handlers &#8212; 0.2.6</title>
+    <title>handlers &#8212; 0.2.7</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.2.6"
+        <a href="../index.html" title="0.2.7"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.2.6 logo">
+                   alt="0.2.7 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.6</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.7</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.2.6" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.2.7" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.2.6">msdss-data-api</a>
+       title="0.2.7">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -299,12 +299,12 @@
 <h2 id="datahandler">DataHandler<a class="headerlink" href="#datahandler" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_data_api.handlers.DataHandler">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.handlers.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;,</span> <span class="pre">permitted_tables=[],</span> <span class="pre">restricted_tables=['data',</span> <span class="pre">'user']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/handlers.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.handlers.DataHandler" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.handlers.</span></span><span class="sig-name descname"><span class="pre">DataHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permitted_tables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restricted_tables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['data',</span> <span class="pre">'user']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/handlers.html#DataHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.handlers.DataHandler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to handle dataset events.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – Database object to use for managing datasets.</p></li>
+<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> or None) – Database object to use for managing datasets. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default database will be used.</p></li>
 <li><p><strong>permitted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of permitted table names that are only accessible. If any tables not in this list are accessed, a 401 unauthorized http exception will be thrown.</p></li>
 <li><p><strong>restricted_tables</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>(</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a><em>)</em>) – List of restricted table names that are not accessible. If any of these are accessed, a 401 unauthorized http exception will be thrown.</p></li>
 </ul>

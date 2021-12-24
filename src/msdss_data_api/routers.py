@@ -12,7 +12,7 @@ async def _no_current_user():
 
 def get_data_router(
     users_api=None,
-    database=Database(),
+    database=None,
     route_settings=DEFAULT_DATA_ROUTE_SETTINGS,
     prefix='/data',
     tags=['data'],
@@ -25,8 +25,8 @@ def get_data_router(
     users_api : :class:`msdss_users_api:msdss_users_api.core.UsersAPI` or None
         Users API object to enable user authentication for data routes.
         If ``None``, user authentication will not be used for data routes.
-    database : :class:`msdss_base_database:msdss_base_database.core.Database`
-        A :class:`msdss_base_database:msdss_base_database.core.Database` object for managing data.
+    database : :class:`msdss_base_database:msdss_base_database.core.Database` or None
+        A :class:`msdss_base_database:msdss_base_database.core.Database` object for managing data. If ``None``, a default database will be used.
     route_settings : dict
         Dictionary of settings for the data routes. Each route consists of the following keys:
 
@@ -106,6 +106,7 @@ def get_data_router(
         # Try it at https://localhost:8000/docs
         # app.start()
     """ 
+    database = database if database else Database()
 
     # (get_data_router_defaults) Merge defaults and user params 
     get_user = {}

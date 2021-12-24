@@ -47,7 +47,7 @@
   
   
   
-    <title>managers &#8212; 0.2.6</title>
+    <title>managers &#8212; 0.2.7</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/material.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
@@ -90,11 +90,11 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex navheader">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../index.html" title="0.2.6"
+        <a href="../index.html" title="0.2.7"
            class="md-header-nav__button md-logo">
           
               <img src="../_static/logo.svg" height="26"
-                   alt="0.2.6 logo">
+                   alt="0.2.7 logo">
           
         </a>
       </div>
@@ -177,7 +177,7 @@
   <nav class="md-tabs" data-md-component="tabs">
     <div class="md-tabs__inner md-grid">
       <ul class="md-tabs__list">
-          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.6</a></li>
+          <li class="md-tabs__item"><a href="../index.html" class="md-tabs__link">0.2.7</a></li>
           <li class="md-tabs__item"><a href="index.html" class="md-tabs__link">API Reference</a></li>
       </ul>
     </div>
@@ -190,13 +190,13 @@
               <div class="md-sidebar__inner">
                 <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../index.html" title="0.2.6" class="md-nav__button md-logo">
+    <a href="../index.html" title="0.2.7" class="md-nav__button md-logo">
       
         <img src="../_static/logo.svg" alt=" logo" width="48" height="48">
       
     </a>
     <a href="../index.html"
-       title="0.2.6">msdss-data-api</a>
+       title="0.2.7">msdss-data-api</a>
   </label>
     <div class="md-nav__source">
       <a href="https://github.com/rrwen/msdss-data-api/" title="Go to repository" class="md-source" data-md-source="github">
@@ -317,12 +317,12 @@
 <h2 id="datamanager">DataManager<a class="headerlink" href="#datamanager" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msdss_data_api.managers.DataManager">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.managers.</span></span><span class="sig-name descname"><span class="pre">DataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database=&lt;msdss_base_database.core.Database</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler=&lt;msdss_data_api.handlers.DataHandler</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msdss_data_api.managers.</span></span><span class="sig-name descname"><span class="pre">DataManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler=&lt;msdss_data_api.handlers.DataHandler</span> <span class="pre">object&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msdss_data_api/managers.html#DataManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msdss_data_api.managers.DataManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to manage datasets in a database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a>) – Database object to use for creating data.</p></li>
+<li><p><strong>database</strong> (<a class="reference external" href="https://rrwen.github.io/msdss-base-database/reference/core.html#msdss_base_database.core.Database" title="(in msdss_base_database v0.1.4)"><code class="docutils literal notranslate"><span class="pre">msdss_base_database.core.Database</span></code></a> or None) – Database object to use for creating data. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, a default database will be used.</p></li>
 <li><p><strong>handler</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">msdss_data_api.data.DataHandler</span></code> or None) – Handler for handling dataset events.
 If <code class="docutils literal notranslate"><span class="pre">None</span></code>, name events will not be handled.
 Sets the handler database to be the parameter <code class="docutils literal notranslate"><span class="pre">database</span></code>.</p></li>
@@ -1045,7 +1045,7 @@ This defines the table to store the metadata, where the default is:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.790832'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-23 19:02:08.782504'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1053,7 +1053,7 @@ This defines the table to store the metadata, where the default is:</p>
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.790839')}]
+  'updated_at': Timestamp('2021-12-23 19:02:08.782512')}]
 </pre></div>
 </div>
 </div>
@@ -1123,7 +1123,7 @@ This defines the table to store the metadata, where the default is:</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_delete:
 
-[{'created_at': Timestamp('2021-12-17 23:20:01.839527'),
+[{'created_at': Timestamp('2021-12-23 19:02:08.836514'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1131,7 +1131,7 @@ This defines the table to store the metadata, where the default is:</p>
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.839541')}]
+  'updated_at': Timestamp('2021-12-23 19:02:08.836522')}]
 
 after_delete:
 
@@ -1201,7 +1201,7 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.895011'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-23 19:02:08.904830'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1209,7 +1209,7 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.895019')}]
+  'updated_at': Timestamp('2021-12-23 19:02:08.904838')}]
 </pre></div>
 </div>
 </div>
@@ -1278,7 +1278,7 @@ after_delete:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-17 23:20:01.941926'),
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[{'created_at': Timestamp('2021-12-23 19:02:08.957659'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1286,7 +1286,7 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.941934')}]
+  'updated_at': Timestamp('2021-12-23 19:02:08.957667')}]
 </pre></div>
 </div>
 </div>
@@ -1358,7 +1358,7 @@ after_delete:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[{'created_at': Timestamp('2021-12-17 23:20:01.992868'),
+[{'created_at': Timestamp('2021-12-23 19:02:09.009286'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1366,11 +1366,11 @@ after_delete:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.992875')}]
+  'updated_at': Timestamp('2021-12-23 19:02:09.009293')}]
 
 after_update:
 
-[{'created_at': Timestamp('2021-12-17 23:20:01.992868'),
+[{'created_at': Timestamp('2021-12-23 19:02:09.009286'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'NEW DESCRIPTION',
@@ -1378,7 +1378,7 @@ after_update:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:01.992875')}]
+  'updated_at': Timestamp('2021-12-23 19:02:09.009293')}]
 </pre></div>
 </div>
 </div>
@@ -1449,7 +1449,7 @@ after_update:
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>before_update:
 
-[{'created_at': Timestamp('2021-12-17 23:20:02.054646'),
+[{'created_at': Timestamp('2021-12-23 19:02:09.074459'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1461,7 +1461,7 @@ after_update:
 
 after_update:
 
-[{'created_at': Timestamp('2021-12-17 23:20:02.054646'),
+[{'created_at': Timestamp('2021-12-23 19:02:09.074459'),
   'created_by': 'msdss',
   'dataset': 'test_data',
   'description': 'Data used for testing',
@@ -1469,7 +1469,7 @@ after_update:
   'source': 'Automatically generated from Python',
   'tags': 'test exp auto',
   'title': 'Testing Data',
-  'updated_at': Timestamp('2021-12-17 23:20:02.063656')}]
+  'updated_at': Timestamp('2021-12-23 19:02:09.085262')}]
 </pre></div>
 </div>
 </div>
